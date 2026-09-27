@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'games.dart';
 import 'quiz.dart';
 
-void main() => runApp(const App());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  prefs = await SharedPreferences.getInstance();
+  runApp(const App());
+}
 
 final allGames = [...quizGames, ...otherGames];
 
@@ -70,13 +75,17 @@ class _HomeState extends State<Home> {
                   clipBehavior: Clip.antiAlias,
                   color: cats[g.cat]!.$2.withValues(alpha: .2),
                   child: InkWell(
-                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => g.build())),
+                    onTap: () async {
+                      await Navigator.push(context, MaterialPageRoute(settings: RouteSettings(name: g.name), builder: (_) => g.build()));
+                      if (mounted) setState(() {}); // refresh best scores
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(12),
                       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                         Icon(cats[g.cat]!.$1, size: 36, color: cats[g.cat]!.$2),
                         const SizedBox(height: 8),
                         Flexible(child: Text(g.name, textAlign: TextAlign.center, overflow: TextOverflow.ellipsis, maxLines: 3, style: const TextStyle(fontWeight: FontWeight.w600))),
+                        if (prefs?.getString('bestText:${g.name}') case final best?) Text('Best: $best', style: const TextStyle(fontSize: 12, color: Colors.white70)),
                       ]),
                     ),
                   ),

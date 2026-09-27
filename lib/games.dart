@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Game {
   const Game(this.name, this.cat, this.build);
@@ -65,18 +66,43 @@ Widget tile(Color color, {String text = '', VoidCallback? onTap}) => Material(
       ),
     );
 
-void showResult(BuildContext context, String msg, VoidCallback again) => showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (c) => AlertDialog(
-        title: const Text('Result'),
-        content: Text(msg, style: const TextStyle(fontSize: 20)),
-        actions: [
-          TextButton(onPressed: () => Navigator.of(c)..pop()..pop(), child: const Text('Exit')),
-          FilledButton(onPressed: () { Navigator.pop(c); again(); }, child: const Text('Play again')),
-        ],
-      ),
-    );
+SharedPreferences? prefs;
+
+/// Saves [v] as the best score of the current route's game if it beats the old one.
+bool record(BuildContext context, num v, {bool lower = false, String unit = ''}) {
+  final name = ModalRoute.of(context)?.settings.name, p = prefs;
+  if (name == null || p == null) return false;
+  final old = p.getDouble('best:$name');
+  if (old != null && (lower ? v >= old : v <= old)) return false;
+  p.setDouble('best:$name', v.toDouble());
+  p.setString('bestText:$name', '$v$unit');
+  return true;
+}
+
+void showResult(BuildContext context, String msg, VoidCallback again, {num? score, bool lower = false, String unit = ''}) {
+  final best = score != null && record(context, score, lower: lower, unit: unit);
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (c) => AlertDialog(
+      title: Text(best ? '🏆 New best!' : 'Result'),
+      content: Text(msg, style: const TextStyle(fontSize: 20)),
+      actions: [
+        TextButton(
+            onPressed: () => Navigator.of(c)
+              ..pop()
+              ..pop(),
+            child: const Text('Exit')),
+        FilledButton(
+            onPressed: () {
+              Navigator.pop(c);
+              again();
+            },
+            child: const Text('Play again')),
+      ],
+    ),
+  );
+}
 
 /// Orthogonal neighbours of cell [i] on an [n]×[n] grid.
 List<int> adj(int i, int n) => [
@@ -131,7 +157,7 @@ class _SimonState extends State<Simon> {
     flash(i);
     if (seq[step] != i) {
       busy = true;
-      showResult(context, 'Score: ${seq.length - 1}', () {
+      showResult(context, score: seq.length - 1, 'Score: ${seq.length - 1}', () {
         seq.clear();
         next();
       });
@@ -186,7 +212,7 @@ class _NumberMemoryState extends State<NumberMemory> {
       level++;
       start();
     } else {
-      showResult(context, 'Number was $target\nLevel reached: $level', () {
+      showResult(context, score: level, 'Number was $target\nLevel reached: $level', () {
         level = 1;
         start();
       });
@@ -258,7 +284,7 @@ class _PatternMemoryState extends State<PatternMemory> {
     if (showing || hit.contains(i)) return;
     if (!target.contains(i)) {
       setState(() => showing = true);
-      showResult(context, 'Level reached: $level', () {
+      showResult(context, score: level, 'Level reached: $level', () {
         level = 1;
         start();
       });
@@ -319,7 +345,7 @@ class _CardMatchState extends State<CardMatch> {
         done.addAll(open);
         open.clear();
       });
-      if (done.length == cards.length) showResult(context, 'Solved in $moves moves', () => setState(start));
+      if (done.length == cards.length) showResult(context, score: moves, lower: true, unit: ' moves', 'Solved in $moves moves', () => setState(start));
     } else {
       Future.delayed(const Duration(milliseconds: 700), () {
         if (mounted) setState(open.clear);
@@ -383,6 +409,7 @@ class _ReactionState extends State<Reaction> {
         sw.stop();
         setState(() {
           times.add(sw.elapsedMilliseconds);
+          record(context, sw.elapsedMilliseconds, lower: true, unit: ' ms');
           state = 'result';
         });
       default:
@@ -444,7 +471,8 @@ class _SchulteState extends State<Schulte> {
     setState(() => next++);
     if (next > n * n) {
       sw.stop();
-      showResult(context, 'Time: ${(sw.elapsedMilliseconds / 1000).toStringAsFixed(2)} s', () => setState(start));
+      final secs = (sw.elapsedMilliseconds / 1000).toStringAsFixed(2);
+      showResult(context, score: double.parse(secs), lower: true, unit: ' s', 'Time: $secs s', () => setState(start));
     }
   }
 
@@ -475,7 +503,7 @@ class _AimState extends State<Aim> {
     });
     if (hits == goal) {
       sw.stop();
-      showResult(context, 'Avg ${sw.elapsedMilliseconds ~/ goal} ms per target', () {
+      showResult(context, score: sw.elapsedMilliseconds ~/ goal, lower: true, unit: ' ms', 'Avg ${sw.elapsedMilliseconds ~/ goal} ms per target', () {
         setState(() => hits = 0);
         sw
           ..reset()
@@ -543,7 +571,7 @@ class _SlidingState extends State<Sliding> {
       moves++;
     });
     if (List.generate(n * n, (i) => i).every((i) => t[i] == (i + 1) % (n * n))) {
-      showResult(context, 'Solved in $moves moves', () => setState(start));
+      showResult(context, score: moves, lower: true, unit: ' moves', 'Solved in $moves moves', () => setState(start));
     }
   }
 
@@ -594,7 +622,7 @@ class _LightsOutState extends State<LightsOut> {
       press(i);
       moves++;
     });
-    if (!on.contains(true)) showResult(context, 'All lights out in $moves moves', () => setState(start));
+    if (!on.contains(true)) showResult(context, score: moves, lower: true, unit: ' moves', 'All lights out in $moves moves', () => setState(start));
   }
 
   @override
@@ -612,7 +640,16 @@ class TicTacToe extends StatefulWidget {
 }
 
 class _TicTacToeState extends State<TicTacToe> {
-  static const lines = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
+  static const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
   final b = List.filled(9, '');
 
   static String? winner(List<String> b) {
@@ -641,7 +678,10 @@ class _TicTacToeState extends State<TicTacToe> {
     setState(() {
       b[i] = 'X';
       if (winner(b) != null) return;
-      final free = [for (var j = 0; j < 9; j++) if (b[j] == '') j]..shuffle(_r);
+      final free = [
+        for (var j = 0; j < 9; j++)
+          if (b[j] == '') j
+      ]..shuffle(_r);
       var bi = free.first, bs = -2;
       for (final j in free) {
         b[j] = 'O';
@@ -660,7 +700,8 @@ class _TicTacToeState extends State<TicTacToe> {
   @override
   Widget build(BuildContext context) => page(
         'Tic Tac Toe',
-        board(3, 9, (i) => tile(b[i] == 'X' ? Colors.blue.shade700 : (b[i] == 'O' ? Colors.red.shade700 : Colors.grey.shade800), text: b[i], onTap: () => tap(i))),
+        board(3, 9,
+            (i) => tile(b[i] == 'X' ? Colors.blue.shade700 : (b[i] == 'O' ? Colors.red.shade700 : Colors.grey.shade800), text: b[i], onTap: () => tap(i))),
         'You are X',
       );
 }
@@ -688,11 +729,17 @@ class _GuessNumberState extends State<GuessNumber> {
     if (g == null) return;
     tries++;
     if (g == target) {
-      showResult(context, 'Got it in $tries tries', () => setState(() {
-            target = _r.nextInt(100) + 1;
-            tries = 0;
-            hint = 'Guess a number 1–100';
-          }));
+      showResult(
+          context,
+          score: tries,
+          lower: true,
+          unit: ' tries',
+          'Got it in $tries tries',
+          () => setState(() {
+                target = _r.nextInt(100) + 1;
+                tries = 0;
+                hint = 'Guess a number 1–100';
+              }));
     } else {
       setState(() => hint = g < target ? '$g is too low ↑' : '$g is too high ↓');
     }
