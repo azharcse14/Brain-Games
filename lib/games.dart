@@ -6,9 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Game {
-  const Game(this.name, this.cat, this.build);
+  const Game(this.name, this.cat, this.build, {this.glyph});
   final String name, cat;
   final Widget Function() build;
+  final String? glyph; // card icon; falls back to the glyphs map in main.dart
 }
 
 final _r = Random();

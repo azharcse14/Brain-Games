@@ -1,12 +1,13 @@
 # Brain Games 🧠
 
-A Flutter app with **124 brain-training games**: quick-fire math and word quizzes, memory and focus trainers, classic puzzles, board games and card games. The app runs on Android, iOS, web, macOS, Windows and Linux.
+A Flutter app with **224 games**: 124 brain-training games (math and word quizzes, memory and focus trainers, puzzles, board and card games) plus **100 two-player games** you play together on one device. The app runs on Android, iOS, web, macOS, Windows and Linux.
 
 ## Features
 
-- **124 games in 8 categories**, with search, category filters and a 🎲 *Surprise me* button that opens a random game
+- **224 games in 10 categories**, with search, category filters and a 🎲 *Surprise me* button that opens a random game
 - **Best scores** saved for every game, shown on each game card with a 🏆 *New best!* on a record
 - **Adaptive quizzes**: 10 questions that get harder as you go, a 15-second timer per question and a 🔥 streak counter
+- **100 same-device 2-player games**: action games where both players control their own half of the screen at the same time, and pass-and-play board games (Chess, Go, Checkers and more)
 - **Computer opponents** in Ludo, Connect Four, Tic Tac Toe (can't be beaten), Crazy Eights and Snakes & Ladders
 - **Sound effects** with a mute toggle
 - **Endless variety**: every question, puzzle, deck and board is generated at random
@@ -23,6 +24,8 @@ A Flutter app with **124 brain-training games**: quick-fire math and word quizze
 | 🧱 **Puzzle** | 12 | **2048**, Tower of Hanoi (3, 4, 5 disks), **Connect Four**, Sliding Puzzle (3×3, 4×4), Lights Out (3×3, 4×4, 5×5), Tic Tac Toe, Guess the Number |
 | 🎲 **Board** | 3 | **Ludo** (2 or 4 players), Snakes & Ladders |
 | 🃏 **Cards** | 3 | Blackjack, Crazy Eights, Higher or Lower |
+| 🎮 **2P Action** | 30 | Pong (Classic, Fast, Two Balls, Tiny Paddles, Center Wall, Speed-Up Rally), Air Hockey (Classic, Big Goals, Ice, Heavy Puck, Two Pucks), Tron (Classic, Fast, Small Arena, Wrap-Around, Boost, Obstacles), Snake Duel (Classic, Fast, Wrap, Poison, Long), Tug of War, Tap Race 100, Hold & Release, Rhythm Duel, Reflex Duel (Classic, Stroop, Even, Shapes) |
+| 👥 **2P Board** | 70 | **Chess**, **Chess960**, **Go** (9×9, 13×13), Checkers (English, Casual, 10×10, Giveaway), Nine / Six / Three Men's Morris, Quoridor (9×9, 7×7), Battleship (8×8, 10×10), Tablut, Brandubh, Breakthrough (6×6, 8×8), Amazons (6×6, 8×8), Fox and Geese, Konane (6×6, 8×8), Lines of Action, Memory Duel (3 sizes), Hangman Duel, Mastermind Duel, Tic Tac Toe (3×3, 4×4, 5×5, Misère), Ultimate Tic Tac Toe, Gomoku (9×9, 11×11, 15×15, Gravity 10×10), Connect Three / Four / Five, Reversi (6×6, 8×8, 10×10), Dots and Boxes (4 sizes), Mancala (3, 4, 6 seeds), Hex (5×5, 7×7, 9×9), Domineering (3 sizes), Nim (3-4-5, 1-3-5-7, Misère), 21 Sticks, Chomp (2 sizes), Pig (to 50, to 100), Pentago, Isolation, Knight Isolation |
 
 ## Getting started
 
@@ -55,6 +58,8 @@ The tests check that:
 - every quiz question at every difficulty always offers the correct answer
 - the game logic is correct: 2048 merging, Sudoku generation, Mastermind scoring, Connect Four win detection, Blackjack hand values and the Ludo and Snakes & Ladders boards
 - the bigger games open, and Ludo and Snakes & Ladders play many turns against the AI, all without layout errors on a phone-sized screen
+- the 2-player rules work: chess (castling, en passant, checkmate, stalemate), Go (capture, ko, suicide), checkers forced jumps, Quoridor wall blocking, Reversi flips, Mancala captures, Hex connections and more; action games play complete matches
+- every one of the 224 games opens on a phone-sized screen without errors, and all game names are unique
 
 ## Project structure
 
@@ -64,12 +69,19 @@ lib/
 ├── quiz.dart      # Quiz engine + 88 question generators (Math, Logic, Focus, Word)
 ├── games.dart     # Shared UI helpers, best scores, sound, memory/focus/puzzle games
 ├── complex.dart   # 2048, Sudoku, Minesweeper, Mastermind, Tower of Hanoi, Connect Four
-└── tabletop.dart  # Ludo, Snakes & Ladders, Blackjack, Crazy Eights, Higher or Lower
+├── tabletop.dart  # Ludo, Snakes & Ladders, Blackjack, Crazy Eights, Higher or Lower
+├── duel.dart          # Shared 2-player helpers (colours, turn banner, winner dialog)
+├── duel_action.dart   # 30 real-time split-screen games (Pong, Air Hockey, Tron, …)
+├── duel_board.dart    # 40 pass-and-play games (Gomoku, Reversi, Mancala, Hex, …)
+└── duel_classic.dart  # 30 classic board games (Chess, Go, Checkers, Quoridor, …)
 assets/
 ├── icon.png       # App icon source (generated with flutter_launcher_icons)
 └── sfx/           # Sound effects
 test/
-└── widget_test.dart
+├── widget_test.dart
+├── duel_action_test.dart
+├── duel_board_test.dart
+└── duel_classic_test.dart
 ```
 
 ### Adding a quiz game

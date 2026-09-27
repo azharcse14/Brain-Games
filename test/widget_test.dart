@@ -27,7 +27,10 @@ void main() {
     expect(prefs!.getString('bestText:/'), '7/10');
   });
 
-  test('has 100+ games', () => expect(allGames.length, greaterThanOrEqualTo(100)));
+  test('has 224 games with unique names (best scores are keyed by name)', () {
+    expect(allGames.length, 224);
+    expect(allGames.map((g) => g.name).toSet().length, allGames.length);
+  });
 
   test('every quiz question has its answer among 2–4 distinct options', () {
     final r = Random(42);

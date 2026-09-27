@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'complex.dart';
+import 'duel_action.dart';
+import 'duel_board.dart';
+import 'duel_classic.dart';
 import 'games.dart';
 import 'quiz.dart';
 import 'tabletop.dart';
@@ -14,7 +17,7 @@ Future<void> main() async {
   runApp(const App());
 }
 
-final allGames = [...quizGames, ...otherGames, ...complexGames, ...tabletopGames];
+final allGames = [...quizGames, ...otherGames, ...complexGames, ...tabletopGames, ...duelActionGames, ...duelBoardGames, ...duelClassicGames];
 
 const cats = {
   'Math': (Icons.calculate, Colors.blue),
@@ -25,6 +28,8 @@ const cats = {
   'Puzzle': (Icons.extension, Colors.green),
   'Board': (Icons.casino, Colors.brown),
   'Cards': (Icons.style, Colors.pink),
+  '2P Action': (Icons.sports_esports, Colors.cyan),
+  '2P Board': (Icons.people, Colors.indigo),
 };
 
 /// Card glyph per game. Variants ("Lights Out 4×4", "Sudoku Easy") fall back to their first two words, then the first word.
@@ -63,7 +68,7 @@ const glyphs = {
   'Ludo': '🎲', 'Snakes & Ladders': '🐍🪜', 'Blackjack': '21', 'Crazy Eights': '8♠', 'Higher or Lower': '⬆️⬇️',
 };
 
-String? glyphFor(Game g) => glyphs[g.name] ?? glyphs[g.name.split(' ').take(2).join(' ')] ?? glyphs[g.name.split(' ').first];
+String? glyphFor(Game g) => g.glyph ?? glyphs[g.name] ?? glyphs[g.name.split(' ').take(2).join(' ')] ?? glyphs[g.name.split(' ').first];
 
 class App extends StatelessWidget {
   const App({super.key});
