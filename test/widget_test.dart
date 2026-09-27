@@ -4,6 +4,7 @@ import 'package:brain_games/complex.dart';
 import 'package:brain_games/games.dart';
 import 'package:brain_games/main.dart';
 import 'package:brain_games/quiz.dart';
+import 'package:brain_games/tabletop.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -108,16 +109,64 @@ void main() {
     expect(connectFourWin(board([6, 7, 8, 9]), 7), isFalse); // wraps rows, not a line
   });
 
-  testWidgets('complex games render and take a tap at phone size', (tester) async {
+  testWidgets('complex, board and card games render and take a tap at phone size', (tester) async {
     prefs!.setBool('mute', true);
     tester.view.physicalSize = const Size(400, 800);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
-    for (final g in complexGames) {
+    for (final g in [...complexGames, ...tabletopGames]) {
       await tester.pumpWidget(MaterialApp(key: UniqueKey(), home: g.build()));
       await tester.tapAt(const Offset(200, 400));
       await tester.pump(const Duration(seconds: 1));
       expect(tester.takeException(), isNull, reason: g.name);
+    }
+  });
+
+  test('blackjack hand values count aces as 1 or 11', () {
+    expect(handValue([0, 12]), 21); // A K
+    expect(handValue([0, 13, 8]), 21); // A A 9
+    expect(handValue([12, 11, 4]), 25); // K Q 5
+    expect(handValue([0, 0 + 13, 0 + 26, 0 + 39]), 14); // four aces
+  });
+
+  test('ludo track is a closed loop and every player has a home run', () {
+    expect(ludoTrack.length, 52);
+    expect(ludoTrack.toSet().length, 52);
+    for (var i = 0; i < 52; i++) {
+      final (a, b) = ludoTrack[i];
+      final (c, d) = ludoTrack[(i + 1) % 52];
+      expect((a - c).abs() + (b - d).abs(), anyOf(1, 2), reason: 'step $i'); // adjacent or diagonal corner
+    }
+    for (var p = 0; p < 4; p++) {
+      final (a, b) = ludoCell(p, 0, 50);
+      final (c, d) = ludoCell(p, 0, 51);
+      expect((a - c).abs() + (b - d).abs(), 1, reason: 'player $p enters home run');
+    }
+  });
+
+  test('snakes & ladders numbers every square once', () {
+    expect({for (var i = 0; i < 100; i++) slSquare(i)}.length, 100);
+    expect(slSquare(90), 1); // bottom-left
+    expect(slSquare(0), 100); // top-left
+  });
+
+  testWidgets('ludo and snakes & ladders survive many turns against the AI', (tester) async {
+    prefs!.setBool('mute', true);
+    tester.view.physicalSize = const Size(400, 800);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    for (final g in [tabletopGames[1], tabletopGames[2]]) {
+      await tester.pumpWidget(MaterialApp(key: UniqueKey(), home: g.build()));
+      for (var k = 0; k < 40; k++) {
+        final roll = find.widgetWithText(FilledButton, 'Roll');
+        if (roll.evaluate().isNotEmpty) await tester.tap(roll);
+        await tester.pump(const Duration(seconds: 5));
+        await tester.pump(const Duration(seconds: 5));
+        // Ludo waits for you to pick a token after a 6: pick the first glowing one.
+        final state = tester.state(find.byType(g.build().runtimeType)) as dynamic;
+        if (g.name.startsWith('Ludo') && (state.waiting as List).isNotEmpty) state.apply(state.waiting.first, state.die);
+        expect(tester.takeException(), isNull, reason: '${g.name} turn $k');
+      }
     }
   });
 }

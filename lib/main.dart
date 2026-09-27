@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'complex.dart';
 import 'games.dart';
 import 'quiz.dart';
+import 'tabletop.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,7 +14,7 @@ Future<void> main() async {
   runApp(const App());
 }
 
-final allGames = [...quizGames, ...otherGames, ...complexGames];
+final allGames = [...quizGames, ...otherGames, ...complexGames, ...tabletopGames];
 
 const cats = {
   'Math': (Icons.calculate, Colors.blue),
@@ -22,6 +23,8 @@ const cats = {
   'Memory': (Icons.memory, Colors.orange),
   'Focus': (Icons.center_focus_strong, Colors.red),
   'Puzzle': (Icons.extension, Colors.green),
+  'Board': (Icons.casino, Colors.brown),
+  'Cards': (Icons.style, Colors.pink),
 };
 
 /// Card glyph per game. Variants ("Lights Out 4×4", "Sudoku Easy") fall back to their first two words, then the first word.
@@ -56,6 +59,8 @@ const glyphs = {
   'Sliding Puzzle': '🧱', 'Lights Out': '💡', 'Tic Tac Toe': '⭕', 'Guess the Number': '❓',
   // Complex
   '2048': '2048', 'Sudoku': '9×9', 'Minesweeper': '💣', 'Mastermind': '🕵️', 'Hanoi Tower': '🗼', 'Connect Four': '🟡🔴',
+  // Board & Cards
+  'Ludo': '🎲', 'Snakes & Ladders': '🐍🪜', 'Blackjack': '21', 'Crazy Eights': '8♠', 'Higher or Lower': '⬆️⬇️',
 };
 
 String? glyphFor(Game g) => glyphs[g.name] ?? glyphs[g.name.split(' ').take(2).join(' ')] ?? glyphs[g.name.split(' ').first];
