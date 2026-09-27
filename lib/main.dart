@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'complex.dart';
 import 'games.dart';
 import 'quiz.dart';
 
@@ -12,7 +13,7 @@ Future<void> main() async {
   runApp(const App());
 }
 
-final allGames = [...quizGames, ...otherGames];
+final allGames = [...quizGames, ...otherGames, ...complexGames];
 
 const cats = {
   'Math': (Icons.calculate, Colors.blue),
@@ -23,7 +24,7 @@ const cats = {
   'Puzzle': (Icons.extension, Colors.green),
 };
 
-/// Card glyph per game. Sized variants ("Lights Out 4×4") fall back to their first two words.
+/// Card glyph per game. Variants ("Lights Out 4×4", "Sudoku Easy") fall back to their first two words, then the first word.
 const glyphs = {
   // Math
   'Addition': '+', 'Subtraction': '−', 'Multiplication': '×', 'Division': '÷', 'Mixed Operations': '±',
@@ -53,9 +54,11 @@ const glyphs = {
   // Memory & Puzzle
   'Simon Says': '🔴', 'Number Memory': '🔢', 'Pattern Memory': '🧠', 'Card Match': '🃏',
   'Sliding Puzzle': '🧱', 'Lights Out': '💡', 'Tic Tac Toe': '⭕', 'Guess the Number': '❓',
+  // Complex
+  '2048': '2048', 'Sudoku': '9×9', 'Minesweeper': '💣', 'Mastermind': '🕵️', 'Hanoi Tower': '🗼', 'Connect Four': '🟡🔴',
 };
 
-String? glyphFor(Game g) => glyphs[g.name] ?? glyphs[g.name.split(' ').take(2).join(' ')];
+String? glyphFor(Game g) => glyphs[g.name] ?? glyphs[g.name.split(' ').take(2).join(' ')] ?? glyphs[g.name.split(' ').first];
 
 class App extends StatelessWidget {
   const App({super.key});

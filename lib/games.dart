@@ -36,15 +36,16 @@ Widget page(String title, Widget body, [String? status]) => Scaffold(
       body: SafeArea(child: body),
     );
 
-Widget board(int cols, int count, Widget Function(int) cell) => Center(
+Widget board(int cols, int count, Widget Function(int) cell, {double gap = 8}) => Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 480),
         child: GridView.count(
           crossAxisCount: cols,
           shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(), // boards never scroll; keeps swipes for games like 2048
           padding: const EdgeInsets.all(16),
-          mainAxisSpacing: 8,
-          crossAxisSpacing: 8,
+          mainAxisSpacing: gap,
+          crossAxisSpacing: gap,
           children: List.generate(count, cell),
         ),
       ),
