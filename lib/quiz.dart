@@ -28,9 +28,9 @@ class QuizScreen extends StatefulWidget {
 }
 
 class _QuizScreenState extends State<QuizScreen> {
-  static const total = 10;
+  static const total = 10, seconds = 15;
   final _r = Random();
-  int i = 0, score = 0;
+  int i = 0, score = 0, streak = 0;
   late Q q = widget.gen(_r, 1);
   String? picked;
 
@@ -38,7 +38,12 @@ class _QuizScreenState extends State<QuizScreen> {
     if (picked != null) return;
     setState(() {
       picked = o;
-      if (o == q.answer) score++;
+      if (o == q.answer) {
+        score++;
+        streak++;
+      } else {
+        streak = 0;
+      }
     });
     sfx(o == q.answer ? 'right' : 'wrong');
     await Future.delayed(const Duration(milliseconds: 700));
@@ -51,11 +56,15 @@ class _QuizScreenState extends State<QuizScreen> {
       return;
     }
     showResult(context, won: score >= total ~/ 2, score: score, unit: '/$total', 'Score: $score / $total', () => setState(() {
-          i = score = 0;
+          i = score = streak = 0;
           picked = null;
           q = widget.gen(_r, 1);
         }));
   }
+
+  double timeLeft = 1; // last shown countdown value, kept so the bar freezes after a pick
+
+  Widget timeBar(double v) => LinearProgressIndicator(value: v, minHeight: 6, color: Color.lerp(Colors.red, Colors.amber, v), borderRadius: BorderRadius.circular(3));
 
   Color? colorFor(String o) {
     if (picked == null) return null;
@@ -73,14 +82,39 @@ class _QuizScreenState extends State<QuizScreen> {
               padding: const EdgeInsets.all(20),
               child: Column(children: [
                 LinearProgressIndicator(value: i / total),
+                const SizedBox(height: 8),
+                // Per-question countdown; running out counts as a wrong answer.
+                if (picked != null)
+                  timeBar(timeLeft)
+                else
+                  TweenAnimationBuilder<double>(
+                    key: ObjectKey(q),
+                    tween: Tween(begin: 1, end: 0),
+                    duration: const Duration(seconds: seconds),
+                    onEnd: () => pick(''),
+                    builder: (_, v, __) => timeBar(timeLeft = v),
+                  ),
                 Expanded(
                   child: Center(
                     child: SingleChildScrollView(
-                      child: Column(children: [
-                        if (q.ask != null) Text(q.ask!, style: const TextStyle(fontSize: 18, color: Colors.white70), textAlign: TextAlign.center),
-                        const SizedBox(height: 12),
-                        Text(q.prompt, textAlign: TextAlign.center, style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold, color: q.color)),
-                      ]),
+                      child: TweenAnimationBuilder<double>(
+                        key: ValueKey('$i$picked'), // shakes after a wrong pick
+                        tween: Tween(begin: 0, end: picked != null && picked != q.answer ? 1 : 0),
+                        duration: const Duration(milliseconds: 450),
+                        builder: (_, v, child) => Transform.translate(offset: Offset(sin(v * pi * 6) * 12 * (1 - v), 0), child: child),
+                        child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 300),
+                          transitionBuilder: (child, a) => SlideTransition(
+                            position: Tween(begin: const Offset(.3, 0), end: Offset.zero).animate(a),
+                            child: FadeTransition(opacity: a, child: child),
+                          ),
+                          child: Column(key: ObjectKey(q), children: [
+                            if (q.ask != null) Text(q.ask!, style: const TextStyle(fontSize: 18, color: Colors.white70), textAlign: TextAlign.center),
+                            const SizedBox(height: 12),
+                            Text(q.prompt, textAlign: TextAlign.center, style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold, color: q.color)),
+                          ]),
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -90,10 +124,14 @@ class _QuizScreenState extends State<QuizScreen> {
                     child: SizedBox(
                       width: double.infinity,
                       height: 56,
-                      child: FilledButton.tonal(
-                        style: FilledButton.styleFrom(backgroundColor: colorFor(o)),
-                        onPressed: () => pick(o),
-                        child: Text(o, style: const TextStyle(fontSize: 20)),
+                      child: AnimatedScale(
+                        scale: picked != null && o == q.answer ? 1.05 : 1,
+                        duration: const Duration(milliseconds: 200),
+                        child: FilledButton.tonal(
+                          style: FilledButton.styleFrom(backgroundColor: colorFor(o)),
+                          onPressed: () => pick(o),
+                          child: Text(o, style: const TextStyle(fontSize: 20)),
+                        ),
                       ),
                     ),
                   ),
@@ -101,7 +139,7 @@ class _QuizScreenState extends State<QuizScreen> {
             ),
           ),
         ),
-        '${i + 1}/$total · ★$score',
+        '${streak >= 2 ? '🔥$streak  ' : ''}${min(i + 1, total)}/$total · ★$score',
       );
 }
 

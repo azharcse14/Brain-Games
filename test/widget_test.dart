@@ -42,9 +42,28 @@ void main() {
     }
   });
 
+  test('every game has its own card glyph', () {
+    for (final g in allGames) {
+      expect(glyphFor(g), isNotNull, reason: g.name);
+    }
+  });
+
   testWidgets('home lists games', (tester) async {
     await tester.pumpWidget(const App());
     expect(find.textContaining('Brain Games'), findsOneWidget);
     expect(find.text('Addition'), findsOneWidget);
+  });
+
+  testWidgets('quiz: answering and timing out both advance', (tester) async {
+    prefs!.setBool('mute', true);
+    await tester.pumpWidget(MaterialApp(home: quizGames.first.build()));
+    expect(find.textContaining('1/10'), findsOneWidget);
+    await tester.tap(find.byType(FilledButton).first);
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 1));
+    expect(find.textContaining('2/10'), findsOneWidget);
+    await tester.pump(const Duration(seconds: 16)); // let the timer run out
+    await tester.pump(const Duration(seconds: 1));
+    expect(find.textContaining('3/10'), findsOneWidget);
   });
 }
