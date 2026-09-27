@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'complex.dart';
@@ -13,6 +14,8 @@ import 'tabletop.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Every game is laid out for a phone held upright; rotation would also reset real-time games mid-rally.
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   prefs = await SharedPreferences.getInstance();
   runApp(const App());
 }
@@ -92,8 +95,13 @@ class _HomeState extends State<Home> {
   String? cat;
   String query = '';
 
+  bool opening = false;
+
   Future<void> open(Game g) async {
+    if (opening) return; // a quick double tap would push the game twice
+    opening = true;
     await Navigator.push(context, MaterialPageRoute(settings: RouteSettings(name: g.name), builder: (_) => g.build()));
+    opening = false;
     if (mounted) setState(() {}); // refresh best scores
   }
 

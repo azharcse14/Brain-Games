@@ -79,7 +79,7 @@ SharedPreferences? prefs;
 /// Saves [v] as the best score of the current route's game if it beats the old one.
 bool record(BuildContext context, num v, {bool lower = false, String unit = ''}) {
   final name = ModalRoute.of(context)?.settings.name, p = prefs;
-  if (name == null || p == null) return false;
+  if (name == null || p == null || (!lower && v <= 0)) return false; // scoring 0 is never a record
   final old = p.getDouble('best:$name');
   if (old != null && (lower ? v >= old : v <= old)) return false;
   p.setDouble('best:$name', v.toDouble());
@@ -232,7 +232,7 @@ class _NumberMemoryState extends State<NumberMemory> {
       level++;
       start();
     } else {
-      showResult(context, won: false, score: level, 'Number was $target\nLevel reached: $level', () {
+      showResult(context, won: false, score: level - 1, 'Number was $target\nLevels cleared: ${level - 1}', () {
         level = 1;
         start();
       });
@@ -301,10 +301,10 @@ class _PatternMemoryState extends State<PatternMemory> {
   }
 
   void tap(int i) {
-    if (showing || hit.contains(i)) return;
+    if (showing || hit.length == target.length || hit.contains(i)) return; // ignore taps while the next level loads
     if (!target.contains(i)) {
       setState(() => showing = true);
-      showResult(context, won: false, score: level, 'Level reached: $level', () {
+      showResult(context, won: false, score: level - 1, 'Levels cleared: ${level - 1}', () {
         level = 1;
         start();
       });

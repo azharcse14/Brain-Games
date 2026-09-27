@@ -55,11 +55,14 @@ bool lineAt(List<int> cells, int rows, int cols, int i, int k) {
   return [(0, 1), (1, 0), (1, 1), (1, -1)].any((d) => 1 + run(d.$1, d.$2) + run(-d.$1, -d.$2) >= k);
 }
 
-bool hasLine(List<int> cells, int rows, int cols, int k, int p) => [for (var i = 0; i < cells.length; i++) i].any((i) => cells[i] == p && lineAt(cells, rows, cols, i, k));
+bool hasLine(List<int> cells, int rows, int cols, int k, int p) =>
+    [for (var i = 0; i < cells.length; i++) i].any((i) => cells[i] == p && lineAt(cells, rows, cols, i, k));
 
 Widget disc(int v) => v == 0
     ? const SizedBox.expand()
-    : Container(margin: const EdgeInsets.all(2), decoration: BoxDecoration(shape: BoxShape.circle, color: duelColors[v - 1], border: Border.all(color: Colors.white54)));
+    : Container(
+        margin: const EdgeInsets.all(2),
+        decoration: BoxDecoration(shape: BoxShape.circle, color: duelColors[v - 1], border: Border.all(color: Colors.white54)));
 
 Widget cellBox(Color color, Widget child, VoidCallback onTap) => GestureDetector(
       onTap: onTap,
@@ -137,7 +140,16 @@ class _InARowState extends State<InARow> {
 
 // ---------- Ultimate Tic Tac Toe ----------
 
-const tttLines = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
+const tttLines = [
+  [0, 1, 2],
+  [3, 4, 5],
+  [6, 7, 8],
+  [0, 3, 6],
+  [1, 4, 7],
+  [2, 5, 8],
+  [0, 4, 8],
+  [2, 4, 6]
+];
 
 /// 1 or 2 if that player has three in a row on a 3×3 board (3 = drawn board, never counts), else 0.
 int tttWinner(List<int> v) {
@@ -287,21 +299,32 @@ class _ReversiState extends State<Reversi> {
 
   @override
   Widget build(BuildContext context) {
-    final legal = {for (var i = 0; i < n * n; i++) if (reversiFlips(cells, n, i, turn + 1).isNotEmpty) i};
+    final legal = {
+      for (var i = 0; i < n * n; i++)
+        if (reversiFlips(cells, n, i, turn + 1).isNotEmpty) i
+    };
     return duelPage(
       'Reversi $n×$n',
       turn,
       banner: note,
       status: '🔵${cells.where((v) => v == 1).length} 🔴${cells.where((v) => v == 2).length}',
-      board(n, n * n, gap: 2, (i) => cellBox(
-            Colors.green.shade800,
-            cells[i] != 0
-                ? disc(cells[i])
-                : legal.contains(i)
-                    ? Center(child: FractionallySizedBox(widthFactor: .25, heightFactor: .25, child: Container(decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.white38))))
-                    : const SizedBox.expand(),
-            () => tap(i),
-          )),
+      board(
+          n,
+          n * n,
+          gap: 2,
+          (i) => cellBox(
+                Colors.green.shade800,
+                cells[i] != 0
+                    ? disc(cells[i])
+                    : legal.contains(i)
+                        ? Center(
+                            child: FractionallySizedBox(
+                                widthFactor: .25,
+                                heightFactor: .25,
+                                child: Container(decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.white38))))
+                        : const SizedBox.expand(),
+                () => tap(i),
+              )),
     );
   }
 }
@@ -359,8 +382,14 @@ class _DotsBoxesState extends State<DotsBoxes> {
         status: '🔵${owner.values.where((p) => p == 0).length} 🔴${owner.values.where((p) => p == 1).length}',
         board(s, s * s, gap: 0, (g) {
           final r = g ~/ s, c = g % s;
-          if (r.isEven && c.isEven) return Center(child: FractionallySizedBox(widthFactor: .4, heightFactor: .4, child: Container(decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.white))));
-          if (r.isOdd && c.isOdd) return Container(margin: const EdgeInsets.all(2), color: owner[g] == null ? null : duelColors[owner[g]!].withValues(alpha: .6));
+          if (r.isEven && c.isEven) {
+            return Center(
+              child: FractionallySizedBox(widthFactor: .4, heightFactor: .4, child: Container(decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.white))),
+            );
+          }
+          if (r.isOdd && c.isOdd) {
+            return Container(margin: const EdgeInsets.all(2), color: owner[g] == null ? null : duelColors[owner[g]!].withValues(alpha: .6));
+          }
           final drawn = lines.contains(g);
           return GestureDetector(
             behavior: HitTestBehavior.opaque,
@@ -470,18 +499,21 @@ class _MancalaState extends State<Mancala> {
         turn,
         banner: "${duelNames[turn]}'s turn · ${turn == 0 ? 'bottom' : 'top'} row",
         Center(
-          child: Container(
-            padding: const EdgeInsets.all(6),
-            decoration: BoxDecoration(color: Colors.brown.shade400, borderRadius: BorderRadius.circular(24)),
-            child: Row(mainAxisSize: MainAxisSize.min, children: [
-              pit(13),
-              Column(mainAxisSize: MainAxisSize.min, children: [
-                Row(children: [for (var i = 12; i >= 7; i--) pit(i)]),
-                const SizedBox(height: 20),
-                Row(children: [for (var i = 0; i < 6; i++) pit(i)]),
+          child: FittedBox(
+            fit: BoxFit.scaleDown, // the board is 372 px wide; shrink it on 360 px phones
+            child: Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(color: Colors.brown.shade400, borderRadius: BorderRadius.circular(24)),
+              child: Row(mainAxisSize: MainAxisSize.min, children: [
+                pit(13),
+                Column(mainAxisSize: MainAxisSize.min, children: [
+                  Row(children: [for (var i = 12; i >= 7; i--) pit(i)]),
+                  const SizedBox(height: 20),
+                  Row(children: [for (var i = 0; i < 6; i++) pit(i)]),
+                ]),
+                pit(6),
               ]),
-              pit(6),
-            ]),
+            ),
           ),
         ),
       );
@@ -491,7 +523,11 @@ class _MancalaState extends State<Mancala> {
 
 /// Blue (1) joins top to bottom, Red (2) joins left to right.
 bool hexWon(List<int> cells, int n, int p) {
-  final seen = <int>{}, stack = [for (var k = 0; k < n; k++) if (cells[p == 1 ? k : k * n] == p) p == 1 ? k : k * n];
+  final seen = <int>{},
+      stack = [
+        for (var k = 0; k < n; k++)
+          if (cells[p == 1 ? k : k * n] == p) p == 1 ? k : k * n
+      ];
   while (stack.isNotEmpty) {
     final i = stack.removeLast();
     if (!seen.add(i)) continue;
@@ -561,7 +597,8 @@ class _HexState extends State<Hex> {
                           width: s - 1,
                           height: s - 1,
                           margin: const EdgeInsets.all(.5),
-                          decoration: BoxDecoration(shape: BoxShape.circle, color: cells[r * n + c] == 0 ? Colors.blueGrey.shade700 : duelColors[cells[r * n + c] - 1]),
+                          decoration:
+                              BoxDecoration(shape: BoxShape.circle, color: cells[r * n + c] == 0 ? Colors.blueGrey.shade700 : duelColors[cells[r * n + c] - 1]),
                         ),
                       ),
                     Container(width: 3, height: s * .8, color: duelColors[1]),
@@ -739,9 +776,13 @@ class _ChompState extends State<Chomp> {
         'Chomp ${widget.rows}×${widget.cols}',
         turn,
         banner: "${duelNames[turn]}'s turn · whoever eats ☠️ loses",
-        board(widget.cols, eaten.length, gap: 3, (i) => eaten[i]
-            ? const SizedBox()
-            : cellBox(Colors.brown.shade600, Center(child: Text(i == 0 ? '☠️' : '', style: const TextStyle(fontSize: 22))), () => tap(i))),
+        board(
+            widget.cols,
+            eaten.length,
+            gap: 3,
+            (i) => eaten[i]
+                ? const SizedBox()
+                : cellBox(Colors.brown.shade600, Center(child: Text(i == 0 ? '☠️' : '', style: const TextStyle(fontSize: 22))), () => tap(i))),
       );
 }
 
@@ -896,7 +937,12 @@ class _PentagoState extends State<Pentago> {
         turn,
         banner: "${duelNames[turn]}: ${rotating ? 'now rotate a quadrant' : 'place a marble'} · 5 in a row wins",
         Column(children: [
-          Expanded(child: board(6, 36, gap: 3, (i) => cellBox((i ~/ 18 + i % 6 ~/ 3).isEven ? Colors.brown.shade700 : Colors.brown.shade500, disc(cells[i]), () => place(i)))),
+          Expanded(
+              child: board(
+                  6,
+                  36,
+                  gap: 3,
+                  (i) => cellBox((i ~/ 18 + i % 6 ~/ 3).isEven ? Colors.brown.shade700 : Colors.brown.shade500, disc(cells[i]), () => place(i)))),
           if (rotating)
             Padding(
               padding: const EdgeInsets.only(bottom: 16),
@@ -988,7 +1034,8 @@ class _IsolationState extends State<Isolation> {
           burned.contains(i) ? Colors.black : (legal.contains(i) ? duelColors[turn].shade900 : Colors.blueGrey.shade700),
           Center(
             child: FittedBox(
-              child: Text(who >= 0 ? piece : (burned.contains(i) ? '✕' : ''), style: TextStyle(fontSize: 26, color: who >= 0 ? duelColors[who].shade200 : Colors.white24)),
+              child: Text(who >= 0 ? piece : (burned.contains(i) ? '✕' : ''),
+                  style: TextStyle(fontSize: 26, color: who >= 0 ? duelColors[who].shade200 : Colors.white24)),
             ),
           ),
           () => tap(i),

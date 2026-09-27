@@ -361,12 +361,13 @@ class Chess extends ClassicDuel {
       if (p.toUpperCase() == 'P' && (to < 8 || to >= 56)) b[to] = s == 0 ? 'Q' : 'q'; // ponytail: auto-queen, add a picker if under-promotion matters
     }
     ep = p.toUpperCase() == 'P' && (to - from).abs() == 16 ? (from + to) ~/ 2 : null;
-    rights.removeWhere((r) => r == from || r == to || (king && r ~/ 8 == from ~/ 8));
+    rights.removeWhere((r) => r == from || r == to || (king && r ~/ 8 == (s == 0 ? 7 : 0))); // only the mover's own rooks
     next();
+    final rest = [for (final x in b) if (x != '' && x.toUpperCase() != 'K') x.toUpperCase()];
     if (!anyMove()) {
       winner = inCheck(turn) ? 1 - turn : 2;
-    } else if (b.where((x) => x != '').length == 2) {
-      winner = 2; // bare kings
+    } else if (rest.isEmpty || (rest.length == 1 && 'BN'.contains(rest[0]))) {
+      winner = 2; // K v K, K+B v K, K+N v K: mate is impossible
     }
   }
 
@@ -917,7 +918,9 @@ class Tafl extends ClassicDuel {
       final a = _step(n, to, dr, dc), z = a == null ? null : _step(n, a, dr, dc);
       if (a != null && z != null && b[a] != 3 && owner(b[a]) == 1 - turn && (owner(b[z]) == turn || (restricted(z) && b[z] == 0))) b[a] = 0;
     }
-    if (turn == 0 && kingTaken(b.indexOf(3))) {
+    final k = b.indexOf(3);
+    // The king is only captured by an attacker moving next to it, not by stepping between two attackers itself.
+    if (turn == 0 && [for (final (dr, dc) in _orth) _step(n, to, dr, dc)].contains(k) && kingTaken(k)) {
       winner = 0;
     } else if (b[to] == 3 && escaped(to)) {
       winner = 1;

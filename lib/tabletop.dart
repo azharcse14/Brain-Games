@@ -184,13 +184,16 @@ class _LudoState extends State<Ludo> {
       if (mounted) setState(() => die = v);
     });
     if (!mounted) return;
-    setState(() => rolling = false);
-    final opts = movable(cur, d);
+    final opts = movable(cur, d); // `rolling` stays true until the turn is handled, so Roll can't fire twice
+
     if (opts.isEmpty) {
       await Future.delayed(const Duration(milliseconds: 700));
       if (mounted) nextTurn(false);
     } else if (cur == 0) {
-      setState(() => waiting = opts);
+      setState(() {
+        rolling = false;
+        waiting = opts;
+      });
     } else {
       await Future.delayed(const Duration(milliseconds: 450));
       if (!mounted) return;
@@ -216,6 +219,7 @@ class _LudoState extends State<Ludo> {
 
   void nextTurn(bool extra) {
     setState(() {
+      rolling = false;
       if (!extra) turn = (turn + 1) % widget.players.length;
     });
     if (cur != 0 && !over) roll();
@@ -435,7 +439,7 @@ class _BlackjackState extends State<Blackjack> {
       playing = true;
       msg = '';
     });
-    if (handValue(player) == 21) stand();
+    if (handValue(player) == 21 || handValue(dealer) == 21) stand();
   }
 
   void hit() {
@@ -448,8 +452,11 @@ class _BlackjackState extends State<Blackjack> {
       dealer.add(draw());
     }
     final p = handValue(player), d = handValue(dealer);
-    if (p == 21 && player.length == 2 && !(d == 21 && dealer.length == 2)) {
+    final pNat = p == 21 && player.length == 2, dNat = d == 21 && dealer.length == 2;
+    if (pNat && !dNat) {
       settle(bet * 3 ~/ 2, 'Blackjack! +${bet * 3 ~/ 2}');
+    } else if (dNat && !pNat) {
+      settle(-bet, 'Dealer blackjack');
     } else if (d > 21 || p > d) {
       settle(bet, 'You win +$bet');
     } else if (p == d) {
@@ -465,7 +472,7 @@ class _BlackjackState extends State<Blackjack> {
       chips += delta;
       playing = false;
       msg = m;
-      bet = min(bet, max(10, chips));
+      bet = [bet, 25, 10].firstWhere((b) => b <= chips, orElse: () => 10); // stay on a real option
     });
     record(context, chips, unit: ' chips');
     if (chips < 10) {
@@ -662,10 +669,12 @@ class _CrazyEightsState extends State<CrazyEights> {
             ]),
           ),
           Text('Your hand', style: const TextStyle(color: Colors.white70)),
-          SingleChildScrollView(
-            child: Wrap(alignment: WrapAlignment.center, children: [
-              for (final c in you..sort()) playingCard(c, dim: !yourTurn || !playable(c), onTap: () => youPlay(c)),
-            ]),
+          Flexible(
+            child: SingleChildScrollView(
+              child: Wrap(alignment: WrapAlignment.center, children: [
+                for (final c in you..sort()) playingCard(c, dim: !yourTurn || !playable(c), onTap: () => youPlay(c)),
+              ]),
+            ),
           ),
         ]),
       ),

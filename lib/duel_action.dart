@@ -329,17 +329,24 @@ class _AirHockeyState extends State<AirHockey> with SingleTickerProviderStateMix
     final dt = _dt(now, last);
     last = now;
     if (dt <= 0) return;
+    final from = prev.toList(), to = mallets.toList();
     for (var pl = 0; pl < 2; pl++) {
-      final v = (mallets[pl] - prev[pl]) / dt;
+      final v = (to[pl] - from[pl]) / dt;
       malletV[pl] = v.distance > 6 ? v / v.distance * 6 : v;
-      prev[pl] = mallets[pl];
+      prev[pl] = to[pl];
     }
     if (pause > 0) {
       pause -= dt;
     } else {
+      // Substeps cover the puck's travel AND each mallet's, and the mallets are swept along with the puck,
+      // so a fast smash can't jump over it between frames.
+      final reach = max((to[0] - from[0]).distance, (to[1] - from[1]).distance);
       for (var i = 0; i < pucks.length; i++) {
-        final b = pucks[i], steps = min(20, max(1, (b.v.distance * dt / (widget.puckR / 2)).ceil()));
+        final b = pucks[i], steps = min(30, max(1, ((b.v.distance * dt + reach) / (widget.puckR / 2)).ceil()));
         for (var s = 0; s < steps; s++) {
+          for (var pl = 0; pl < 2; pl++) {
+            mallets[pl] = Offset.lerp(from[pl], to[pl], (s + 1) / steps)!;
+          }
           final scorer = movePuck(b, dt / steps);
           if (scorer != null) {
             goal(scorer, i);
@@ -348,6 +355,7 @@ class _AirHockeyState extends State<AirHockey> with SingleTickerProviderStateMix
         }
         pucks[i].v *= pow(widget.friction, dt).toDouble();
       }
+      mallets.setAll(0, to);
       if (pucks.length == 2) collidePucks();
     }
     setState(() {});

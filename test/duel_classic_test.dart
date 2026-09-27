@@ -67,6 +67,26 @@ void main() {
       expect(g.b[sq('f1')], 'R');
     });
 
+    test("a king walking along the enemy's back rank keeps the enemy's castling rights", () {
+      final g = emptyChess();
+      g.b[sq('c8')] = 'K';
+      g.b[sq('e8')] = 'k';
+      g.b[sq('h8')] = 'r';
+      g.rights = {sq('h8')};
+      g.play(sq('c8'), sq('b8'));
+      expect(g.rights, contains(sq('h8')));
+    });
+
+    test('king and knight against king is a draw', () {
+      final g = emptyChess();
+      g.b[sq('e1')] = 'K';
+      g.b[sq('b1')] = 'N';
+      g.b[sq('e8')] = 'k';
+      g.b[sq('c3')] = 'p';
+      mv(g, 'b1', 'c3');
+      expect(g.winner, 2);
+    });
+
     test('chess960 castles by moving the king onto its rook', () {
       final g = Chess(fischer: true)
         ..b = List.filled(64, '')
@@ -210,6 +230,20 @@ void main() {
       g.play(at(6, 2), at(1, 2)); // sandwiches the king between (1,0) and (1,2)
       expect(g.winner, 0);
     });
+  });
+
+  test('tafl: a king that steps between two attackers is not captured by an unrelated move', () {
+    final g = Tafl(7);
+    int at(int r, int c) => r * 7 + c;
+    g.b.fillRange(0, 49, 0);
+    g.b[at(2, 2)] = 3;
+    g.b[at(1, 1)] = 1;
+    g.b[at(1, 3)] = 1;
+    g.b[at(5, 5)] = 1;
+    g.turn = 1;
+    g.play(at(2, 2), at(1, 2)); // king steps between the two attackers itself
+    g.play(at(5, 5), at(5, 4)); // attackers move elsewhere
+    expect(g.winner, isNull);
   });
 
   test('lines of action connectivity', () {

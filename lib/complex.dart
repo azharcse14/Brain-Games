@@ -213,7 +213,7 @@ class _SudokuState extends State<Sudoku> {
               final r = i ~/ 9, c = i % 9, box = (r ~/ 3 + c ~/ 3).isEven;
               final same = sel != null && g[sel!] != 0 && g[i] == g[sel!];
               return Material(
-                color: i == sel ? Colors.deepPurple : (same ? Colors.deepPurple.shade800 : (box ? Colors.blueGrey.shade800 : Colors.blueGrey.shade700)),
+                color: i == sel ? Colors.deepPurple : (same ? Colors.deepPurple.shade800 : (box ? Colors.blueGrey.shade900 : Colors.blueGrey.shade600)),
                 borderRadius: BorderRadius.circular(4),
                 child: InkWell(
                   onTap: () => setState(() => sel = i),

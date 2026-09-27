@@ -182,16 +182,24 @@ String roman(int n) {
   return '$b';
 }
 
+/// Real words that a distractor could accidentally spell (typo, scramble, missing letter or compound).
+const realWords = {
+  'BATTER', 'BETTER', 'BITTER', 'HANDLE', 'DONKEY', 'POCKET', 'SOCKET', 'LOCKET', 'MITTEN', 'BITTEN', 'PACKET', //
+  'RACKET', 'MUZZLE', 'NUZZLE', 'GUZZLE', 'DRAIN', 'TRAIN', 'GRAIN', 'ALOUD', 'LIVER', 'DIVER', 'GIVER', 'FIVER',
+  'SIMMER', 'SLIVER', 'LIVERS', 'MELON', 'SNOWBALL', 'SNOWFALL', 'FIREMAN', 'FIREFLY', 'FIREBALL', 'SUNLIGHT',
+  'SUNFISH', 'RAINFALL', 'HANDBOOK', 'HANDBALL', 'CUPBOARD', 'STARLIGHT', 'FOOTFALL', 'SEAMAN',
+};
+
 String scramble(String w, Random r) {
   String s;
   do {
     s = (w.split('')..shuffle(r)).join();
-  } while (s == w);
+  } while (s == w || realWords.contains(s));
   return s;
 }
 
 String swapAt(String w, int i) => w.substring(0, i) + w[i + 1] + w[i] + w.substring(i + 2);
-Set<String> typos(String w) => {for (var i = 0; i < w.length - 1; i++) swapAt(w, i)}..remove(w);
+Set<String> typos(String w) => {for (var i = 0; i < w.length - 1; i++) swapAt(w, i)}..remove(w)..removeAll(realWords);
 List<String> nearLetters(int t) => [for (final j in [-2, -1, 1, 2]) if (t + j >= 0 && t + j < 26) abc[t + j]];
 List<String> sample(Random r, List<String> l, int k) => (l.toList()..shuffle(r)).take(k).toList();
 
@@ -217,12 +225,12 @@ const words = [
 ];
 const antonyms = [
   ('HOT', 'COLD'), ('BIG', 'SMALL'), ('FAST', 'SLOW'), ('HAPPY', 'SAD'), ('LIGHT', 'DARK'), ('OPEN', 'CLOSED'),
-  ('EARLY', 'LATE'), ('FULL', 'EMPTY'), ('HARD', 'SOFT'), ('HIGH', 'LOW'), ('RICH', 'POOR'), ('STRONG', 'WEAK'),
+  ('EARLY', 'LATE'), ('FULL', 'EMPTY'), ('HARD', 'EASY'), ('HIGH', 'LOW'), ('RICH', 'POOR'), ('STRONG', 'WEAK'),
   ('YOUNG', 'OLD'), ('WET', 'DRY'), ('LOUD', 'QUIET'), ('PUSH', 'PULL'), ('WIN', 'LOSE'), ('BUY', 'SELL'),
 ];
 const synonyms = [
   ('BIG', 'LARGE'), ('SMALL', 'TINY'), ('HAPPY', 'GLAD'), ('FAST', 'QUICK'), ('SMART', 'CLEVER'), ('ANGRY', 'MAD'),
-  ('BEGIN', 'START'), ('END', 'FINISH'), ('SHUT', 'CLOSE'), ('BRAVE', 'BOLD'), ('EASY', 'SIMPLE'), ('HUGE', 'GIANT'),
+  ('BEGIN', 'START'), ('END', 'FINISH'), ('SHUT', 'CLOSE'), ('BRAVE', 'BOLD'), ('EASY', 'SIMPLE'), ('GIFT', 'PRESENT'),
   ('RICH', 'WEALTHY'), ('SCARED', 'AFRAID'), ('CHOOSE', 'PICK'), ('TALK', 'SPEAK'), ('JUMP', 'LEAP'), ('SHOUT', 'YELL'),
 ];
 const capitals = [
@@ -534,8 +542,9 @@ final quizGames = <Game>[
   quiz('Number Rule', 'Logic', (r, d) {
     final k = rn(r, 2, 9);
     final f = one(r, <int Function(int)>[(x) => x * k, (x) => x + k, (x) => x * x, (x) => x * k - 1, (x) => x * x + k]);
-    final xs = sample(r, [for (var i = 1; i <= 6 + 2 * d; i++) '$i'], 3).map(int.parse).toList();
-    return n('${xs[0]} → ${f(xs[0])}\n${xs[1]} → ${f(xs[1])}\n${xs[2]} → ?', f(xs[2]), r);
+    // Three examples pin down every rule above (two can't: x*x+k vs x*k look alike).
+    final xs = sample(r, [for (var i = 1; i <= 6 + 2 * d; i++) '$i'], 4).map(int.parse).toList();
+    return n('${[for (final x in xs.take(3)) '$x → ${f(x)}'].join('\n')}\n${xs[3]} → ?', f(xs[3]), r);
   }),
   quiz('Proportions', 'Logic', (r, d) {
     final a = rn(r, 2, 5), p = rn(r, 2, 10 * d), b = rn(r, 2, 12);
@@ -584,7 +593,7 @@ final quizGames = <Game>[
   }),
   quiz('Missing Letter', 'Word', (r, d) {
     final w = one(r, words), i = r.nextInt(w.length);
-    return Q(w.replaceRange(i, i + 1, '_'), w[i], abc.split(''), ask: 'Fill the blank');
+    return Q(w.replaceRange(i, i + 1, '_'), w[i], abc.split('').where((c) => !realWords.contains(w.replaceRange(i, i + 1, c))), ask: 'Fill the blank');
   }),
   quiz('Reverse Word', 'Word', (r, d) {
     final w = one(r, words), rev = w.split('').reversed.join();
@@ -649,7 +658,7 @@ final quizGames = <Game>[
   }),
   quiz('Compound Words', 'Word', (r, d) {
     final (a, b) = one(r, compounds);
-    return choice('$a + ?', b, compounds.map((e) => e.$2), ask: 'Make a word');
+    return choice('$a + ?', b, compounds.map((e) => e.$2).where((x) => !realWords.contains(a + x)), ask: 'Make a word');
   }),
   quiz('Starts With', 'Word', (r, d) {
     final w = one(r, words);
