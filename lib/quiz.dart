@@ -40,6 +40,7 @@ class _QuizScreenState extends State<QuizScreen> {
       picked = o;
       if (o == q.answer) score++;
     });
+    sfx(o == q.answer ? 'right' : 'wrong');
     await Future.delayed(const Duration(milliseconds: 700));
     if (!mounted) return;
     if (++i < total) {
@@ -49,7 +50,7 @@ class _QuizScreenState extends State<QuizScreen> {
       });
       return;
     }
-    showResult(context, score: score, unit: '/$total', 'Score: $score / $total', () => setState(() {
+    showResult(context, won: score >= total ~/ 2, score: score, unit: '/$total', 'Score: $score / $total', () => setState(() {
           i = score = 0;
           picked = null;
           q = widget.gen(_r, 1);

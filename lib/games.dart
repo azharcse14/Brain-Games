@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -54,7 +55,12 @@ Widget tile(Color color, {String text = '', VoidCallback? onTap}) => Material(
       borderRadius: BorderRadius.circular(12),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
-        onTap: onTap,
+        onTap: onTap == null
+            ? null
+            : () {
+                sfx('tap');
+                onTap();
+              },
         child: Center(
           child: FittedBox(
             child: Padding(
@@ -79,8 +85,18 @@ bool record(BuildContext context, num v, {bool lower = false, String unit = ''})
   return true;
 }
 
-void showResult(BuildContext context, String msg, VoidCallback again, {num? score, bool lower = false, String unit = ''}) {
+final _players = <String, AudioPlayer>{};
+
+/// Plays assets/sfx/[name].wav unless muted.
+void sfx(String name) {
+  if (prefs?.getBool('mute') ?? false) return;
+  final p = _players.putIfAbsent(name, AudioPlayer.new);
+  p.stop().then((_) => p.play(AssetSource('sfx/$name.wav'))).ignore();
+}
+
+void showResult(BuildContext context, String msg, VoidCallback again, {num? score, bool lower = false, String unit = '', bool won = true}) {
   final best = score != null && record(context, score, lower: lower, unit: unit);
+  sfx(best || won ? 'win' : 'wrong');
   showDialog(
     context: context,
     barrierDismissible: false,
@@ -157,11 +173,12 @@ class _SimonState extends State<Simon> {
     flash(i);
     if (seq[step] != i) {
       busy = true;
-      showResult(context, score: seq.length - 1, 'Score: ${seq.length - 1}', () {
+      showResult(context, won: false, score: seq.length - 1, 'Score: ${seq.length - 1}', () {
         seq.clear();
         next();
       });
     } else if (++step == seq.length) {
+      sfx('right');
       next();
     }
   }
@@ -209,10 +226,11 @@ class _NumberMemoryState extends State<NumberMemory> {
 
   void submit() {
     if (ctrl.text.trim() == target) {
+      sfx('right');
       level++;
       start();
     } else {
-      showResult(context, score: level, 'Number was $target\nLevel reached: $level', () {
+      showResult(context, won: false, score: level, 'Number was $target\nLevel reached: $level', () {
         level = 1;
         start();
       });
@@ -284,7 +302,7 @@ class _PatternMemoryState extends State<PatternMemory> {
     if (showing || hit.contains(i)) return;
     if (!target.contains(i)) {
       setState(() => showing = true);
-      showResult(context, score: level, 'Level reached: $level', () {
+      showResult(context, won: false, score: level, 'Level reached: $level', () {
         level = 1;
         start();
       });
@@ -292,6 +310,7 @@ class _PatternMemoryState extends State<PatternMemory> {
     }
     setState(() => hit.add(i));
     if (hit.length == target.length) {
+      sfx('right');
       level++;
       t = Timer(const Duration(milliseconds: 400), start);
     }
@@ -341,6 +360,7 @@ class _CardMatchState extends State<CardMatch> {
     if (open.length < 2) return;
     moves++;
     if (cards[open[0]] == cards[open[1]]) {
+      sfx('right');
       setState(() {
         done.addAll(open);
         open.clear();
@@ -693,7 +713,7 @@ class _TicTacToeState extends State<TicTacToe> {
     });
     final w = winner(b);
     if (w != null) {
-      showResult(context, w == 'draw' ? "It's a draw" : (w == 'X' ? 'You win!' : 'AI wins'), () => setState(() => b.fillRange(0, 9, '')));
+      showResult(context, won: w != 'O', w == 'draw' ? "It's a draw" : (w == 'X' ? 'You win!' : 'AI wins'), () => setState(() => b.fillRange(0, 9, '')));
     }
   }
 

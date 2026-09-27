@@ -44,9 +44,16 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final muted = prefs?.getBool('mute') ?? false;
     final list = allGames.where((g) => cat == null || g.cat == cat).toList();
     return Scaffold(
-      appBar: AppBar(title: Text('Brain Games · ${allGames.length}')),
+      appBar: AppBar(title: Text('Brain Games · ${allGames.length}'), actions: [
+        IconButton(
+          tooltip: 'Sound',
+          icon: Icon(muted ? Icons.volume_off : Icons.volume_up),
+          onPressed: () => setState(() => prefs?.setBool('mute', !muted)),
+        ),
+      ]),
       body: Column(children: [
         SizedBox(
           height: 56,
