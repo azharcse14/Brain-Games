@@ -1,10 +1,30 @@
 import 'dart:math';
 
+import 'package:brain_games/games.dart';
 import 'package:brain_games/main.dart';
 import 'package:brain_games/quiz.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
+  setUp(() async {
+    SharedPreferences.setMockInitialValues({});
+    prefs = await SharedPreferences.getInstance();
+  });
+
+  testWidgets('record keeps only better scores', (tester) async {
+    late BuildContext ctx;
+    await tester.pumpWidget(MaterialApp(home: Builder(builder: (c) {
+      ctx = c;
+      return const SizedBox();
+    })));
+    expect(record(ctx, 5), isTrue);
+    expect(record(ctx, 3), isFalse);
+    expect(record(ctx, 7, unit: '/10'), isTrue);
+    expect(prefs!.getString('bestText:/'), '7/10');
+  });
+
   test('has 100+ games', () => expect(allGames.length, greaterThanOrEqualTo(100)));
 
   test('every quiz question has its answer among 2–4 distinct options', () {

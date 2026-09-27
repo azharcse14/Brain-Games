@@ -49,7 +49,7 @@ class _QuizScreenState extends State<QuizScreen> {
       });
       return;
     }
-    showResult(context, 'Score: $score / $total', () => setState(() {
+    showResult(context, score: score, unit: '/$total', 'Score: $score / $total', () => setState(() {
           i = score = 0;
           picked = null;
           q = widget.gen(_r, 1);
