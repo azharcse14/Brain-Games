@@ -9,12 +9,12 @@ import 'games.dart';
 final _r = Random();
 
 final complexGames = <Game>[
-  Game('2048', 'Puzzle', () => const Game2048()),
-  for (final (label, givens) in [('Easy', 40), ('Hard', 28)]) Game('Sudoku $label', 'Logic', () => Sudoku(givens)),
-  for (final (n, mines) in [(9, 10), (12, 24)]) Game('Minesweeper $n×$n', 'Logic', () => Minesweeper(n, mines)),
-  Game('Mastermind', 'Logic', () => const Mastermind()),
-  for (final n in [3, 4, 5]) Game('Hanoi Tower $n Disks', 'Puzzle', () => Hanoi(n)),
-  Game('Connect Four', 'Puzzle', () => const ConnectFour()),
+  Game('2048', 'Puzzle', () => const Game2048(), bn: '2048'),
+  for (final (label, bn, givens) in [('Easy', 'সহজ', 40), ('Hard', 'কঠিন', 28)]) Game('Sudoku $label', 'Logic', () => Sudoku(givens), bn: 'সুডোকু $bn'),
+  for (final (n, mines) in [(9, 10), (12, 24)]) Game('Minesweeper $n×$n', 'Logic', () => Minesweeper(n, mines), bn: 'মাইনসুইপার $n×$n'),
+  Game('Mastermind', 'Logic', () => const Mastermind(), bn: 'মাস্টারমাইন্ড'),
+  for (final n in [3, 4, 5]) Game('Hanoi Tower $n Disks', 'Puzzle', () => Hanoi(n), bn: 'হ্যানয় টাওয়ার $n চাকতি'),
+  Game('Connect Four', 'Puzzle', () => const ConnectFour(), bn: 'কানেক্ট ফোর'),
 ];
 
 /// 8-way neighbours of cell [i] on a [cols]-wide grid of [count] cells.
@@ -95,7 +95,7 @@ class _Game2048State extends State<Game2048> {
       score += gained;
       spawn();
     });
-    if (!canMove()) showResult(context, won: false, score: score, 'No moves left!\nScore: $score', () => setState(start));
+    if (!canMove()) showResult(context, won: false, score: score, tr('No moves left!\nScore: $score', 'আর কোনো চাল নেই!\nস্কোর: $score'), () => setState(start));
   }
 
   @override
@@ -122,7 +122,7 @@ class _Game2048State extends State<Game2048> {
             }),
           ),
         ),
-        'Score $score',
+        tr('Score $score', 'স্কোর $score'),
       );
 }
 
@@ -200,13 +200,13 @@ class _SudokuState extends State<Sudoku> {
     if (!g.contains(0) && !List.generate(81, bad).contains(true)) {
       sw.stop();
       final secs = sw.elapsed.inSeconds;
-      showResult(context, score: secs, lower: true, unit: ' s', 'Solved in ${secs ~/ 60}m ${secs % 60}s', () => setState(start));
+      showResult(context, score: secs, lower: true, unit: ' s', tr('Solved in ${secs ~/ 60}m ${secs % 60}s', '${secs ~/ 60} মি ${secs % 60} সে-এ সমাধান'), () => setState(start));
     }
   }
 
   @override
   Widget build(BuildContext context) => page(
-        'Sudoku',
+        tr('Sudoku', 'সুডোকু'),
         Column(children: [
           Expanded(
             child: board(9, 81, gap: 2, (i) {
@@ -237,7 +237,7 @@ class _SudokuState extends State<Sudoku> {
             ]),
           ),
         ]),
-        '${g.where((v) => v == 0).length} left',
+        tr('${g.where((v) => v == 0).length} left', '${g.where((v) => v == 0).length}টি বাকি'),
       );
 }
 
@@ -298,7 +298,7 @@ class _MinesweeperState extends State<Minesweeper> {
           if (mine[j]) open[j] = true;
         }
       });
-      showResult(context, won: false, 'Boom! 💥', () => setState(start));
+      showResult(context, won: false, tr('Boom! 💥', 'বুম! 💥'), () => setState(start));
       return;
     }
     sfx('tap');
@@ -315,13 +315,13 @@ class _MinesweeperState extends State<Minesweeper> {
       sw.stop();
       over = true;
       final secs = sw.elapsed.inSeconds;
-      showResult(context, score: secs, lower: true, unit: ' s', 'Cleared in $secs s', () => setState(start));
+      showResult(context, score: secs, lower: true, unit: ' s', tr('Cleared in $secs s', '$secs সে-এ পরিষ্কার'), () => setState(start));
     }
   }
 
   @override
   Widget build(BuildContext context) => page(
-        'Minesweeper',
+        tr('Minesweeper', 'মাইনসুইপার'),
         Column(children: [
           Expanded(
             child: board(n, n * n, gap: 3, (i) {
@@ -344,7 +344,7 @@ class _MinesweeperState extends State<Minesweeper> {
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 16),
-            child: FilterChip(label: const Text('🚩 Flag mode (or long-press)'), selected: flagMode, onSelected: (v) => setState(() => flagMode = v)),
+            child: FilterChip(label: Text(tr('🚩 Flag mode (or long-press)', '🚩 পতাকা মোড (বা লম্বা চাপ)')), selected: flagMode, onSelected: (v) => setState(() => flagMode = v)),
           ),
         ]),
         '💣 ${widget.mines - flag.where((f) => f).length}',
@@ -404,9 +404,9 @@ class _MastermindState extends State<Mastermind> {
       cur.clear();
     });
     if (fb.$1 == 4) {
-      showResult(context, score: guesses.length, lower: true, unit: ' guesses', 'Cracked in ${guesses.length} guesses!', () => setState(start));
+      showResult(context, score: guesses.length, lower: true, unit: ' guesses', tr('Cracked in ${guesses.length} guesses!', '${guesses.length} বারে কোড ভাঙা হয়েছে!'), () => setState(start));
     } else if (guesses.length == maxGuesses) {
-      showResult(context, won: false, 'Out of guesses.\nThe code was:\n${code.map((c) => ['🔴', '🔵', '🟢', '🟡', '🟣', '🟠'][c]).join()}', () => setState(start));
+      showResult(context, won: false, tr('Out of guesses.\nThe code was:\n', 'চেষ্টা শেষ।\nকোডটি ছিল:\n') + code.map((c) => ['🔴', '🔵', '🟢', '🟡', '🟣', '🟠'][c]).join(), () => setState(start));
     } else {
       sfx(fb.$1 + fb.$2 > 0 ? 'right' : 'wrong');
     }
@@ -421,9 +421,9 @@ class _MastermindState extends State<Mastermind> {
 
   @override
   Widget build(BuildContext context) => page(
-        'Mastermind',
+        tr('Mastermind', 'মাস্টারমাইন্ড'),
         Column(children: [
-          const Padding(padding: EdgeInsets.all(12), child: Text('● right color & place   ○ right color, wrong place', style: TextStyle(color: Colors.white70))),
+          Padding(padding: const EdgeInsets.all(12), child: Text(tr('● right color & place   ○ right color, wrong place', '● রং ও জায়গা ঠিক   ○ রং ঠিক, জায়গা ভুল'), style: const TextStyle(color: Colors.white70))),
           Expanded(
             child: ListView(padding: const EdgeInsets.symmetric(horizontal: 24), children: [
               for (final (g, (b, w)) in guesses)
@@ -452,9 +452,9 @@ class _MastermindState extends State<Mastermind> {
           Padding(
             padding: const EdgeInsets.only(bottom: 16),
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              OutlinedButton.icon(onPressed: cur.isEmpty ? null : () => setState(cur.removeLast), icon: const Icon(Icons.undo), label: const Text('Undo')),
+              OutlinedButton.icon(onPressed: cur.isEmpty ? null : () => setState(cur.removeLast), icon: const Icon(Icons.undo), label: Text(tr('Undo', 'ফেরত'))),
               const SizedBox(width: 12),
-              FilledButton.icon(onPressed: cur.length == 4 ? check : null, icon: const Icon(Icons.check), label: const Text('Check')),
+              FilledButton.icon(onPressed: cur.length == 4 ? check : null, icon: const Icon(Icons.check), label: Text(tr('Check', 'যাচাই'))),
             ]),
           ),
         ]),
@@ -506,15 +506,15 @@ class _HanoiState extends State<Hanoi> {
     }
     setState(() => sel = null);
     if (pegs[2].length == n) {
-      showResult(context, score: moves, lower: true, unit: ' moves', 'Done in $moves moves\n(best possible: ${(1 << n) - 1})', () => setState(start));
+      showResult(context, score: moves, lower: true, unit: ' moves', tr('Done in $moves moves\n(best possible: ${(1 << n) - 1})', '$moves চালে শেষ\n(সেরা সম্ভব: ${(1 << n) - 1})'), () => setState(start));
     }
   }
 
   @override
   Widget build(BuildContext context) => page(
-        'Tower of Hanoi',
+        tr('Tower of Hanoi', 'হ্যানয় টাওয়ার'),
         Column(children: [
-          const Padding(padding: EdgeInsets.all(16), child: Text('Move every disk to the right peg.\nNever put a bigger disk on a smaller one.', textAlign: TextAlign.center, style: TextStyle(color: Colors.white70))),
+          Padding(padding: const EdgeInsets.all(16), child: Text(tr('Move every disk to the right peg.\nNever put a bigger disk on a smaller one.', 'সব চাকতি ডান দিকের খুঁটিতে নিন।\nছোট চাকতির ওপর কখনো বড়টা রাখবেন না।'), textAlign: TextAlign.center, style: const TextStyle(color: Colors.white70))),
           Expanded(
             child: Row(children: [
               for (var p = 0; p < 3; p++)
@@ -546,7 +546,7 @@ class _HanoiState extends State<Hanoi> {
             ]),
           ),
         ]),
-        'Moves $moves',
+        tr('Moves $moves', 'চাল $moves'),
       );
 }
 
@@ -624,7 +624,7 @@ class _ConnectFourState extends State<ConnectFour> {
     }
     if (!cells.contains(0)) {
       over = true;
-      showResult(context, won: false, "It's a draw", () => setState(restart));
+      showResult(context, won: false, tr("It's a draw", 'ড্র হয়েছে'), () => setState(restart));
       return true;
     }
     return false;
@@ -640,7 +640,7 @@ class _ConnectFourState extends State<ConnectFour> {
     sfx('tap');
     late int i;
     setState(() => i = drop(c, you));
-    if (finish(i, 'You win! 🎉', won: true)) return;
+    if (finish(i, tr('You win! 🎉', 'আপনি জিতেছেন! 🎉'), won: true)) return;
     setState(() => busy = true);
     await Future.delayed(const Duration(milliseconds: 450));
     if (!mounted) return;
@@ -648,12 +648,12 @@ class _ConnectFourState extends State<ConnectFour> {
       i = drop(aiColumn(), ai);
       busy = false;
     });
-    finish(i, 'AI wins', won: false);
+    finish(i, tr('AI wins', 'কম্পিউটার জিতেছে'), won: false);
   }
 
   @override
   Widget build(BuildContext context) => page(
-        'Connect Four',
+        tr('Connect Four', 'কানেক্ট ফোর'),
         board(7, 42, gap: 6, (i) {
           final v = cells[i];
           return GestureDetector(
@@ -666,6 +666,6 @@ class _ConnectFourState extends State<ConnectFour> {
             ),
           );
         }),
-        busy ? 'AI thinking…' : 'You are 🟡',
+        busy ? tr('AI thinking…', 'কম্পিউটার ভাবছে…') : tr('You are 🟡', 'আপনি 🟡'),
       );
 }

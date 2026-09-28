@@ -32,9 +32,15 @@ void main() {
     expect(allGames.map((g) => g.name).toSet().length, allGames.length);
   });
 
-  test('every quiz question has its answer among 2–4 distinct options', () {
+  test('every game has a Bangla name', () {
+    expect([for (final g in allGames) if (g.bn == null) g.name], isEmpty);
+  });
+
+  test('every quiz question has its answer among 2–4 distinct options, in both languages', () {
     final r = Random(42);
-    for (final g in quizGames) {
+    addTearDown(() => bangla.value = false);
+    for (final (bn, g) in [for (final bn in [false, true]) for (final g in quizGames) (bn, g)]) {
+      bangla.value = bn;
       final gen = (g.build() as QuizScreen).gen;
       for (var d = 1; d <= 4; d++) {
         for (var k = 0; k < 200; k++) {

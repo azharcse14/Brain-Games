@@ -8,29 +8,29 @@ import 'tabletop.dart';
 final _r = Random();
 
 final solitaireGames = <Game>[
-  Game('Klondike Draw 1', 'Cards', () => const Klondike(), glyph: 'K1'),
-  Game('Klondike Draw 3', 'Cards', () => const Klondike(draw: 3), glyph: 'K3'),
-  Game('Yukon', 'Cards', () => const Klondike(yukon: true), glyph: '🏔️'),
-  Game('FreeCell', 'Cards', () => const FreeCell(), glyph: '🆓'),
-  Game('Spider 1 Suit', 'Cards', () => const Spider(1), glyph: '🕷️'),
-  Game('Spider 2 Suits', 'Cards', () => const Spider(2), glyph: '🕸️'),
-  Game('Spider 4 Suits', 'Cards', () => const Spider(4), glyph: '🕷4'),
-  Game('Pyramid Solitaire', 'Cards', () => const Pyramid(), glyph: '🔺'),
-  Game('TriPeaks', 'Cards', () => const TriPeaks(), glyph: '⛰️'),
-  Game('Golf Solitaire', 'Cards', () => const Golf(), glyph: '⛳'),
-  Game('Clock Solitaire', 'Cards', () => const ClockSolitaire(), glyph: '🕰️'),
-  Game('Accordion', 'Cards', () => const Accordion(), glyph: '🪗'),
-  Game('Video Poker Jacks or Better', 'Cards', () => const VideoPoker(), glyph: '🎰'),
-  Game('Video Poker Deuces Wild', 'Cards', () => const VideoPoker(deuces: true), glyph: '2️⃣'),
-  Game('Baccarat', 'Cards', () => const Baccarat(), glyph: '🎴'),
-  Game('Red Dog', 'Cards', () => const RedDog(), glyph: '🐕'),
-  Game('War', 'Cards', () => const War(), glyph: '⚔️🃏'),
-  Game('Go Fish', 'Cards', () => const GoFish(), glyph: '🎣'),
-  Game('Old Maid', 'Cards', () => const OldMaid(), glyph: '👵'),
-  Game('Yahtzee', 'Board', () => const Yahtzee(), glyph: '🎲🎲'),
-  Game('Farkle', 'Board', () => const Farkle(), glyph: '🔥'),
-  Game('Shut the Box', 'Board', () => const ShutTheBox(), glyph: '📦'),
-  Game('Dice Poker', 'Board', () => const DicePoker(), glyph: '🎲♠'),
+  Game('Klondike Draw 1', 'Cards', () => const Klondike(), glyph: 'K1', bn: 'ক্লনডাইক ড্র 1'),
+  Game('Klondike Draw 3', 'Cards', () => const Klondike(draw: 3), glyph: 'K3', bn: 'ক্লনডাইক ড্র 3'),
+  Game('Yukon', 'Cards', () => const Klondike(yukon: true), glyph: '🏔️', bn: 'ইউকন'),
+  Game('FreeCell', 'Cards', () => const FreeCell(), glyph: '🆓', bn: 'ফ্রিসেল'),
+  Game('Spider 1 Suit', 'Cards', () => const Spider(1), glyph: '🕷️', bn: 'স্পাইডার 1 স্যুট'),
+  Game('Spider 2 Suits', 'Cards', () => const Spider(2), glyph: '🕸️', bn: 'স্পাইডার 2 স্যুট'),
+  Game('Spider 4 Suits', 'Cards', () => const Spider(4), glyph: '🕷4', bn: 'স্পাইডার 4 স্যুট'),
+  Game('Pyramid Solitaire', 'Cards', () => const Pyramid(), glyph: '🔺', bn: 'পিরামিড সলিটেয়ার'),
+  Game('TriPeaks', 'Cards', () => const TriPeaks(), glyph: '⛰️', bn: 'ট্রাইপিকস'),
+  Game('Golf Solitaire', 'Cards', () => const Golf(), glyph: '⛳', bn: 'গলফ সলিটেয়ার'),
+  Game('Clock Solitaire', 'Cards', () => const ClockSolitaire(), glyph: '🕰️', bn: 'ঘড়ি সলিটেয়ার'),
+  Game('Accordion', 'Cards', () => const Accordion(), glyph: '🪗', bn: 'অ্যাকর্ডিয়ন'),
+  Game('Video Poker Jacks or Better', 'Cards', () => const VideoPoker(), glyph: '🎰', bn: 'ভিডিও পোকার জ্যাকস অর বেটার'),
+  Game('Video Poker Deuces Wild', 'Cards', () => const VideoPoker(deuces: true), glyph: '2️⃣', bn: 'ভিডিও পোকার ডিউসেস ওয়াইল্ড'),
+  Game('Baccarat', 'Cards', () => const Baccarat(), glyph: '🎴', bn: 'ব্যাকারা'),
+  Game('Red Dog', 'Cards', () => const RedDog(), glyph: '🐕', bn: 'রেড ডগ'),
+  Game('War', 'Cards', () => const War(), glyph: '⚔️🃏', bn: 'যুদ্ধ'),
+  Game('Go Fish', 'Cards', () => const GoFish(), glyph: '🎣', bn: 'গো ফিশ'),
+  Game('Old Maid', 'Cards', () => const OldMaid(), glyph: '👵', bn: 'ওল্ড মেইড'),
+  Game('Yahtzee', 'Board', () => const Yahtzee(), glyph: '🎲🎲', bn: 'ইয়াতজি'),
+  Game('Farkle', 'Board', () => const Farkle(), glyph: '🔥', bn: 'ফার্কল'),
+  Game('Shut the Box', 'Board', () => const ShutTheBox(), glyph: '📦', bn: 'শাট দ্য বক্স'),
+  Game('Dice Poker', 'Board', () => const DicePoker(), glyph: '🎲♠', bn: 'ডাইস পোকার'),
 ];
 
 // ---------- shared ----------
@@ -132,8 +132,8 @@ Widget topOf(List<int> pile, double w, VoidCallback onTap, {bool sel = false, St
 Widget tools(VoidCallback undo, VoidCallback restart, [List<Widget> extra = const []]) => Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Wrap(alignment: WrapAlignment.center, spacing: 8, children: [
-        OutlinedButton.icon(onPressed: undo, icon: const Icon(Icons.undo), label: const Text('Undo')),
-        OutlinedButton.icon(onPressed: restart, icon: const Icon(Icons.refresh), label: const Text('New')),
+        OutlinedButton.icon(onPressed: undo, icon: const Icon(Icons.undo), label: Text(tr('Undo', 'আনডু'))),
+        OutlinedButton.icon(onPressed: restart, icon: const Icon(Icons.refresh), label: Text(tr('New', 'নতুন'))),
         ...extra,
       ]),
     );
@@ -178,7 +178,7 @@ mixin Piles<T extends StatefulWidget> on State<T> {
   void solved(VoidCallback again) {
     sw.stop();
     final s = sw.elapsed.inSeconds;
-    showResult(context, score: s, lower: true, unit: ' s', 'Solved in ${s ~/ 60}m ${s % 60}s · $moves moves', () => setState(again));
+    showResult(context, score: s, lower: true, unit: ' s', tr('Solved in ${s ~/ 60}m ${s % 60}s · $moves moves', 'সমাধান ${s ~/ 60}মি ${s % 60}সে · $moves চাল'), () => setState(again));
   }
 }
 
@@ -277,7 +277,7 @@ class _KlondikeState extends State<Klondike> with Piles {
 
   @override
   Widget build(BuildContext context) => page(
-        widget.yukon ? 'Yukon' : 'Klondike · Draw ${widget.draw}',
+        widget.yukon ? tr('Yukon', 'ইউকন') : tr('Klondike · Draw ${widget.draw}', 'ক্লনডাইক · ড্র ${widget.draw}'),
         felt(LayoutBuilder(builder: (_, box) {
           final w = min(56.0, (box.maxWidth - 8) / 7 - 4);
           return Column(children: [
@@ -295,7 +295,7 @@ class _KlondikeState extends State<Klondike> with Piles {
             tools(undo, () => setState(deal)),
           ]);
         })),
-        'Moves $moves',
+        tr('Moves $moves', 'চাল $moves'),
       );
 }
 
@@ -364,7 +364,7 @@ class _FreeCellState extends State<FreeCell> with Piles {
 
   @override
   Widget build(BuildContext context) => page(
-        'FreeCell',
+        tr('FreeCell', 'ফ্রিসেল'),
         felt(LayoutBuilder(builder: (_, box) {
           final w = min(52.0, (box.maxWidth - 8) / 8 - 4);
           return Column(children: [
@@ -381,7 +381,7 @@ class _FreeCellState extends State<FreeCell> with Piles {
             tools(undo, () => setState(deal)),
           ]);
         })),
-        'Moves $moves',
+        tr('Moves $moves', 'চাল $moves'),
       );
 }
 
@@ -471,13 +471,13 @@ class _SpiderState extends State<Spider> with Piles {
 
   @override
   Widget build(BuildContext context) => page(
-        'Spider · ${widget.suits} Suit${widget.suits > 1 ? 's' : ''}',
+        tr('Spider · ${widget.suits} Suit${widget.suits > 1 ? 's' : ''}', 'স্পাইডার · ${widget.suits} স্যুট'),
         felt(LayoutBuilder(builder: (_, box) {
           final w = min(44.0, (box.maxWidth - 8) / 10 - 4);
           return Column(children: [
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               topOf(p[0], w, dealRow, label: p[0].isEmpty ? null : '${p[0].length ~/ 10}'),
-              Padding(padding: const EdgeInsets.all(8), child: Text('Runs ${p[1].length}/8', style: const TextStyle(fontWeight: FontWeight.bold))),
+              Padding(padding: const EdgeInsets.all(8), child: Text(tr('Runs ${p[1].length}/8', 'সিরিজ ${p[1].length}/8'), style: const TextStyle(fontWeight: FontWeight.bold))),
             ]),
             Expanded(
               child: SingleChildScrollView(
@@ -489,7 +489,7 @@ class _SpiderState extends State<Spider> with Piles {
             tools(undo, () => setState(deal)),
           ]);
         })),
-        'Moves $moves',
+        tr('Moves $moves', 'চাল $moves'),
       );
 }
 
@@ -583,17 +583,17 @@ class _PyramidState extends State<Pyramid> with Piles {
     final a = avail();
     final canPair = a.any((x) => rankOf(x) == 13) || [for (var i = 0; i < a.length; i++) for (var j = i + 1; j < a.length; j++) rankOf(a[i]) + rankOf(a[j]) == 13].contains(true);
     if (!canPair && p[1].isEmpty && (p[3][0] == 0 || p[2].isEmpty)) {
-      showResult(context, won: false, 'No more moves · ${p[0].where((c) => c >= 0).length} cards left', () => setState(deal));
+      showResult(context, won: false, tr('No more moves · ${p[0].where((c) => c >= 0).length} cards left', 'আর চাল নেই · ${p[0].where((c) => c >= 0).length}টি তাস বাকি'), () => setState(deal));
     }
   }
 
   @override
   Widget build(BuildContext context) => page(
-        'Pyramid',
+        tr('Pyramid', 'পিরামিড'),
         felt(LayoutBuilder(builder: (_, box) {
           final w = min(50.0, (box.maxWidth - 16) / 7), h = w * 1.4;
           return Column(children: [
-            const Padding(padding: EdgeInsets.all(8), child: Text('Remove pairs that add up to 13 (J=11, Q=12, K=13 alone)', style: TextStyle(color: Colors.white70))),
+            Padding(padding: const EdgeInsets.all(8), child: Text(tr('Remove pairs that add up to 13 (J=11, Q=12, K=13 alone)', 'যোগফল 13 হয় এমন জোড়া সরান (J=11, Q=12, K একাই 13)'), style: const TextStyle(color: Colors.white70))),
             SizedBox(
               width: 7 * w,
               height: 4 * h,
@@ -611,12 +611,12 @@ class _PyramidState extends State<Pyramid> with Piles {
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               topOf([for (final c in p[1]) c + hidden], w, () => tap(1, 0), label: p[1].isEmpty ? (p[3][0] > 0 ? '↻' : '✕') : '${p[1].length}'),
               topOf(p[2], w, () => tap(2, 0), sel: sel?.$1 == 2),
-              Text('  Recycles: ${p[3][0]}'),
+              Text(tr('  Recycles: ${p[3][0]}', '  আবার ঘোরানো: ${p[3][0]}')),
             ]),
             tools(undo, () => setState(deal)),
           ]);
         })),
-        'Moves $moves',
+        tr('Moves $moves', 'চাল $moves'),
       );
 }
 
@@ -684,16 +684,16 @@ class _TriPeaksState extends State<TriPeaks> with Piles {
   void check() {
     if (p[0].every((c) => c < 0)) return solved(deal);
     final playable = [for (var i = 0; i < 28; i++) p[0][i] >= 0 && free(i) && neighbours(p[0][i], p[2].last)].contains(true);
-    if (p[1].isEmpty && !playable) showResult(context, won: false, 'No more moves · ${p[0].where((c) => c >= 0).length} cards left', () => setState(deal));
+    if (p[1].isEmpty && !playable) showResult(context, won: false, tr('No more moves · ${p[0].where((c) => c >= 0).length} cards left', 'আর চাল নেই · ${p[0].where((c) => c >= 0).length}টি তাস বাকি'), () => setState(deal));
   }
 
   @override
   Widget build(BuildContext context) => page(
-        'TriPeaks',
+        tr('TriPeaks', 'ট্রাইপিকস'),
         felt(LayoutBuilder(builder: (_, box) {
           final w = min(40.0, (box.maxWidth - 16) / 10), h = w * 1.4;
           return Column(children: [
-            const Padding(padding: EdgeInsets.all(8), child: Text('Play a card one higher or lower than the pile (A–K wrap)', style: TextStyle(color: Colors.white70))),
+            Padding(padding: const EdgeInsets.all(8), child: Text(tr('Play a card one higher or lower than the pile (A–K wrap)', 'গাদার তাসের চেয়ে এক বড় বা এক ছোট তাস খেলুন (A–K ঘুরে আসে)'), style: const TextStyle(color: Colors.white70))),
             SizedBox(
               width: 10 * w,
               height: 3 * h * .5 + h,
@@ -715,7 +715,7 @@ class _TriPeaksState extends State<TriPeaks> with Piles {
             tools(undo, () => setState(deal)),
           ]);
         })),
-        'Moves $moves',
+        tr('Moves $moves', 'চাল $moves'),
       );
 }
 
@@ -762,17 +762,17 @@ class _GolfState extends State<Golf> with Piles {
     final left = [for (var c = 0; c < 7; c++) p[c].length].reduce((a, b) => a + b);
     final canPlay = [for (var c = 0; c < 7; c++) p[c].isNotEmpty && fits(p[c].last)].contains(true);
     if (left == 0 || (p[7].isEmpty && !canPlay)) {
-      showResult(context, won: left == 0, score: left, lower: true, unit: ' left', left == 0 ? 'Cleared! ⛳' : '$left cards left', () => setState(deal));
+      showResult(context, won: left == 0, score: left, lower: true, unit: ' left', left == 0 ? tr('Cleared! ⛳', 'সব সাফ! ⛳') : tr('$left cards left', '$leftটি তাস বাকি'), () => setState(deal));
     }
   }
 
   @override
   Widget build(BuildContext context) => page(
-        'Golf',
+        tr('Golf', 'গলফ'),
         felt(LayoutBuilder(builder: (_, box) {
           final w = min(52.0, (box.maxWidth - 8) / 7 - 4);
           return Column(children: [
-            const Padding(padding: EdgeInsets.all(8), child: Text('Play column tops one higher or lower than the pile. Nothing goes on a King.', textAlign: TextAlign.center, style: TextStyle(color: Colors.white70))),
+            Padding(padding: const EdgeInsets.all(8), child: Text(tr('Play column tops one higher or lower than the pile. Nothing goes on a King.', 'কলামের উপরের তাস গাদার চেয়ে এক বড় বা ছোট হলে খেলুন। K-এর উপর কিছু যায় না।'), textAlign: TextAlign.center, style: const TextStyle(color: Colors.white70))),
             Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, children: [
               for (var c = 0; c < 7; c++) fan(p[c], w, (_) => tap(c)),
             ]),
@@ -784,7 +784,7 @@ class _GolfState extends State<Golf> with Piles {
             tools(undo, () => setState(deal)),
           ]);
         })),
-        'Moves $moves',
+        tr('Moves $moves', 'চাল $moves'),
       );
 }
 
@@ -824,7 +824,7 @@ class _ClockSolitaireState extends State<ClockSolitaire> {
     });
     if (held == null) {
       final won = p.every((x) => x.every(up));
-      showResult(context, won: won, won ? 'Every card is face up! 🕰️' : 'The fourth King came up too soon', () => setState(deal));
+      showResult(context, won: won, won ? tr('Every card is face up! 🕰️', 'সব তাস উল্টে গেছে! 🕰️') : tr('The fourth King came up too soon', 'চতুর্থ K খুব আগে উঠে গেছে'), () => setState(deal));
     }
   }
 
@@ -851,12 +851,12 @@ class _ClockSolitaireState extends State<ClockSolitaire> {
                 Positioned(left: size / 2 - w / 2, top: size / 2 - w * .7, child: pileAt(12)),
               ]),
             ),
-            const Text('Tap the pile that matches your card', style: TextStyle(color: Colors.white70)),
+            Text(tr('Tap the pile that matches your card', 'আপনার তাসের সাথে মেলে এমন গাদায় চাপুন'), style: const TextStyle(color: Colors.white70)),
             const SizedBox(height: 8),
             if (held != null) sCard(held, 56),
           ]);
         })),
-        'Kings out: ${p[12].where(up).length}',
+        tr('Kings out: ${p[12].where(up).length}', 'K উঠেছে: ${p[12].where(up).length}'),
       );
 }
 
@@ -896,7 +896,7 @@ class _AccordionState extends State<Accordion> with Piles {
       sfx('tap');
       if (!accordionHasMove(p[0])) {
         final n = p[0].length;
-        showResult(context, won: n == 1, score: n, lower: true, unit: ' piles', n == 1 ? 'One pile left! 🪗' : '$n piles left', () => setState(deal));
+        showResult(context, won: n == 1, score: n, lower: true, unit: ' piles', n == 1 ? tr('One pile left! 🪗', 'মাত্র একটি গাদা বাকি! 🪗') : tr('$n piles left', '$nটি গাদা বাকি'), () => setState(deal));
       }
       return;
     }
@@ -905,11 +905,11 @@ class _AccordionState extends State<Accordion> with Piles {
 
   @override
   Widget build(BuildContext context) => page(
-        'Accordion',
+        tr('Accordion', 'অ্যাকর্ডিয়ন'),
         felt(Column(children: [
-          const Padding(
-            padding: EdgeInsets.all(8),
-            child: Text('Tap a card, then the card 1 or 3 places to its left with the same suit or rank', textAlign: TextAlign.center, style: TextStyle(color: Colors.white70)),
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Text(tr('Tap a card, then the card 1 or 3 places to its left with the same suit or rank', 'একটি তাসে চাপুন, তারপর বাঁয়ে 1 বা 3 ঘর দূরের একই স্যুট বা র‍্যাঙ্কের তাসে'), textAlign: TextAlign.center, style: const TextStyle(color: Colors.white70)),
           ),
           Expanded(
             child: SingleChildScrollView(
@@ -920,7 +920,7 @@ class _AccordionState extends State<Accordion> with Piles {
           ),
           tools(undo, () => setState(deal)),
         ])),
-        '${p[0].length} piles',
+        tr('${p[0].length} piles', '${p[0].length} গাদা'),
       );
 }
 
@@ -976,6 +976,17 @@ String? deucesHand(List<int> h) {
 }
 
 // Pays per coin at max bet (5 coins): 9/6 Jacks or Better and full-pay Deuces Wild.
+/// Bangla display names for poker hands and Yahtzee boxes; the English names stay the keys.
+const handBn = {
+  'Royal Flush': 'রয়্যাল ফ্লাশ', 'Straight Flush': 'স্ট্রেইট ফ্লাশ', 'Four of a Kind': 'চারটি একই', 'Full House': 'ফুল হাউস',
+  'Flush': 'ফ্লাশ', 'Straight': 'স্ট্রেইট', 'Three of a Kind': 'তিনটি একই', 'Two Pair': 'দুই জোড়া', 'Jacks or Better': 'জ্যাকস অর বেটার',
+  'Natural Royal': 'ন্যাচারাল রয়্যাল', 'Four Deuces': 'চারটি 2', 'Wild Royal': 'ওয়াইল্ড রয়্যাল', 'Five of a Kind': 'পাঁচটি একই',
+  'Nothing': 'কিছুই না', 'Pair': 'এক জোড়া', 'Ones': 'এক', 'Twos': 'দুই', 'Threes': 'তিন', 'Fours': 'চার', 'Fives': 'পাঁচ', 'Sixes': 'ছয়',
+  '3 of a Kind': '3টি একই', '4 of a Kind': '4টি একই', 'Small Straight': 'ছোট স্ট্রেইট', 'Large Straight': 'বড় স্ট্রেইট', 'Yahtzee': 'ইয়াতজি', 'Chance': 'চান্স',
+};
+
+String handName(String h) => tr(h, handBn[h] ?? h);
+
 const jobPay = {'Royal Flush': 800, 'Straight Flush': 50, 'Four of a Kind': 25, 'Full House': 9, 'Flush': 6, 'Straight': 4, 'Three of a Kind': 3, 'Two Pair': 2, 'Jacks or Better': 1};
 const deucesPay = {
   'Natural Royal': 800, 'Four Deuces': 200, 'Wild Royal': 25, 'Five of a Kind': 15, 'Straight Flush': 9, 'Four of a Kind': 5, //
@@ -995,7 +1006,7 @@ class _VideoPokerState extends State<VideoPoker> {
   List<bool> held = List.filled(5, false);
   int credits = 200;
   bool drawing = false; // true between Deal and Draw
-  String msg = 'Press Deal';
+  String msg = tr('Press Deal', '"তাস দিন" চাপুন');
 
   Map<String, int> get pay => widget.deuces ? deucesPay : jobPay;
   String? eval(List<int> h) => widget.deuces ? deucesHand(h) : jobHand(h);
@@ -1008,7 +1019,7 @@ class _VideoPokerState extends State<VideoPoker> {
       hand = [for (var i = 0; i < 5; i++) deck.removeLast()];
       held = List.filled(5, false);
       drawing = true;
-      msg = eval(hand) ?? 'Tap cards to hold';
+      msg = eval(hand) == null ? tr('Tap cards to hold', 'রাখতে চাইলে তাসে চাপুন') : handName(eval(hand)!);
     });
   }
 
@@ -1020,24 +1031,24 @@ class _VideoPokerState extends State<VideoPoker> {
       drawing = false;
       final h = eval(hand), win = h == null ? 0 : pay[h]! * bet;
       credits += win;
-      msg = h == null ? 'No win' : '$h · +$win';
+      msg = h == null ? tr('No win', 'জেতেননি') : '${handName(h)} · +$win';
       sfx(win > 0 ? 'right' : 'wrong');
     });
     record(context, credits, unit: ' credits');
-    if (credits < bet) showResult(context, won: false, 'Out of credits!', () => setState(() => credits = 200));
+    if (credits < bet) showResult(context, won: false, tr('Out of credits!', 'ক্রেডিট শেষ!'), () => setState(() => credits = 200));
   }
 
   @override
   Widget build(BuildContext context) {
     final current = hand.isEmpty ? null : eval(hand);
     return page(
-      widget.deuces ? 'Deuces Wild' : 'Jacks or Better',
+      widget.deuces ? tr('Deuces Wild', 'ডিউসেস ওয়াইল্ড') : tr('Jacks or Better', 'জ্যাকস অর বেটার'),
       felt(Column(children: [
         Expanded(
           child: ListView(padding: const EdgeInsets.all(12), children: [
             for (final e in pay.entries)
               Row(children: [
-                Expanded(child: Text(e.key, style: TextStyle(color: e.key == current ? Colors.amber : Colors.white70, fontWeight: e.key == current ? FontWeight.bold : null))),
+                Expanded(child: Text(handName(e.key), style: TextStyle(color: e.key == current ? Colors.amber : Colors.white70, fontWeight: e.key == current ? FontWeight.bold : null))),
                 Text('${e.value * bet}', style: TextStyle(color: e.key == current ? Colors.amber : Colors.white70)),
               ]),
           ]),
@@ -1048,12 +1059,12 @@ class _VideoPokerState extends State<VideoPoker> {
           for (var i = 0; i < hand.length; i++)
             Column(children: [
               playingCard(hand[i], w: 58, onTap: drawing ? () => setState(() => held[i] = !held[i]) : null),
-              Text(held[i] ? 'HELD' : '', style: const TextStyle(color: Colors.amber, fontWeight: FontWeight.bold)),
+              Text(held[i] ? tr('HELD', 'রাখা') : '', style: const TextStyle(color: Colors.amber, fontWeight: FontWeight.bold)),
             ]),
         ]),
         Padding(
           padding: const EdgeInsets.all(12),
-          child: FilledButton(onPressed: drawing ? draw : (credits >= bet ? deal : null), child: Text(drawing ? 'Draw' : 'Deal · bet $bet')),
+          child: FilledButton(onPressed: drawing ? draw : (credits >= bet ? deal : null), child: Text(drawing ? tr('Draw', 'বদলান') : tr('Deal · bet $bet', 'তাস দিন · বাজি $bet'))),
         ),
       ])),
       '🪙 $credits',
@@ -1103,7 +1114,7 @@ class _BaccaratState extends State<Baccarat> {
   static const bet = 10;
   List<int> deck = newDeck(), player = [], banker = [];
   int chips = 100;
-  String msg = 'Bet on Player, Banker or Tie';
+  String msg = tr('Bet on Player, Banker or Tie', 'প্লেয়ার, ব্যাংকার বা টাই-এ বাজি ধরুন');
 
   void play(String on) {
     if (deck.length < 10) deck = newDeck();
@@ -1117,14 +1128,16 @@ class _BaccaratState extends State<Baccarat> {
       player = pl;
       banker = bk;
       chips += delta;
-      msg = '$result wins · ${delta >= 0 ? '+' : ''}$delta';
+      msg = tr('$result wins · ${delta >= 0 ? '+' : ''}$delta', '${bac(result)} জিতেছে · ${delta >= 0 ? '+' : ''}$delta');
     });
     record(context, chips, unit: ' chips');
-    if (chips < bet) showResult(context, won: false, 'Out of chips!', () => setState(() => chips = 100));
+    if (chips < bet) showResult(context, won: false, tr('Out of chips!', 'চিপস শেষ!'), () => setState(() => chips = 100));
   }
 
+  static String bac(String side) => tr(side, const {'Player': 'প্লেয়ার', 'Banker': 'ব্যাংকার', 'Tie': 'টাই'}[side]!);
+
   Widget hand(String who, List<int> h) => Column(children: [
-        Text(h.isEmpty ? who : '$who · ${bacVal(h)}', style: const TextStyle(fontSize: 18, color: Colors.white70)),
+        Text(h.isEmpty ? bac(who) : '${bac(who)} · ${bacVal(h)}', style: const TextStyle(fontSize: 18, color: Colors.white70)),
         Wrap(children: [for (final c in h) playingCard(c, w: 52)]),
       ]);
 
@@ -1139,10 +1152,10 @@ class _BaccaratState extends State<Baccarat> {
           Padding(
             padding: const EdgeInsets.all(16),
             child: Wrap(spacing: 8, alignment: WrapAlignment.center, children: [
-              for (final on in ['Player', 'Banker', 'Tie']) FilledButton(onPressed: chips >= bet ? () => play(on) : null, child: Text(on)),
+              for (final on in ['Player', 'Banker', 'Tie']) FilledButton(onPressed: chips >= bet ? () => play(on) : null, child: Text(bac(on))),
             ]),
           ),
-          const Text('Bet 10 · Player 1:1 · Banker 0.95:1 · Tie 8:1', style: TextStyle(color: Colors.white54)),
+          Text(tr('Bet 10 · Player 1:1 · Banker 0.95:1 · Tie 8:1', 'বাজি 10 · প্লেয়ার 1:1 · ব্যাংকার 0.95:1 · টাই 8:1'), style: const TextStyle(color: Colors.white54)),
           const SizedBox(height: 12),
         ])),
         '🪙 $chips',
@@ -1166,7 +1179,7 @@ class _RedDogState extends State<RedDog> {
   List<int> deck = newDeck(), cards = [];
   int chips = 100, bet = 10;
   bool deciding = false;
-  String msg = 'Will the third card fall between the first two?';
+  String msg = tr('Will the third card fall between the first two?', 'তৃতীয় তাস কি প্রথম দুটির মাঝে পড়বে?');
 
   void settle(int delta, String m) {
     sfx(delta > 0 ? 'right' : (delta < 0 ? 'wrong' : 'tap'));
@@ -1176,7 +1189,7 @@ class _RedDogState extends State<RedDog> {
       deciding = false;
     });
     record(context, chips, unit: ' chips');
-    if (chips < 10) showResult(context, won: false, 'Out of chips!', () => setState(() => chips = 100));
+    if (chips < 10) showResult(context, won: false, tr('Out of chips!', 'চিপস শেষ!'), () => setState(() => chips = 100));
   }
 
   void deal() {
@@ -1184,14 +1197,14 @@ class _RedDogState extends State<RedDog> {
     bet = 10;
     setState(() => cards = [deck.removeLast(), deck.removeLast()]..sort((a, b) => highRank(a) - highRank(b)));
     final gap = highRank(cards[1]) - highRank(cards[0]);
-    if (gap == 1) return settle(0, 'Consecutive — push');
+    if (gap == 1) return settle(0, tr('Consecutive — push', 'পরপর — ড্র'));
     if (gap == 0) {
       setState(() => cards.add(deck.removeLast()));
-      return highRank(cards[2]) == highRank(cards[0]) ? settle(bet * 11, 'Three of a kind! +${bet * 11}') : settle(0, 'Pair — push');
+      return highRank(cards[2]) == highRank(cards[0]) ? settle(bet * 11, tr('Three of a kind! +${bet * 11}', 'তিনটি একই! +${bet * 11}')) : settle(0, tr('Pair — push', 'জোড়া — ড্র'));
     }
     setState(() {
       deciding = true;
-      msg = 'Spread ${gap - 1} pays ${redDogPay(gap - 1)}:1';
+      msg = tr('Spread ${gap - 1} pays ${redDogPay(gap - 1)}:1', 'ফাঁক ${gap - 1} · পাবেন ${redDogPay(gap - 1)}:1');
     });
   }
 
@@ -1199,7 +1212,7 @@ class _RedDogState extends State<RedDog> {
     if (raise && chips >= 2 * bet) bet *= 2;
     setState(() => cards.add(deck.removeLast()));
     final lo = highRank(cards[0]), hi = highRank(cards[1]), t = highRank(cards[2]), pay = redDogPay(hi - lo - 1);
-    t > lo && t < hi ? settle(bet * pay, 'Inside! +${bet * pay}') : settle(-bet, 'Outside · −$bet');
+    t > lo && t < hi ? settle(bet * pay, tr('Inside! +${bet * pay}', 'ভেতরে! +${bet * pay}')) : settle(-bet, tr('Outside · −$bet', 'বাইরে · −$bet'));
   }
 
   @override
@@ -1212,14 +1225,14 @@ class _RedDogState extends State<RedDog> {
           const SizedBox(height: 32),
           if (deciding)
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              FilledButton.tonal(onPressed: () => third(false), child: const Text('Call')),
+              FilledButton.tonal(onPressed: () => third(false), child: Text(tr('Call', 'কল'))),
               const SizedBox(width: 16),
-              FilledButton(onPressed: chips >= 2 * bet ? () => third(true) : null, child: const Text('Raise ×2')),
+              FilledButton(onPressed: chips >= 2 * bet ? () => third(true) : null, child: Text(tr('Raise ×2', 'রেইজ ×2'))),
             ])
           else
-            FilledButton(onPressed: chips >= 10 ? deal : null, child: const Text('Deal · bet 10')),
+            FilledButton(onPressed: chips >= 10 ? deal : null, child: Text(tr('Deal · bet 10', 'তাস দিন · বাজি 10'))),
           const SizedBox(height: 16),
-          const Text('Aces high · spread 1 pays 5:1, 2 pays 4:1, 3 pays 2:1, 4+ pays 1:1', textAlign: TextAlign.center, style: TextStyle(color: Colors.white54)),
+          Text(tr('Aces high · spread 1 pays 5:1, 2 pays 4:1, 3 pays 2:1, 4+ pays 1:1', 'A সবচেয়ে বড় · ফাঁক 1 পায় 5:1, 2 পায় 4:1, 3 পায় 2:1, 4+ পায় 1:1'), textAlign: TextAlign.center, style: const TextStyle(color: Colors.white54)),
         ])),
         '🪙 $chips',
       );
@@ -1238,7 +1251,7 @@ class _WarState extends State<War> {
   late List<int> you, ai;
   int? a, b;
   int rounds = 0;
-  String msg = 'Tap Flip';
+  String msg = tr('Tap Flip', '"উল্টান" চাপুন');
 
   @override
   void initState() {
@@ -1252,7 +1265,7 @@ class _WarState extends State<War> {
     ai = d.sublist(26);
     a = b = null;
     rounds = 0;
-    msg = 'Tap Flip';
+    msg = tr('Tap Flip', '"উল্টান" চাপুন');
   }
 
   void battle() {
@@ -1264,7 +1277,8 @@ class _WarState extends State<War> {
       pot.addAll([a!, b!]);
       if (highRank(a!) != highRank(b!)) {
         (highRank(a!) > highRank(b!) ? you : ai).addAll(pot..shuffle(_r));
-        msg = '${wars > 0 ? 'War ×$wars! ' : ''}${highRank(a!) > highRank(b!) ? 'You' : 'AI'} take${highRank(a!) > highRank(b!) ? '' : 's'} ${pot.length}';
+        final mine = highRank(a!) > highRank(b!);
+        msg = tr('${wars > 0 ? 'War ×$wars! ' : ''}${mine ? 'You take' : 'AI takes'} ${pot.length}', '${wars > 0 ? 'যুদ্ধ ×$wars! ' : ''}${mine ? 'আপনি পেলেন' : 'AI পেল'} ${pot.length}');
         return;
       }
       wars++;
@@ -1286,31 +1300,31 @@ class _WarState extends State<War> {
     sfx('tap');
     if (you.isEmpty || ai.isEmpty || rounds >= maxRounds) {
       final won = you.length > ai.length;
-      showResult(context, won: won, '${won ? 'You win' : (you.length == ai.length ? 'Draw' : 'AI wins')} · $rounds rounds\n${you.length} vs ${ai.length} cards', () => setState(start));
+      showResult(context, won: won, tr('${won ? 'You win' : (you.length == ai.length ? 'Draw' : 'AI wins')} · $rounds rounds\n${you.length} vs ${ai.length} cards', '${won ? 'আপনি জিতেছেন' : (you.length == ai.length ? 'ড্র' : 'AI জিতেছে')} · $rounds রাউন্ড\n${you.length} বনাম ${ai.length} তাস'), () => setState(start));
     }
   }
 
   @override
   Widget build(BuildContext context) => page(
-        'War',
+        tr('War', 'যুদ্ধ'),
         felt(Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Text('AI · ${ai.length} cards', style: const TextStyle(fontSize: 18)),
+          Text(tr('AI · ${ai.length} cards', 'AI · ${ai.length}টি তাস'), style: const TextStyle(fontSize: 18)),
           playingCard(b, w: 80),
           const SizedBox(height: 16),
           Text(msg, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
           const SizedBox(height: 16),
           playingCard(a, w: 80),
-          Text('You · ${you.length} cards', style: const TextStyle(fontSize: 18)),
+          Text(tr('You · ${you.length} cards', 'আপনি · ${you.length}টি তাস'), style: const TextStyle(fontSize: 18)),
           const SizedBox(height: 24),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            FilledButton(onPressed: () => flip(1), child: const Text('Flip')),
+            FilledButton(onPressed: () => flip(1), child: Text(tr('Flip', 'উল্টান'))),
             const SizedBox(width: 12),
-            FilledButton.tonal(onPressed: () => flip(10), child: const Text('Flip ×10')),
+            FilledButton.tonal(onPressed: () => flip(10), child: Text(tr('Flip ×10', 'উল্টান ×10'))),
           ]),
           const SizedBox(height: 8),
-          Text('Round $rounds / $maxRounds', style: const TextStyle(color: Colors.white54)),
+          Text(tr('Round $rounds / $maxRounds', 'রাউন্ড $rounds / $maxRounds'), style: const TextStyle(color: Colors.white54)),
         ])),
-        'Aces high',
+        tr('Aces high', 'A সবচেয়ে বড়'),
       );
 }
 
@@ -1329,6 +1343,7 @@ int takeBooks(List<int> hand) {
 }
 
 const rankNames = ['Aces', '2s', '3s', '4s', '5s', '6s', '7s', '8s', '9s', '10s', 'Jacks', 'Queens', 'Kings'];
+const rankNamesBn = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
 
 class GoFish extends StatefulWidget {
   const GoFish({super.key});
@@ -1356,7 +1371,7 @@ class _GoFishState extends State<GoFish> {
     aiBooks = takeBooks(ai);
     yourTurn = true;
     over = false;
-    msg = 'Tap a card to ask the AI for that rank';
+    msg = tr('Tap a card to ask the AI for that rank', 'তাসে চাপুন, AI-র কাছে সেই র‍্যাঙ্কটি চাইতে');
   }
 
   void refill(List<int> h) {
@@ -1367,7 +1382,7 @@ class _GoFishState extends State<GoFish> {
     // books are removed at once, so with an empty deck and an empty hand no more books can form
     if (yourBooks + aiBooks < 13 && !(deck.isEmpty && (you.isEmpty || ai.isEmpty))) return false;
     over = true;
-    showResult(context, won: yourBooks > aiBooks, 'Books: you $yourBooks · AI $aiBooks', () => setState(start));
+    showResult(context, won: yourBooks > aiBooks, tr('Books: you $yourBooks · AI $aiBooks', 'বুক: আপনি $yourBooks · AI $aiBooks'), () => setState(start));
     return true;
   }
 
@@ -1375,18 +1390,18 @@ class _GoFishState extends State<GoFish> {
   bool ask(List<int> asker, List<int> other, int rank, bool isYou) {
     final got = other.where((c) => rankOf(c) == rank).toList();
     var again = got.isNotEmpty;
-    final who = isYou ? 'You' : 'AI';
+    final who = isYou ? tr('You', 'আপনি') : 'AI', r = tr(rankNames[rank - 1], rankNamesBn[rank - 1]);
     if (again) {
       other.removeWhere((c) => rankOf(c) == rank);
       asker.addAll(got);
-      msg = '$who got ${got.length} ${rankNames[rank - 1]}';
+      msg = tr('$who got ${got.length} $r', '$who ${got.length}টি $r পেল');
     } else if (deck.isNotEmpty) {
       final c = deck.removeLast();
       asker.add(c);
       again = rankOf(c) == rank;
-      msg = '$who asked for ${rankNames[rank - 1]} · Go fish!${again ? ' Lucky catch!' : ''}';
+      msg = tr('$who asked for $r · Go fish!${again ? ' Lucky catch!' : ''}', '$who $r চাইল · গো ফিশ!${again ? ' ভাগ্যক্রমে মিলে গেল!' : ''}');
     } else {
-      msg = '$who asked for ${rankNames[rank - 1]} · Go fish! (deck empty)';
+      msg = tr('$who asked for $r · Go fish! (deck empty)', '$who $r চাইল · গো ফিশ! (ডেক খালি)');
     }
     final books = takeBooks(asker);
     if (isYou) {
@@ -1422,14 +1437,14 @@ class _GoFishState extends State<GoFish> {
         felt(Padding(
           padding: const EdgeInsets.all(8),
           child: Column(children: [
-            Text('AI · ${ai.length} cards · $aiBooks books', style: const TextStyle(color: Colors.white70)),
+            Text(tr('AI · ${ai.length} cards · $aiBooks books', 'AI · ${ai.length}টি তাস · $aiBooks বুক'), style: const TextStyle(color: Colors.white70)),
             SizedBox(height: 64, child: Stack(children: [for (var i = 0; i < ai.length; i++) Positioned(left: i * 12.0, child: playingCard(null, w: 40))])),
             Expanded(
               child: Center(
-                child: Text('$msg\n\nDeck: ${deck.length}', textAlign: TextAlign.center, style: const TextStyle(fontSize: 18)),
+                child: Text(tr('$msg\n\nDeck: ${deck.length}', '$msg\n\nডেক: ${deck.length}'), textAlign: TextAlign.center, style: const TextStyle(fontSize: 18)),
               ),
             ),
-            Text('You · $yourBooks books', style: const TextStyle(color: Colors.white70)),
+            Text(tr('You · $yourBooks books', 'আপনি · $yourBooks বুক'), style: const TextStyle(color: Colors.white70)),
             Flexible(
               child: SingleChildScrollView(
                 child: Wrap(alignment: WrapAlignment.center, children: [
@@ -1439,7 +1454,7 @@ class _GoFishState extends State<GoFish> {
             ),
           ]),
         )),
-        yourTurn ? 'Your turn' : 'AI turn',
+        yourTurn ? tr('Your turn', 'আপনার পালা') : tr('AI turn', 'AI-র পালা'),
       );
 }
 
@@ -1480,13 +1495,13 @@ class _OldMaidState extends State<OldMaid> {
     ai.shuffle(_r);
     yourTurn = true;
     over = false;
-    msg = 'Take a card from the AI';
+    msg = tr('Take a card from the AI', 'AI-র কাছ থেকে একটি তাস নিন');
   }
 
   bool checkEnd() {
     if (you.isNotEmpty && ai.isNotEmpty) return false;
     over = true;
-    showResult(context, won: you.isEmpty, you.isEmpty ? 'The AI is stuck with the Old Maid!' : 'You are left with the Old Maid 👵', () => setState(start));
+    showResult(context, won: you.isEmpty, you.isEmpty ? tr('The AI is stuck with the Old Maid!', 'ওল্ড মেইড রয়ে গেল AI-র হাতে!') : tr('You are left with the Old Maid 👵', 'ওল্ড মেইড রয়ে গেল আপনার হাতে 👵'), () => setState(start));
     return true;
   }
 
@@ -1497,7 +1512,7 @@ class _OldMaidState extends State<OldMaid> {
       final c = ai.removeAt(i);
       you.add(c);
       discardPairs(you);
-      msg = 'You drew ${cardLabel(c)}';
+      msg = tr('You drew ${cardLabel(c)}', 'আপনি পেলেন ${cardLabel(c)}');
       yourTurn = false;
     });
     if (checkEnd()) return;
@@ -1509,7 +1524,7 @@ class _OldMaidState extends State<OldMaid> {
         ..add(c)
         ..shuffle(_r);
       discardPairs(ai);
-      msg = 'AI took your ${cardLabel(c)}';
+      msg = tr('AI took your ${cardLabel(c)}', 'AI আপনার ${cardLabel(c)} নিল');
       yourTurn = true;
     });
     checkEnd();
@@ -1521,14 +1536,14 @@ class _OldMaidState extends State<OldMaid> {
         felt(Padding(
           padding: const EdgeInsets.all(8),
           child: Column(children: [
-            Text('AI · ${ai.length} cards — tap one to take it', style: const TextStyle(color: Colors.white70)),
+            Text(tr('AI · ${ai.length} cards — tap one to take it', 'AI · ${ai.length}টি তাস — একটিতে চাপ দিয়ে নিন'), style: const TextStyle(color: Colors.white70)),
             Wrap(alignment: WrapAlignment.center, children: [for (var i = 0; i < ai.length; i++) playingCard(null, w: 40, onTap: () => take(i))]),
             Expanded(child: Center(child: Text(msg, textAlign: TextAlign.center, style: const TextStyle(fontSize: 20)))),
-            const Text('Your hand', style: TextStyle(color: Colors.white70)),
+            Text(tr('Your hand', 'আপনার হাত'), style: const TextStyle(color: Colors.white70)),
             Wrap(alignment: WrapAlignment.center, children: [for (final c in you..sort((a, b) => rankOf(a) - rankOf(b))) playingCard(c, w: 44)]),
           ]),
         )),
-        yourTurn ? 'Your turn' : 'AI turn',
+        yourTurn ? tr('Your turn', 'আপনার পালা') : tr('AI turn', 'AI-র পালা'),
       );
 }
 
@@ -1611,7 +1626,7 @@ class _YahtzeeState extends State<Yahtzee> {
     });
     if (!score.contains(null)) {
       final t = yahtzeeTotal(score);
-      showResult(context, score: t, 'Final score: $t', () => setState(reset));
+      showResult(context, score: t, tr('Final score: $t', 'চূড়ান্ত স্কোর: $t'), () => setState(reset));
     }
   }
 
@@ -1634,26 +1649,26 @@ class _YahtzeeState extends State<Yahtzee> {
               ),
             ),
         ]),
-        FilledButton.icon(onPressed: rolls > 0 && !rolling ? roll : null, icon: const Icon(Icons.casino), label: Text('Roll ($rolls left)')),
+        FilledButton.icon(onPressed: rolls > 0 && !rolling ? roll : null, icon: const Icon(Icons.casino), label: Text(tr('Roll ($rolls left)', 'চালুন ($rolls বাকি)'))),
         Expanded(
           child: ListView(children: [
             for (var c = 0; c < 13; c++)
               ListTile(
                 dense: true,
                 visualDensity: VisualDensity.compact,
-                title: Text(yahtzeeCats[c]),
+                title: Text(handName(yahtzeeCats[c])),
                 onTap: () => pick(c),
                 trailing: Text(
                   score[c] != null ? '${score[c]}' : (rolls < 3 ? '${yahtzeeScore(c, d)}' : ''),
                   style: TextStyle(fontSize: 16, fontWeight: score[c] != null ? FontWeight.bold : null, color: score[c] != null ? null : Colors.amber),
                 ),
               ),
-            ListTile(dense: true, title: Text('Upper bonus (63+) · $upper/63'), trailing: Text(upper >= 63 ? '35' : '0')),
-            ListTile(title: const Text('Total', style: TextStyle(fontWeight: FontWeight.bold)), trailing: Text('${yahtzeeTotal(score)}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
+            ListTile(dense: true, title: Text(tr('Upper bonus (63+) · $upper/63', 'উপরের বোনাস (63+) · $upper/63')), trailing: Text(upper >= 63 ? '35' : '0')),
+            ListTile(title: Text(tr('Total', 'মোট'), style: const TextStyle(fontWeight: FontWeight.bold)), trailing: Text('${yahtzeeTotal(score)}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
           ]),
         ),
       ]),
-      'Round ${min(13, score.where((s) => s != null).length + 1)}/13',
+      tr('Round ${min(13, score.where((s) => s != null).length + 1)}/13', 'রাউন্ড ${min(13, score.where((s) => s != null).length + 1)}/13'),
     );
   }
 }
@@ -1712,7 +1727,7 @@ class _FarkleState extends State<Farkle> {
   List<int> roll = [];
   Set<int> chosen = {};
   bool busy = false, over = false;
-  String msg = 'Roll six dice. Set aside scoring dice, then roll again or bank.';
+  String msg = tr('Roll six dice. Set aside scoring dice, then roll again or bank.', 'ছয়টি ছক্কা চালুন। স্কোর হওয়া ছক্কা আলাদা রাখুন, তারপর আবার চালুন বা জমা করুন।');
 
   int get selScore => farkleScore([for (final i in chosen) roll[i]]);
 
@@ -1737,7 +1752,7 @@ class _FarkleState extends State<Farkle> {
     if (scores[turn] >= target) {
       over = true;
       setState(() {});
-      showResult(context, won: turn == 0, '${turn == 0 ? 'You win' : 'AI wins'} · ${scores[0]} to ${scores[1]}', () => setState(newGame));
+      showResult(context, won: turn == 0, tr('${turn == 0 ? 'You win' : 'AI wins'} · ${scores[0]} to ${scores[1]}', '${turn == 0 ? 'আপনি জিতেছেন' : 'AI জিতেছে'} · ${scores[0]} বনাম ${scores[1]}'), () => setState(newGame));
       return;
     }
     setState(() {
@@ -1755,7 +1770,7 @@ class _FarkleState extends State<Farkle> {
     throwDice(left);
     if (farkleBest(roll).isEmpty) {
       setState(() {
-        msg = 'Farkle! You lose $turnPts points';
+        msg = tr('Farkle! You lose $turnPts points', 'ফার্কল! আপনি $turnPts পয়েন্ট হারালেন');
         busy = true;
       });
       await Future.delayed(const Duration(milliseconds: 1200));
@@ -1763,7 +1778,7 @@ class _FarkleState extends State<Farkle> {
       busy = false;
       await endTurn();
     } else {
-      setState(() => msg = 'Tap dice to set aside');
+      setState(() => msg = tr('Tap dice to set aside', 'আলাদা রাখতে ছক্কায় চাপুন'));
     }
   }
 
@@ -1776,7 +1791,7 @@ class _FarkleState extends State<Farkle> {
       throwDice(left);
       final best = farkleBest(roll);
       if (best.isEmpty) {
-        setState(() => msg = 'AI farkled and loses $turnPts');
+        setState(() => msg = tr('AI farkled and loses $turnPts', 'AI ফার্কল করে $turnPts হারাল'));
         await Future.delayed(const Duration(milliseconds: 1200));
         if (!mounted) return;
         setState(() => busy = false);
@@ -1787,7 +1802,7 @@ class _FarkleState extends State<Farkle> {
       setState(() {
         chosen = best.toSet();
         turnPts += selScore;
-        msg = 'AI sets aside ${best.length} · turn $turnPts';
+        msg = tr('AI sets aside ${best.length} · turn $turnPts', 'AI ${best.length}টি আলাদা রাখল · এই দানে $turnPts');
       });
       left -= best.length;
       if (left == 0) left = 6; // hot dice
@@ -1796,7 +1811,7 @@ class _FarkleState extends State<Farkle> {
         await Future.delayed(const Duration(milliseconds: 800));
         if (!mounted) return;
         setState(() {
-          msg = 'AI banks $turnPts';
+          msg = tr('AI banks $turnPts', 'AI $turnPts জমা করল');
           busy = false;
         });
         return endTurn(bank: true);
@@ -1810,7 +1825,7 @@ class _FarkleState extends State<Farkle> {
     return page(
       'Farkle',
       felt(Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Text('You ${scores[0]}   ·   AI ${scores[1]}   (to $target)', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+        Text(tr('You ${scores[0]}   ·   AI ${scores[1]}   (to $target)', 'আপনি ${scores[0]}   ·   AI ${scores[1]}   (লক্ষ্য $target)'), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         const SizedBox(height: 12),
         Text(msg, textAlign: TextAlign.center, style: const TextStyle(fontSize: 16)),
         const SizedBox(height: 16),
@@ -1827,10 +1842,10 @@ class _FarkleState extends State<Farkle> {
             ),
         ]),
         const SizedBox(height: 12),
-        Text('Turn: $turnPts${chosen.isNotEmpty ? ' + ${valid ? selScore : '✕'}' : ''}', style: const TextStyle(fontSize: 18)),
+        Text('${tr('Turn', 'এই দান')}: $turnPts${chosen.isNotEmpty ? ' + ${valid ? selScore : '✕'}' : ''}', style: const TextStyle(fontSize: 18)),
         const SizedBox(height: 16),
         Wrap(spacing: 12, alignment: WrapAlignment.center, children: [
-          FilledButton(onPressed: mine && (roll.isEmpty || valid) ? youRoll : null, child: Text(roll.isEmpty ? 'Roll' : 'Roll again')),
+          FilledButton(onPressed: mine && (roll.isEmpty || valid) ? youRoll : null, child: Text(roll.isEmpty ? tr('Roll', 'চালুন') : tr('Roll again', 'আবার চালুন'))),
           FilledButton.tonal(
             onPressed: mine && valid
                 ? () {
@@ -1838,13 +1853,13 @@ class _FarkleState extends State<Farkle> {
                     endTurn(bank: true);
                   }
                 : null,
-            child: const Text('Bank'),
+            child: Text(tr('Bank', 'জমা')),
           ),
         ]),
         const SizedBox(height: 16),
-        const Text('1 = 100 · 5 = 50 · three of a kind = face × 100 (1s = 1000), each extra die doubles · straight or three pairs = 1500', textAlign: TextAlign.center, style: TextStyle(color: Colors.white54, fontSize: 12)),
+        Text(tr('1 = 100 · 5 = 50 · three of a kind = face × 100 (1s = 1000), each extra die doubles · straight or three pairs = 1500', '1 = 100 · 5 = 50 · তিনটি একই = মান × 100 (1 হলে 1000), প্রতিটি বাড়তি ছক্কায় দ্বিগুণ · স্ট্রেইট বা তিন জোড়া = 1500'), textAlign: TextAlign.center, style: const TextStyle(color: Colors.white54, fontSize: 12)),
       ])),
-      turn == 0 ? 'Your turn' : 'AI turn',
+      turn == 0 ? tr('Your turn', 'আপনার পালা') : tr('AI turn', 'AI-র পালা'),
     );
   }
 }
@@ -1876,7 +1891,7 @@ class _ShutTheBoxState extends State<ShutTheBox> {
     sfx('tap');
     if (!canMake(open, need)) {
       final left = open.fold(0, (a, b) => a + b);
-      showResult(context, won: false, score: left, lower: true, unit: ' pts', 'No tiles make $need\nScore: $left (lower is better)', () => setState(() {
+      showResult(context, won: false, score: left, lower: true, unit: ' pts', tr('No tiles make $need\nScore: $left (lower is better)', 'কোনো টাইলে $need হয় না\nস্কোর: $left (কম হলে ভালো)'), () => setState(() {
             open = List.generate(9, (i) => i + 1);
             dv = [];
           }));
@@ -1898,7 +1913,7 @@ class _ShutTheBoxState extends State<ShutTheBox> {
         dv = [];
       });
       if (open.isEmpty) {
-        showResult(context, score: 0, lower: true, unit: ' pts', 'You shut the box! 📦', () => setState(() => open = List.generate(9, (i) => i + 1)));
+        showResult(context, score: 0, lower: true, unit: ' pts', tr('You shut the box! 📦', 'বাক্স বন্ধ করেছেন! 📦'), () => setState(() => open = List.generate(9, (i) => i + 1)));
       }
     }
   }
@@ -1907,7 +1922,7 @@ class _ShutTheBoxState extends State<ShutTheBox> {
   Widget build(BuildContext context) => page(
         'Shut the Box',
         felt(Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          const Text('Shut tiles that add up to your roll', style: TextStyle(color: Colors.white70)),
+          Text(tr('Shut tiles that add up to your roll', 'চালের সমান যোগফলের টাইলগুলো বন্ধ করুন'), style: const TextStyle(color: Colors.white70)),
           const SizedBox(height: 16),
           Wrap(alignment: WrapAlignment.center, spacing: 6, runSpacing: 6, children: [
             for (var t = 1; t <= 9; t++)
@@ -1927,11 +1942,11 @@ class _ShutTheBoxState extends State<ShutTheBox> {
           ]),
           const SizedBox(height: 24),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [for (final v in dv) Padding(padding: const EdgeInsets.all(6), child: dice(v))]),
-          if (dv.isNotEmpty) Text('Make $need', style: const TextStyle(fontSize: 20)),
+          if (dv.isNotEmpty) Text(tr('Make $need', '$need বানান'), style: const TextStyle(fontSize: 20)),
           const SizedBox(height: 16),
-          FilledButton.icon(onPressed: dv.isEmpty ? roll : null, icon: const Icon(Icons.casino), label: const Text('Roll')),
+          FilledButton.icon(onPressed: dv.isEmpty ? roll : null, icon: const Icon(Icons.casino), label: Text(tr('Roll', 'চালুন'))),
         ])),
-        'Open: ${open.fold(0, (a, b) => a + b)}',
+        tr('Open: ${open.fold(0, (a, b) => a + b)}', 'খোলা: ${open.fold(0, (a, b) => a + b)}'),
       );
 }
 
@@ -1984,7 +1999,7 @@ class _DicePokerState extends State<DicePoker> {
   Set<int> held = {};
   int phase = 0; // 0 roll, 1 hold & reroll, 2 round result
   final wins = [0, 0];
-  String msg = 'First to 3 rounds';
+  String msg = tr('First to 3 rounds', 'যে আগে 3 রাউন্ড জিতবে');
 
   List<int> five() => List.generate(5, (_) => _r.nextInt(6) + 1);
 
@@ -1995,7 +2010,7 @@ class _DicePokerState extends State<DicePoker> {
       ai = five();
       held = {};
       phase = 1;
-      msg = 'Tap dice to keep, then reroll the rest';
+      msg = tr('Tap dice to keep, then reroll the rest', 'রাখার ছক্কায় চাপুন, বাকিগুলো আবার চালুন');
     });
   }
 
@@ -2007,12 +2022,12 @@ class _DicePokerState extends State<DicePoker> {
       ai = [for (final v in ai) keep.contains(v) ? v : _r.nextInt(6) + 1];
       final cmp = compareRanks(dicePokerRank(you), dicePokerRank(ai));
       if (cmp != 0) wins[cmp > 0 ? 0 : 1]++;
-      msg = '${dicePokerNames[dicePokerRank(you)[0]]} vs ${dicePokerNames[dicePokerRank(ai)[0]]} · ${cmp > 0 ? 'you win the round' : (cmp < 0 ? 'AI wins the round' : 'tie')}';
+      msg = '${handName(dicePokerNames[dicePokerRank(you)[0]])} ${tr('vs', 'বনাম')} ${handName(dicePokerNames[dicePokerRank(ai)[0]])} · ${cmp > 0 ? tr('you win the round', 'রাউন্ড আপনার') : (cmp < 0 ? tr('AI wins the round', 'রাউন্ড AI-র') : tr('tie', 'টাই'))}';
       phase = 2;
     });
     sfx('tap');
     if (wins.contains(3)) {
-      showResult(context, won: wins[0] == 3, '${wins[0] == 3 ? 'You win' : 'AI wins'} ${wins[0]}–${wins[1]}', () => setState(() {
+      showResult(context, won: wins[0] == 3, tr('${wins[0] == 3 ? 'You win' : 'AI wins'} ${wins[0]}–${wins[1]}', '${wins[0] == 3 ? 'আপনি জিতেছেন' : 'AI জিতেছে'} ${wins[0]}–${wins[1]}'), () => setState(() {
             wins.fillRange(0, 2, 0);
             phase = 0;
             you = [];
@@ -2038,16 +2053,16 @@ class _DicePokerState extends State<DicePoker> {
   Widget build(BuildContext context) => page(
         'Dice Poker',
         felt(Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Text('AI${ai.isEmpty ? '' : ' · ${dicePokerNames[dicePokerRank(ai)[0]]}'}', style: const TextStyle(fontSize: 18)),
+          Text('AI${ai.isEmpty ? '' : ' · ${handName(dicePokerNames[dicePokerRank(ai)[0]])}'}', style: const TextStyle(fontSize: 18)),
           row(ai),
           const SizedBox(height: 24),
           Text(msg, textAlign: TextAlign.center, style: const TextStyle(fontSize: 18)),
           const SizedBox(height: 24),
           row(you, mine: true),
-          Text('You${you.isEmpty ? '' : ' · ${dicePokerNames[dicePokerRank(you)[0]]}'}', style: const TextStyle(fontSize: 18)),
+          Text('${tr('You', 'আপনি')}${you.isEmpty ? '' : ' · ${handName(dicePokerNames[dicePokerRank(you)[0]])}'}', style: const TextStyle(fontSize: 18)),
           const SizedBox(height: 24),
-          FilledButton(onPressed: phase == 1 ? reroll : rollBoth, child: Text(phase == 1 ? 'Reroll' : (phase == 2 ? 'Next round' : 'Roll'))),
+          FilledButton(onPressed: phase == 1 ? reroll : rollBoth, child: Text(phase == 1 ? tr('Reroll', 'আবার চালুন') : (phase == 2 ? tr('Next round', 'পরের রাউন্ড') : tr('Roll', 'চালুন')))),
         ])),
-        'You ${wins[0]} · AI ${wins[1]}',
+        tr('You ${wins[0]} · AI ${wins[1]}', 'আপনি ${wins[0]} · AI ${wins[1]}'),
       );
 }

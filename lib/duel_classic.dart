@@ -9,28 +9,28 @@ import 'games.dart';
 final _r = Random();
 
 final duelClassicGames = <Game>[
-  Game('Chess', '2P Board', () => ClassicBoard(Chess.new), glyph: '♞'),
-  Game('Chess960', '2P Board', () => ClassicBoard(() => Chess(fischer: true)), glyph: '960'),
-  Game('Checkers', '2P Board', () => ClassicBoard(() => Checkers(8)), glyph: '🏁'),
-  Game('Checkers Casual', '2P Board', () => ClassicBoard(() => Checkers(8, forcedCapture: false)), glyph: '🏁'),
-  Game('Checkers 10×10', '2P Board', () => ClassicBoard(() => Checkers(10)), glyph: '🏁'),
-  Game('Giveaway Checkers', '2P Board', () => ClassicBoard(() => Checkers(8, giveaway: true)), glyph: '🎁'),
-  for (final n in [9, 13]) Game('Go $n×$n', '2P Board', () => ClassicBoard(() => Go(n)), glyph: '⚫⚪'),
-  Game("Nine Men's Morris", '2P Board', () => ClassicBoard(Morris.nine), glyph: '9⚪'),
-  Game("Six Men's Morris", '2P Board', () => ClassicBoard(Morris.six), glyph: '6⚪'),
-  Game("Three Men's Morris", '2P Board', () => ClassicBoard(Morris.three), glyph: '3⚪'),
-  for (final (n, w) in [(9, 10), (7, 7)]) Game('Quoridor $n×$n', '2P Board', () => ClassicBoard(() => Quoridor(n, w)), glyph: '🧱'),
-  for (final (n, ships) in [(8, [4, 3, 3, 2, 2]), (10, [5, 4, 3, 3, 2])]) Game('Battleship $n×$n', '2P Board', () => Battleship(n, ships), glyph: '🚢'),
-  Game('Tablut', '2P Board', () => ClassicBoard(() => Tafl(9)), glyph: '👑'),
-  Game('Brandubh', '2P Board', () => ClassicBoard(() => Tafl(7)), glyph: '🛡️'),
-  for (final n in [6, 8]) Game('Breakthrough $n×$n', '2P Board', () => ClassicBoard(() => Breakthrough(n)), glyph: '⚔️'),
-  for (final n in [6, 8]) Game('Amazons $n×$n', '2P Board', () => ClassicBoard(() => Amazons(n)), glyph: '🏹'),
-  Game('Fox and Geese', '2P Board', () => ClassicBoard(FoxGeese.new), glyph: '🦊'),
-  for (final n in [6, 8]) Game('Konane $n×$n', '2P Board', () => ClassicBoard(() => Konane(n)), glyph: '🌋'),
-  Game('Lines of Action', '2P Board', () => ClassicBoard(LinesOfAction.new), glyph: '🔗'),
-  for (final (c, r) in [(4, 4), (4, 6), (6, 6)]) Game('Memory Duel $c×$r', '2P Board', () => MemoryDuel(c, r), glyph: '🃏'),
-  Game('Hangman Duel', '2P Board', () => const HangmanDuel(), glyph: '🪢'),
-  Game('Mastermind Duel', '2P Board', () => const MastermindDuel(), glyph: '🕵️'),
+  Game('Chess', '2P Board', () => ClassicBoard(Chess.new), glyph: '♞', bn: 'দাবা'),
+  Game('Chess960', '2P Board', () => ClassicBoard(() => Chess(fischer: true)), glyph: '960', bn: 'দাবা 960'),
+  Game('Checkers', '2P Board', () => ClassicBoard(() => Checkers(8)), glyph: '🏁', bn: 'চেকার্স'),
+  Game('Checkers Casual', '2P Board', () => ClassicBoard(() => Checkers(8, forcedCapture: false)), glyph: '🏁', bn: 'চেকার্স (সহজ)'),
+  Game('Checkers 10×10', '2P Board', () => ClassicBoard(() => Checkers(10)), glyph: '🏁', bn: 'চেকার্স 10×10'),
+  Game('Giveaway Checkers', '2P Board', () => ClassicBoard(() => Checkers(8, giveaway: true)), glyph: '🎁', bn: 'উল্টো চেকার্স'),
+  for (final n in [9, 13]) Game('Go $n×$n', '2P Board', () => ClassicBoard(() => Go(n)), glyph: '⚫⚪', bn: 'গো $n×$n'),
+  Game("Nine Men's Morris", '2P Board', () => ClassicBoard(Morris.nine), glyph: '9⚪', bn: 'নয় গুটির মরিস'),
+  Game("Six Men's Morris", '2P Board', () => ClassicBoard(Morris.six), glyph: '6⚪', bn: 'ছয় গুটির মরিস'),
+  Game("Three Men's Morris", '2P Board', () => ClassicBoard(Morris.three), glyph: '3⚪', bn: 'তিন গুটির মরিস'),
+  for (final (n, w) in [(9, 10), (7, 7)]) Game('Quoridor $n×$n', '2P Board', () => ClassicBoard(() => Quoridor(n, w)), glyph: '🧱', bn: 'কোরিডর $n×$n'),
+  for (final (n, ships) in [(8, [4, 3, 3, 2, 2]), (10, [5, 4, 3, 3, 2])]) Game('Battleship $n×$n', '2P Board', () => Battleship(n, ships), glyph: '🚢', bn: 'যুদ্ধজাহাজ $n×$n'),
+  Game('Tablut', '2P Board', () => ClassicBoard(() => Tafl(9)), glyph: '👑', bn: 'টাবলুট'),
+  Game('Brandubh', '2P Board', () => ClassicBoard(() => Tafl(7)), glyph: '🛡️', bn: 'ব্র্যান্ডুভ'),
+  for (final n in [6, 8]) Game('Breakthrough $n×$n', '2P Board', () => ClassicBoard(() => Breakthrough(n)), glyph: '⚔️', bn: 'ব্রেকথ্রু $n×$n'),
+  for (final n in [6, 8]) Game('Amazons $n×$n', '2P Board', () => ClassicBoard(() => Amazons(n)), glyph: '🏹', bn: 'অ্যামাজনস $n×$n'),
+  Game('Fox and Geese', '2P Board', () => ClassicBoard(FoxGeese.new), glyph: '🦊', bn: 'শিয়াল ও হাঁস'),
+  for (final n in [6, 8]) Game('Konane $n×$n', '2P Board', () => ClassicBoard(() => Konane(n)), glyph: '🌋', bn: 'কোনানে $n×$n'),
+  Game('Lines of Action', '2P Board', () => ClassicBoard(LinesOfAction.new), glyph: '🔗', bn: 'লাইনস অফ অ্যাকশন'),
+  for (final (c, r) in [(4, 4), (4, 6), (6, 6)]) Game('Memory Duel $c×$r', '2P Board', () => MemoryDuel(c, r), glyph: '🃏', bn: 'স্মৃতির লড়াই $c×$r'),
+  Game('Hangman Duel', '2P Board', () => const HangmanDuel(), glyph: '🪢', bn: 'হ্যাংম্যান ডুয়েল'),
+  Game('Mastermind Duel', '2P Board', () => const MastermindDuel(), glyph: '🕵️', bn: 'মাস্টারমাইন্ড ডুয়েল'),
 ];
 
 // ---------- shared grid helpers ----------
@@ -100,7 +100,7 @@ Widget passScreen(int player, String text, VoidCallback ready) => Container(
         const SizedBox(height: 16),
         Text(text, textAlign: TextAlign.center, style: const TextStyle(fontSize: 24)),
         const SizedBox(height: 24),
-        FilledButton(onPressed: ready, child: Text("I'm ${duelNames[player]} — ready")),
+        FilledButton(onPressed: ready, child: Text(tr("I'm ${duelNames[player]} — ready", 'আমি ${duelNames[player]} — প্রস্তুত'))),
       ]),
     );
 
@@ -121,11 +121,11 @@ abstract class ClassicDuel {
   Widget? pieceAt(int i) => null;
   Widget square(int i) => Container(color: (i ~/ n + i % n).isEven ? _light : _dark);
   String name(int p) => duelNames[p];
-  String get status => "${name(turn)}'s turn";
+  String get status => tr("${name(turn)}'s turn", '${name(turn)}-এর পালা');
   String? get info => null;
   String? get action => null;
   void doAction() {}
-  String get endText => winner == 2 ? "It's a draw!" : '${name(winner!)} wins! 🎉';
+  String get endText => winner == 2 ? tr("It's a draw!", 'ড্র হয়েছে!') : tr('${name(winner!)} wins! 🎉', '${name(winner!)} জিতেছে! 🎉');
   bool anyMove() => [for (var i = 0; i < n * n; i++) i].any((i) => movesFrom(i).isNotEmpty);
 }
 
@@ -255,11 +255,11 @@ class Chess extends ClassicDuel {
   @override
   String get title => fischer ? 'Chess960' : 'Chess';
   @override
-  String name(int p) => p == 0 ? 'White' : 'Black';
+  String name(int p) => p == 0 ? tr('White', 'সাদা') : tr('Black', 'কালো');
   @override
-  String get status => '${name(turn)} to move${inCheck(turn) ? ' — check!' : ''}';
+  String get status => tr('${name(turn)} to move${inCheck(turn) ? ' — check!' : ''}', '${name(turn)}-এর চাল${inCheck(turn) ? ' — কিস্তি!' : ''}');
   @override
-  String? get info => fischer ? 'Castle: king onto own rook' : null;
+  String? get info => fischer ? tr('Castle: king onto own rook', 'ক্যাসলিং: রাজাকে নিজের নৌকার ঘরে নিন') : null;
 
   static int side(String p) => p == '' ? -1 : (p == p.toUpperCase() ? 0 : 1);
 
@@ -400,9 +400,11 @@ class Checkers extends ClassicDuel {
   int quiet = 0; // plies without capture or crowning
 
   @override
-  String get title => giveaway ? 'Giveaway Checkers' : (forcedCapture ? 'Checkers $n×$n' : 'Checkers Casual');
+  String get title => giveaway ? tr('Giveaway Checkers', 'উল্টো চেকার্স') : (forcedCapture ? tr('Checkers $n×$n', 'চেকার্স $n×$n') : tr('Checkers Casual', 'চেকার্স (সহজ)'));
   @override
-  String get status => forced != null ? '${name(turn)}: keep jumping!' : "${name(turn)}'s turn${giveaway ? ' — lose all to win' : ''}";
+  String get status => forced != null
+      ? tr('${name(turn)}: keep jumping!', '${name(turn)}: লাফ চালিয়ে যান!')
+      : tr("${name(turn)}'s turn${giveaway ? ' — lose all to win' : ''}", '${name(turn)}-এর পালা${giveaway ? ' — সব গুটি হারালে জয়' : ''}');
 
   static int owner(int v) => v == 0 ? -1 : (v <= 2 ? 0 : 1);
 
@@ -472,13 +474,13 @@ class Go extends ClassicDuel {
   @override
   String get title => 'Go $n×$n';
   @override
-  String name(int p) => p == 0 ? 'Black' : 'White';
+  String name(int p) => p == 0 ? tr('Black', 'কালো') : tr('White', 'সাদা');
   @override
-  String get status => '${name(turn)} to play${passes == 1 ? ' (opponent passed)' : ''}';
+  String get status => tr('${name(turn)} to play${passes == 1 ? ' (opponent passed)' : ''}', '${name(turn)}-এর চাল${passes == 1 ? ' (প্রতিপক্ষ পাস দিয়েছে)' : ''}');
   @override
-  String? get info => 'Captures ⚫${caps[0]} ⚪${caps[1]}';
+  String? get info => tr('Captures ⚫${caps[0]} ⚪${caps[1]}', 'বন্দি ⚫${caps[0]} ⚪${caps[1]}');
   @override
-  String? get action => 'Pass';
+  String? get action => tr('Pass', 'পাস');
   @override
   String get endText => '${super.endText}\n$result';
 
@@ -534,7 +536,7 @@ class Go extends ClassicDuel {
     next();
     if (passes < 2) return;
     final (black, white) = score();
-    result = 'Black $black – White $white (komi 6.5)';
+    result = tr('Black $black – White $white (komi 6.5)', 'কালো $black – সাদা $white (কোমি 6.5)');
     winner = black > white ? 0 : 1;
   }
 
@@ -665,9 +667,9 @@ class Morris extends ClassicDuel {
 
   @override
   String get status {
-    if (removing) return '${name(turn)}: remove a ${name(1 - turn)} piece';
-    if (inHand[turn] > 0) return '${name(turn)}: place a piece (${inHand[turn]} left)';
-    return '${name(turn)}: move a piece${fly && count(turn) == 3 ? ' (flying!)' : ''}';
+    if (removing) return tr('${name(turn)}: remove a ${name(1 - turn)} piece', '${name(turn)}: ${name(1 - turn)}-এর একটি গুটি সরান');
+    if (inHand[turn] > 0) return tr('${name(turn)}: place a piece (${inHand[turn]} left)', '${name(turn)}: একটি গুটি বসান (${inHand[turn]}টি বাকি)');
+    return tr('${name(turn)}: move a piece${fly && count(turn) == 3 ? ' (flying!)' : ''}', '${name(turn)}: একটি গুটি চালুন${fly && count(turn) == 3 ? ' (উড়তে পারবে!)' : ''}');
   }
 
   @override
@@ -747,11 +749,13 @@ class Quoridor extends ClassicDuel {
   @override
   String get title => 'Quoridor $n×$n';
   @override
-  String get status => mode == 0 ? '${name(turn)}: move (reach the far side)' : '${name(turn)}: tap a square to put a wall ${mode == 1 ? 'under' : 'right of'} it';
+  String get status => mode == 0
+      ? tr('${name(turn)}: move (reach the far side)', '${name(turn)}: চাল দিন (ওপারে পৌঁছান)')
+      : tr('${name(turn)}: tap a square to put a wall ${mode == 1 ? 'under' : 'right of'} it', '${name(turn)}: ঘরে ট্যাপ করে তার ${mode == 1 ? 'নিচে' : 'ডানে'} দেয়াল দিন');
   @override
-  String? get info => 'Walls 🔵${walls[0]} 🔴${walls[1]}';
+  String? get info => tr('Walls 🔵${walls[0]} 🔴${walls[1]}', 'দেয়াল 🔵${walls[0]} 🔴${walls[1]}');
   @override
-  String? get action => ['Mode: Move', 'Mode: Wall ─', 'Mode: Wall │'][mode];
+  String? get action => [tr('Mode: Move', 'মোড: চাল'), tr('Mode: Wall ─', 'মোড: দেয়াল ─'), tr('Mode: Wall │', 'মোড: দেয়াল │')][mode];
   @override
   void doAction() => mode = (mode + 1) % 3;
 
@@ -886,9 +890,9 @@ class Tafl extends ClassicDuel {
   @override
   String get title => n == 9 ? 'Tablut' : 'Brandubh';
   @override
-  String name(int p) => p == 0 ? 'Attackers' : 'Defenders';
+  String name(int p) => p == 0 ? tr('Attackers', 'আক্রমণকারী') : tr('Defenders', 'রক্ষাকারী');
   @override
-  String? get info => n == 9 ? 'King escapes to any edge' : 'King escapes to a corner';
+  String? get info => n == 9 ? tr('King escapes to any edge', 'রাজা যেকোনো কিনারায় পালালে জয়') : tr('King escapes to a corner', 'রাজা কোণে পালালে জয়');
 
   @override
   List<int> movesFrom(int i) {
@@ -958,7 +962,7 @@ class Breakthrough extends ClassicDuel {
   @override
   String get title => 'Breakthrough $n×$n';
   @override
-  String? get info => 'Reach the far row';
+  String? get info => tr('Reach the far row', 'শেষ সারিতে পৌঁছান');
 
   @override
   List<int> movesFrom(int i) {
@@ -1003,9 +1007,9 @@ class Amazons extends ClassicDuel {
   @override
   String get title => 'Amazons $n×$n';
   @override
-  String get status => forced != null ? '${name(turn)}: shoot an arrow' : '${name(turn)}: move an amazon';
+  String get status => forced != null ? tr('${name(turn)}: shoot an arrow', '${name(turn)}: একটি তীর ছুড়ুন') : tr('${name(turn)}: move an amazon', '${name(turn)}: একটি অ্যামাজন চালুন');
   @override
-  String? get info => 'Last player able to move wins';
+  String? get info => tr('Last player able to move wins', 'যে শেষে চাল দিতে পারবে, সে জিতবে');
 
   List<int> reach(int i) => [
         for (final (dr, dc) in [..._orth, ..._diag])
@@ -1053,11 +1057,11 @@ class FoxGeese extends ClassicDuel {
   @override
   String get title => 'Fox and Geese';
   @override
-  String name(int p) => p == 0 ? 'Geese' : 'Fox';
+  String name(int p) => p == 0 ? tr('Geese', 'হাঁস') : tr('Fox', 'শিয়াল');
   @override
-  String get status => turn == 0 ? 'Geese: step down or sideways' : 'Fox: step or jump a goose';
+  String get status => turn == 0 ? tr('Geese: step down or sideways', 'হাঁস: নিচে বা পাশে এক ঘর যান') : tr('Fox: step or jump a goose', 'শিয়াল: এক ঘর যান বা হাঁস ডিঙান');
   @override
-  String? get info => 'Geese ${b.where((x) => x == 0).length} (fox wins below 6)';
+  String? get info => tr('Geese ${b.where((x) => x == 0).length} (fox wins below 6)', 'হাঁস ${b.where((x) => x == 0).length} (6-এর কম হলে শিয়াল জেতে)');
   @override
   bool valid(int i) => (i ~/ 7 >= 2 && i ~/ 7 <= 4) || (i % 7 >= 2 && i % 7 <= 4);
 
@@ -1118,7 +1122,7 @@ class Konane extends ClassicDuel {
   @override
   String get title => 'Konane $n×$n';
   @override
-  String? get info => 'Jump in a straight line; no move = you lose';
+  String? get info => tr('Jump in a straight line; no move = you lose', 'সোজা লাইনে লাফ দিন; চাল না থাকলে হার');
 
   @override
   List<int> movesFrom(int i) {
@@ -1147,7 +1151,7 @@ class Konane extends ClassicDuel {
   @override
   Widget? pieceAt(int i) => b[i] < 0 ? null : stone(b[i] == 0 ? Colors.black : Colors.white);
   @override
-  String name(int p) => p == 0 ? 'Black' : 'White';
+  String name(int p) => p == 0 ? tr('Black', 'কালো') : tr('White', 'সাদা');
 }
 
 // ---------- Lines of Action ----------
@@ -1182,7 +1186,7 @@ class LinesOfAction extends ClassicDuel {
   @override
   String get title => 'Lines of Action';
   @override
-  String? get info => 'Move exactly as far as pieces on that line. Connect all yours!';
+  String? get info => tr('Move exactly as far as pieces on that line. Connect all yours!', 'লাইনে যতগুলো গুটি, ঠিক ততঘর চালুন। নিজের সব গুটি জুড়ে দিন!');
 
   int line(int i, int dr, int dc) => 1 + [..._ray(8, i, dr, dc), ..._ray(8, i, -dr, -dc)].where((j) => b[j] >= 0).length;
 
@@ -1275,7 +1279,7 @@ class _BattleshipState extends State<Battleship> {
     setState(() {
       shots[foe].add(i);
       busy = true;
-      msg = id < 0 ? 'Miss' : ([for (var j = 0; j < n * n; j++) if (f[j] == id) j].every(shots[foe].contains) ? 'Sunk! 💥' : 'Hit! 🔥');
+      msg = id < 0 ? tr('Miss', 'ফসকে গেছে') : ([for (var j = 0; j < n * n; j++) if (f[j] == id) j].every(shots[foe].contains) ? tr('Sunk! 💥', 'ডুবেছে! 💥') : tr('Hit! 🔥', 'লেগেছে! 🔥'));
     });
     sfx(id < 0 ? 'wrong' : 'right');
     if ([for (var j = 0; j < n * n; j++) if (f[j] >= 0) j].every(shots[foe].contains)) {
@@ -1313,12 +1317,12 @@ class _BattleshipState extends State<Battleship> {
   Widget build(BuildContext context) => page(
         'Battleship $n×$n',
         passing
-            ? passScreen(turn, 'Pass the phone to ${duelNames[turn]}', () => setState(() => passing = false))
+            ? passScreen(turn, tr('Pass the phone to ${duelNames[turn]}', 'ফোনটা ${duelNames[turn]}-কে দিন'), () => setState(() => passing = false))
             : Column(children: [
-                turnBanner(turn, '${duelNames[turn]}: fire at the enemy fleet'),
+                turnBanner(turn, tr('${duelNames[turn]}: fire at the enemy fleet', '${duelNames[turn]}: শত্রুর জাহাজে গোলা ছুড়ুন')),
                 Expanded(flex: 3, child: grid(1 - turn, reveal: false, onTap: fire)),
                 Text(msg.isEmpty ? ' ' : msg, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-                const Text('Your fleet', style: TextStyle(color: Colors.white70)),
+                Text(tr('Your fleet', 'আপনার জাহাজ'), style: const TextStyle(color: Colors.white70)),
                 Expanded(flex: 2, child: grid(turn, reveal: true)),
               ]),
       );
@@ -1381,9 +1385,9 @@ class _MemoryDuelState extends State<MemoryDuel> {
 
   @override
   Widget build(BuildContext context) => page(
-        'Memory Duel',
+        tr('Memory Duel', 'স্মৃতির লড়াই'),
         Column(children: [
-          turnBanner(turn, "${duelNames[turn]}'s turn — a match plays again"),
+          turnBanner(turn, tr("${duelNames[turn]}'s turn — a match plays again", '${duelNames[turn]}-এর পালা — জোড়া মিললে আবার খেলুন')),
           Expanded(
             child: board(widget.cols, cards.length, (i) {
               final o = owner[i], up = open.contains(i) || o != null;
@@ -1430,7 +1434,7 @@ class _HangmanDuelState extends State<HangmanDuel> {
 
   void setWord() {
     final w = ctrl.text.trim().toUpperCase();
-    if (!RegExp(r'^[A-Z]{3,12}$').hasMatch(w)) return setState(() => error = '3–12 letters, A–Z only');
+    if (!RegExp(r'^[A-Z]{3,12}$').hasMatch(w)) return setState(() => error = tr('3–12 letters, A–Z only', '3–12টি অক্ষর, শুধু A–Z'));
     setState(() {
       word = w;
       error = null;
@@ -1446,7 +1450,7 @@ class _HangmanDuelState extends State<HangmanDuel> {
     setState(() => guessed.add(l));
     if (!solved && wrong < lives) return;
     if (solved) points[guesser] += lives - wrong + 1;
-    final msg = solved ? '${duelNames[guesser]} guessed "$word"!' : 'The word was "$word".';
+    final msg = solved ? tr('${duelNames[guesser]} guessed "$word"!', '${duelNames[guesser]} "$word" ধরে ফেলেছে!') : tr('The word was "$word".', 'শব্দটি ছিল "$word"।');
     if (round == 0) {
       setState(() {
         round = 1;
@@ -1455,8 +1459,8 @@ class _HangmanDuelState extends State<HangmanDuel> {
       });
       return;
     }
-    final w = points[0] == points[1] ? "It's a draw!" : '${duelNames[points[0] > points[1] ? 0 : 1]} wins! 🎉';
-    showResult(context, '$msg\n\nBlue ${points[0]} – Red ${points[1]}\n$w', restart);
+    final w = points[0] == points[1] ? tr("It's a draw!", 'ড্র হয়েছে!') : tr('${duelNames[points[0] > points[1] ? 0 : 1]} wins! 🎉', '${duelNames[points[0] > points[1] ? 0 : 1]} জিতেছে! 🎉');
+    showResult(context, '$msg\n\n${duelNames[0]} ${points[0]} – ${duelNames[1]} ${points[1]}\n$w', restart);
   }
 
   @override
@@ -1465,22 +1469,22 @@ class _HangmanDuelState extends State<HangmanDuel> {
       'set' => ListView(padding: const EdgeInsets.all(24), children: [
           if (last.isNotEmpty) Text(last, textAlign: TextAlign.center, style: const TextStyle(fontSize: 18)),
           const SizedBox(height: 12),
-          Text('${duelNames[setter]}: type a secret word.\n${duelNames[guesser]}, look away!', textAlign: TextAlign.center, style: const TextStyle(fontSize: 20)),
+          Text(tr('${duelNames[setter]}: type a secret word.\n${duelNames[guesser]}, look away!', '${duelNames[setter]}: একটি গোপন ইংরেজি শব্দ লিখুন।\n${duelNames[guesser]}, অন্যদিকে তাকান!'), textAlign: TextAlign.center, style: const TextStyle(fontSize: 20)),
           const SizedBox(height: 16),
           TextField(
             controller: ctrl,
             obscureText: true,
             textCapitalization: TextCapitalization.characters,
             textAlign: TextAlign.center,
-            decoration: InputDecoration(hintText: 'Secret word', errorText: error),
+            decoration: InputDecoration(hintText: tr('Secret word', 'গোপন শব্দ'), errorText: error),
             onSubmitted: (_) => setWord(),
           ),
           const SizedBox(height: 16),
-          FilledButton(onPressed: setWord, child: const Text('Hide & pass')),
+          FilledButton(onPressed: setWord, child: Text(tr('Hide & pass', 'লুকিয়ে ফোন দিন'))),
         ]),
-      'pass' => passScreen(guesser, 'Pass the phone to ${duelNames[guesser]}', () => setState(() => phase = 'guess')),
+      'pass' => passScreen(guesser, tr('Pass the phone to ${duelNames[guesser]}', 'ফোনটা ${duelNames[guesser]}-কে দিন'), () => setState(() => phase = 'guess')),
       _ => Column(children: [
-          turnBanner(guesser, '${duelNames[guesser]}: guess the word'),
+          turnBanner(guesser, tr('${duelNames[guesser]}: guess the word', '${duelNames[guesser]}: শব্দটি আন্দাজ করুন')),
           const SizedBox(height: 16),
           Text('${'❤️' * (lives - wrong)}${'🖤' * wrong}', style: const TextStyle(fontSize: 24)),
           Expanded(
@@ -1508,7 +1512,7 @@ class _HangmanDuelState extends State<HangmanDuel> {
           ),
         ]),
     };
-    return page('Hangman Duel', body, 'Round ${round + 1}/2 · 🔵${points[0]} 🔴${points[1]}');
+    return page('Hangman Duel', body, tr('Round ${round + 1}/2 · 🔵${points[0]} 🔴${points[1]}', 'রাউন্ড ${round + 1}/2 · 🔵${points[0]} 🔴${points[1]}'));
   }
 }
 
@@ -1553,7 +1557,7 @@ class _MastermindDuelState extends State<MastermindDuel> {
 
   void finish(int k) {
     used[guesser] = k;
-    final msg = k > maxGuesses ? '${duelNames[guesser]} failed to crack it.' : '${duelNames[guesser]} cracked it in $k.';
+    final msg = k > maxGuesses ? tr('${duelNames[guesser]} failed to crack it.', '${duelNames[guesser]} কোড ভাঙতে পারেনি।') : tr('${duelNames[guesser]} cracked it in $k.', '${duelNames[guesser]} $k বারে কোড ভেঙেছে।');
     if (round == 0) {
       setState(() {
         round = 1;
@@ -1562,8 +1566,8 @@ class _MastermindDuelState extends State<MastermindDuel> {
       });
       return;
     }
-    final w = used[0] == used[1] ? "It's a draw!" : '${duelNames[used[0] < used[1] ? 0 : 1]} wins! 🎉';
-    showResult(context, '$msg\n\nGuesses — Blue ${used[0]}, Red ${used[1]}\n$w', () => setState(() {
+    final w = used[0] == used[1] ? tr("It's a draw!", 'ড্র হয়েছে!') : tr('${duelNames[used[0] < used[1] ? 0 : 1]} wins! 🎉', '${duelNames[used[0] < used[1] ? 0 : 1]} জিতেছে! 🎉');
+    showResult(context, tr('$msg\n\nGuesses — Blue ${used[0]}, Red ${used[1]}\n$w', '$msg\n\nঅনুমান — ${duelNames[0]} ${used[0]}, ${duelNames[1]} ${used[1]}\n$w'), () => setState(() {
           round = 0;
           phase = 'set';
           last = '';
@@ -1596,9 +1600,8 @@ class _MastermindDuelState extends State<MastermindDuel> {
         ),
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            OutlinedButton.icon(onPressed: cur.isEmpty ? null : () => setState(cur.removeLast), icon: const Icon(Icons.undo), label: const Text('Undo')),
-            const SizedBox(width: 12),
+          child: Wrap(alignment: WrapAlignment.center, spacing: 12, runSpacing: 8, children: [
+            OutlinedButton.icon(onPressed: cur.isEmpty ? null : () => setState(cur.removeLast), icon: const Icon(Icons.undo), label: Text(tr('Undo', 'মুছুন'))),
             FilledButton(onPressed: cur.length == 4 ? onDone : null, child: Text(doneLabel)),
           ]),
         ),
@@ -1608,17 +1611,17 @@ class _MastermindDuelState extends State<MastermindDuel> {
   Widget build(BuildContext context) {
     final body = switch (phase) {
       'set' => Column(children: [
-          turnBanner(setter, '${duelNames[setter]}: pick a secret code'),
+          turnBanner(setter, tr('${duelNames[setter]}: pick a secret code', '${duelNames[setter]}: একটি গোপন কোড বাছুন')),
           Expanded(
             child: Center(
-              child: Text('${last.isEmpty ? '' : '$last\n\n'}${duelNames[guesser]}, look away!', textAlign: TextAlign.center, style: const TextStyle(fontSize: 20)),
+              child: Text('${last.isEmpty ? '' : '$last\n\n'}${tr('${duelNames[guesser]}, look away!', '${duelNames[guesser]}, অন্যদিকে তাকান!')}', textAlign: TextAlign.center, style: const TextStyle(fontSize: 20)),
             ),
           ),
-          picker(confirmCode, 'Hide & pass'),
+          picker(confirmCode, tr('Hide & pass', 'লুকিয়ে ফোন দিন')),
         ]),
-      'pass' => passScreen(guesser, 'Pass the phone to ${duelNames[guesser]}', () => setState(() => phase = 'guess')),
+      'pass' => passScreen(guesser, tr('Pass the phone to ${duelNames[guesser]}', 'ফোনটা ${duelNames[guesser]}-কে দিন'), () => setState(() => phase = 'guess')),
       _ => Column(children: [
-          turnBanner(guesser, '${duelNames[guesser]}: crack the code (● right place, ○ right color)'),
+          turnBanner(guesser, tr('${duelNames[guesser]}: crack the code (● right place, ○ right color)', '${duelNames[guesser]}: কোড ভাঙুন (● সঠিক ঘর, ○ সঠিক রং)')),
           Expanded(
             child: ListView(padding: const EdgeInsets.symmetric(horizontal: 24), children: [
               for (final (g, (b, w)) in guesses)
@@ -1629,9 +1632,9 @@ class _MastermindDuelState extends State<MastermindDuel> {
                 ]),
             ]),
           ),
-          picker(check, 'Check'),
+          picker(check, tr('Check', 'যাচাই')),
         ]),
     };
-    return page('Mastermind Duel', body, phase == 'guess' ? '${guesses.length}/$maxGuesses' : 'Round ${round + 1}/2');
+    return page('Mastermind Duel', body, phase == 'guess' ? '${guesses.length}/$maxGuesses' : tr('Round ${round + 1}/2', 'রাউন্ড ${round + 1}/2'));
   }
 }

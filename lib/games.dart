@@ -7,26 +7,39 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Game {
-  const Game(this.name, this.cat, this.build, {this.glyph});
-  final String name, cat;
+  const Game(this.name, this.cat, this.build, {this.glyph, this.bn});
+  final String name, cat; // English name keys best scores and routes, so switching language keeps them
   final Widget Function() build;
   final String? glyph; // card icon; falls back to the glyphs map in main.dart
+  final String? bn; // Bangla name
+  String get title => tr(name, bn ?? name);
 }
+
+// ---------- language ----------
+
+/// UI language: true = বাংলা. Only changes on the home screen, so games may read it once when they build a round.
+final bangla = ValueNotifier(false);
+
+/// English or Bangla text for the current language.
+String tr(String en, String bn) => bangla.value ? bn : en;
+
+/// Bangla game names by English name, so [page] can title a game from the English name it's given. Filled in main.dart.
+final bnNames = <String, String>{};
 
 final _r = Random();
 
 final otherGames = <Game>[
-  Game('Simon Says', 'Memory', () => const Simon()),
-  Game('Number Memory', 'Memory', () => const NumberMemory()),
-  for (final n in [3, 4, 5]) Game('Pattern Memory $n×$n', 'Memory', () => PatternMemory(n)),
-  for (final (c, r) in [(3, 4), (4, 4), (4, 5)]) Game('Card Match ${c * r ~/ 2} Pairs', 'Memory', () => CardMatch(c, r)),
-  Game('Reaction Time', 'Focus', () => const Reaction()),
-  for (final n in [3, 4, 5]) Game('Schulte Table $n×$n', 'Focus', () => Schulte(n)),
-  Game('Aim Trainer', 'Focus', () => const Aim()),
-  for (final n in [3, 4]) Game('Sliding Puzzle $n×$n', 'Puzzle', () => Sliding(n)),
-  for (final n in [3, 4, 5]) Game('Lights Out $n×$n', 'Puzzle', () => LightsOut(n)),
-  Game('Tic Tac Toe', 'Puzzle', () => const TicTacToe()),
-  Game('Guess the Number', 'Puzzle', () => const GuessNumber()),
+  Game('Simon Says', 'Memory', () => const Simon(), bn: 'সাইমন বলে'),
+  Game('Number Memory', 'Memory', () => const NumberMemory(), bn: 'সংখ্যা মনে রাখা'),
+  for (final n in [3, 4, 5]) Game('Pattern Memory $n×$n', 'Memory', () => PatternMemory(n), bn: 'নকশা মনে রাখা $n×$n'),
+  for (final (c, r) in [(3, 4), (4, 4), (4, 5)]) Game('Card Match ${c * r ~/ 2} Pairs', 'Memory', () => CardMatch(c, r), bn: 'কার্ড মেলানো ${c * r ~/ 2} জোড়া'),
+  Game('Reaction Time', 'Focus', () => const Reaction(), bn: 'প্রতিক্রিয়ার সময়'),
+  for (final n in [3, 4, 5]) Game('Schulte Table $n×$n', 'Focus', () => Schulte(n), bn: 'শুল্টে টেবিল $n×$n'),
+  Game('Aim Trainer', 'Focus', () => const Aim(), bn: 'নিশানা অনুশীলন'),
+  for (final n in [3, 4]) Game('Sliding Puzzle $n×$n', 'Puzzle', () => Sliding(n), bn: 'স্লাইডিং পাজল $n×$n'),
+  for (final n in [3, 4, 5]) Game('Lights Out $n×$n', 'Puzzle', () => LightsOut(n), bn: 'বাতি নেভাও $n×$n'),
+  Game('Tic Tac Toe', 'Puzzle', () => const TicTacToe(), bn: 'টিক ট্যাক টো'),
+  Game('Guess the Number', 'Puzzle', () => const GuessNumber(), bn: 'সংখ্যা অনুমান'),
 ];
 
 // ---------- shared UI ----------
@@ -41,19 +54,24 @@ Widget page(String title, Widget body, [String? status]) => Builder(
           final leave = await showDialog<bool>(
             context: context,
             builder: (c) => AlertDialog(
-              title: const Text('Leave game?'),
-              content: const Text('Your progress will be lost.'),
+              title: Text(tr('Leave game?', 'গেম ছেড়ে যাবেন?')),
+              content: Text(tr('Your progress will be lost.', 'এই গেমের অগ্রগতি হারিয়ে যাবে।')),
               actions: [
-                TextButton(onPressed: () => Navigator.pop(c, false), child: const Text('Stay')),
-                FilledButton(onPressed: () => Navigator.pop(c, true), child: const Text('Leave')),
+                TextButton(onPressed: () => Navigator.pop(c, false), child: Text(tr('Stay', 'থাকুন'))),
+                FilledButton(onPressed: () => Navigator.pop(c, true), child: Text(tr('Leave', 'ছেড়ে যান'))),
               ],
             ),
           );
           if (leave ?? false) nav.pop();
         },
         child: Scaffold(
-          appBar: AppBar(title: Text(title), actions: [
-            if (status != null) Padding(padding: const EdgeInsets.all(16), child: Text(status, style: const TextStyle(fontSize: 16))),
+          appBar: AppBar(title: Text(tr(title, bnNames[title] ?? title)), actions: [
+            // Shrinks rather than overflows when a long (often Bangla) status meets a narrow phone.
+            if (status != null)
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: ConstrainedBox(constraints: const BoxConstraints(maxWidth: 170), child: FittedBox(fit: BoxFit.scaleDown, child: Text(status, style: const TextStyle(fontSize: 16)))),
+              ),
           ]),
           body: SafeArea(child: body),
         ),
@@ -127,20 +145,20 @@ void showResult(BuildContext context, String msg, VoidCallback again, {num? scor
     context: context,
     barrierDismissible: false,
     builder: (c) => AlertDialog(
-      title: Text(best ? '🏆 New best!' : 'Result'),
+      title: Text(best ? tr('🏆 New best!', '🏆 নতুন রেকর্ড!') : tr('Result', 'ফলাফল')),
       content: Text(msg, style: const TextStyle(fontSize: 20)),
       actions: [
         TextButton(
             onPressed: () => Navigator.of(c)
               ..pop()
               ..pop(),
-            child: const Text('Exit')),
+            child: Text(tr('Exit', 'বের হন'))),
         FilledButton(
             onPressed: () {
               Navigator.pop(c);
               again();
             },
-            child: const Text('Play again')),
+            child: Text(tr('Play again', 'আবার খেলুন'))),
       ],
     ),
   );
@@ -199,7 +217,7 @@ class _SimonState extends State<Simon> {
     flash(i);
     if (seq[step] != i) {
       busy = true;
-      showResult(context, won: false, score: seq.length - 1, 'Score: ${seq.length - 1}', () {
+      showResult(context, won: false, score: seq.length - 1, tr('Score: ${seq.length - 1}', 'স্কোর: ${seq.length - 1}'), () {
         seq.clear();
         next();
       });
@@ -211,9 +229,9 @@ class _SimonState extends State<Simon> {
 
   @override
   Widget build(BuildContext context) => page(
-        'Simon Says',
+        tr('Simon Says', 'সাইমন বলে'),
         board(2, 4, (i) => tile(lit == i ? colors[i] : colors[i].withValues(alpha: .3), onTap: () => tap(i))),
-        busy ? 'Watch…' : 'Level ${seq.length}',
+        busy ? tr('Watch…', 'দেখুন…') : tr('Level ${seq.length}', 'লেভেল ${seq.length}'),
       );
 }
 
@@ -256,7 +274,7 @@ class _NumberMemoryState extends State<NumberMemory> {
       level++;
       start();
     } else {
-      showResult(context, won: false, score: level - 1, 'Number was $target\nLevels cleared: ${level - 1}', () {
+      showResult(context, won: false, score: level - 1, tr('Number was $target\nLevels cleared: ${level - 1}', 'সংখ্যাটি ছিল $target\nপার হওয়া লেভেল: ${level - 1}'), () {
         level = 1;
         start();
       });
@@ -265,7 +283,7 @@ class _NumberMemoryState extends State<NumberMemory> {
 
   @override
   Widget build(BuildContext context) => page(
-        'Number Memory',
+        tr('Number Memory', 'সংখ্যা মনে রাখা'),
         Center(
           child: Padding(
             padding: const EdgeInsets.all(24),
@@ -278,15 +296,15 @@ class _NumberMemoryState extends State<NumberMemory> {
                       keyboardType: TextInputType.number,
                       textAlign: TextAlign.center,
                       style: const TextStyle(fontSize: 32),
-                      decoration: const InputDecoration(hintText: 'What was the number?'),
+                      decoration: InputDecoration(hintText: tr('What was the number?', 'সংখ্যাটি কী ছিল?')),
                       onSubmitted: (_) => submit(),
                     ),
                     const SizedBox(height: 16),
-                    FilledButton(onPressed: submit, child: const Text('Submit')),
+                    FilledButton(onPressed: submit, child: Text(tr('Submit', 'জমা দিন'))),
                   ]),
           ),
         ),
-        'Level $level',
+        tr('Level $level', 'লেভেল $level'),
       );
 }
 
@@ -328,7 +346,7 @@ class _PatternMemoryState extends State<PatternMemory> {
     if (showing || hit.length == target.length || hit.contains(i)) return; // ignore taps while the next level loads
     if (!target.contains(i)) {
       setState(() => showing = true);
-      showResult(context, won: false, score: level - 1, 'Levels cleared: ${level - 1}', () {
+      showResult(context, won: false, score: level - 1, tr('Levels cleared: ${level - 1}', 'পার হওয়া লেভেল: ${level - 1}'), () {
         level = 1;
         start();
       });
@@ -344,12 +362,12 @@ class _PatternMemoryState extends State<PatternMemory> {
 
   @override
   Widget build(BuildContext context) => page(
-        'Pattern Memory',
+        tr('Pattern Memory', 'নকশা মনে রাখা'),
         board(n, n * n, (i) {
           final on = (showing && target.contains(i)) || hit.contains(i);
           return tile(on ? Colors.teal : Colors.grey.shade800, onTap: () => tap(i));
         }),
-        'Level $level',
+        tr('Level $level', 'লেভেল $level'),
       );
 }
 
@@ -391,7 +409,7 @@ class _CardMatchState extends State<CardMatch> {
         done.addAll(open);
         open.clear();
       });
-      if (done.length == cards.length) showResult(context, score: moves, lower: true, unit: ' moves', 'Solved in $moves moves', () => setState(start));
+      if (done.length == cards.length) showResult(context, score: moves, lower: true, unit: ' moves', tr('Solved in $moves moves', '$moves চালে সমাধান'), () => setState(start));
     } else {
       Future.delayed(const Duration(milliseconds: 700), () {
         if (mounted) setState(open.clear);
@@ -401,12 +419,12 @@ class _CardMatchState extends State<CardMatch> {
 
   @override
   Widget build(BuildContext context) => page(
-        'Card Match',
+        tr('Card Match', 'কার্ড মেলানো'),
         board(widget.cols, cards.length, (i) {
           final up = open.contains(i) || done.contains(i);
           return tile(up ? Colors.indigo : Colors.blueGrey.shade700, text: up ? cards[i] : '', onTap: () => tap(i));
         }),
-        'Moves $moves',
+        tr('Moves $moves', 'চাল $moves'),
       );
 }
 
@@ -466,13 +484,13 @@ class _ReactionState extends State<Reaction> {
   @override
   Widget build(BuildContext context) {
     final (color, text) = switch (state) {
-      'wait' => (Colors.red.shade700, 'Wait for green…'),
-      'go' => (Colors.green.shade600, 'TAP!'),
-      'early' => (Colors.orange.shade800, 'Too soon!\nTap to retry'),
-      _ => (Colors.blue.shade700, '${times.last} ms\nBest: ${times.reduce(min)} ms\nTap to retry'),
+      'wait' => (Colors.red.shade700, tr('Wait for green…', 'সবুজের অপেক্ষা করুন…')),
+      'go' => (Colors.green.shade600, tr('TAP!', 'চাপুন!')),
+      'early' => (Colors.orange.shade800, tr('Too soon!\nTap to retry', 'খুব আগে!\nআবার চেষ্টা করতে চাপুন')),
+      _ => (Colors.blue.shade700, tr('${times.last} ms\nBest: ${times.reduce(min)} ms\nTap to retry', '${times.last} ms\nসেরা: ${times.reduce(min)} ms\nআবার খেলতে চাপুন')),
     };
     return page(
-      'Reaction Time',
+      tr('Reaction Time', 'প্রতিক্রিয়ার সময়'),
       GestureDetector(
         onTapDown: (_) => tap(),
         child: Container(
@@ -518,15 +536,15 @@ class _SchulteState extends State<Schulte> {
     if (next > n * n) {
       sw.stop();
       final secs = (sw.elapsedMilliseconds / 1000).toStringAsFixed(2);
-      showResult(context, score: double.parse(secs), lower: true, unit: ' s', 'Time: $secs s', () => setState(start));
+      showResult(context, score: double.parse(secs), lower: true, unit: ' s', tr('Time: $secs s', 'সময়: $secs s'), () => setState(start));
     }
   }
 
   @override
   Widget build(BuildContext context) => page(
-        'Schulte Table',
+        tr('Schulte Table', 'শুল্টে টেবিল'),
         board(n, n * n, (i) => tile(nums[i] < next ? Colors.green.shade900 : Colors.blueGrey.shade700, text: '${nums[i]}', onTap: () => tap(nums[i]))),
-        'Find $next',
+        tr('Find $next', '$next খুঁজুন'),
       );
 }
 
@@ -549,7 +567,7 @@ class _AimState extends State<Aim> {
     });
     if (hits == goal) {
       sw.stop();
-      showResult(context, score: sw.elapsedMilliseconds ~/ goal, lower: true, unit: ' ms', 'Avg ${sw.elapsedMilliseconds ~/ goal} ms per target', () {
+      showResult(context, score: sw.elapsedMilliseconds ~/ goal, lower: true, unit: ' ms', tr('Avg ${sw.elapsedMilliseconds ~/ goal} ms per target', 'প্রতি লক্ষ্যে গড় ${sw.elapsedMilliseconds ~/ goal} ms'), () {
         setState(() => hits = 0);
         sw
           ..reset()
@@ -560,7 +578,7 @@ class _AimState extends State<Aim> {
 
   @override
   Widget build(BuildContext context) => page(
-        'Aim Trainer',
+        tr('Aim Trainer', 'নিশানা অনুশীলন'),
         LayoutBuilder(
           builder: (_, box) => Stack(children: [
             Positioned(
@@ -617,15 +635,15 @@ class _SlidingState extends State<Sliding> {
       moves++;
     });
     if (List.generate(n * n, (i) => i).every((i) => t[i] == (i + 1) % (n * n))) {
-      showResult(context, score: moves, lower: true, unit: ' moves', 'Solved in $moves moves', () => setState(start));
+      showResult(context, score: moves, lower: true, unit: ' moves', tr('Solved in $moves moves', '$moves চালে সমাধান'), () => setState(start));
     }
   }
 
   @override
   Widget build(BuildContext context) => page(
-        'Sliding Puzzle',
+        tr('Sliding Puzzle', 'স্লাইডিং পাজল'),
         board(n, n * n, (i) => t[i] == 0 ? const SizedBox() : tile(Colors.deepPurple, text: '${t[i]}', onTap: () => tap(i))),
-        'Moves $moves',
+        tr('Moves $moves', 'চাল $moves'),
       );
 }
 
@@ -668,14 +686,14 @@ class _LightsOutState extends State<LightsOut> {
       press(i);
       moves++;
     });
-    if (!on.contains(true)) showResult(context, score: moves, lower: true, unit: ' moves', 'All lights out in $moves moves', () => setState(start));
+    if (!on.contains(true)) showResult(context, score: moves, lower: true, unit: ' moves', tr('All lights out in $moves moves', '$moves চালে সব বাতি নিভেছে'), () => setState(start));
   }
 
   @override
   Widget build(BuildContext context) => page(
-        'Lights Out',
+        tr('Lights Out', 'বাতি নেভাও'),
         board(n, n * n, (i) => tile(on[i] ? Colors.amber : Colors.grey.shade800, onTap: () => tap(i))),
-        'Moves $moves',
+        tr('Moves $moves', 'চাল $moves'),
       );
 }
 
@@ -739,16 +757,16 @@ class _TicTacToeState extends State<TicTacToe> {
     });
     final w = winner(b);
     if (w != null) {
-      showResult(context, won: w != 'O', w == 'draw' ? "It's a draw" : (w == 'X' ? 'You win!' : 'AI wins'), () => setState(() => b.fillRange(0, 9, '')));
+      showResult(context, won: w != 'O', w == 'draw' ? tr("It's a draw", 'ড্র হয়েছে') : (w == 'X' ? tr('You win!', 'আপনি জিতেছেন!') : tr('AI wins', 'কম্পিউটার জিতেছে')), () => setState(() => b.fillRange(0, 9, '')));
     }
   }
 
   @override
   Widget build(BuildContext context) => page(
-        'Tic Tac Toe',
+        tr('Tic Tac Toe', 'টিক ট্যাক টো'),
         board(3, 9,
             (i) => tile(b[i] == 'X' ? Colors.blue.shade700 : (b[i] == 'O' ? Colors.red.shade700 : Colors.grey.shade800), text: b[i], onTap: () => tap(i))),
-        'You are X',
+        tr('You are X', 'আপনি X'),
       );
 }
 
@@ -761,7 +779,7 @@ class GuessNumber extends StatefulWidget {
 class _GuessNumberState extends State<GuessNumber> {
   final ctrl = TextEditingController();
   int target = _r.nextInt(100) + 1, tries = 0;
-  String hint = 'Guess a number 1–100';
+  String hint = tr('Guess a number 1–100', '1–100 এর মধ্যে একটি সংখ্যা অনুমান করুন');
 
   @override
   void dispose() {
@@ -780,20 +798,20 @@ class _GuessNumberState extends State<GuessNumber> {
           score: tries,
           lower: true,
           unit: ' tries',
-          'Got it in $tries tries',
+          tr('Got it in $tries tries', '$tries চেষ্টায় পেরেছেন'),
           () => setState(() {
                 target = _r.nextInt(100) + 1;
                 tries = 0;
-                hint = 'Guess a number 1–100';
+                hint = tr('Guess a number 1–100', '1–100 এর মধ্যে একটি সংখ্যা অনুমান করুন');
               }));
     } else {
-      setState(() => hint = g < target ? '$g is too low ↑' : '$g is too high ↓');
+      setState(() => hint = g < target ? tr('$g is too low ↑', '$g খুব ছোট ↑') : tr('$g is too high ↓', '$g খুব বড় ↓'));
     }
   }
 
   @override
   Widget build(BuildContext context) => page(
-        'Guess the Number',
+        tr('Guess the Number', 'সংখ্যা অনুমান'),
         Center(
           child: Padding(
             padding: const EdgeInsets.all(24),
@@ -809,10 +827,10 @@ class _GuessNumberState extends State<GuessNumber> {
                 onSubmitted: (_) => guess(),
               ),
               const SizedBox(height: 16),
-              FilledButton(onPressed: guess, child: const Text('Guess')),
+              FilledButton(onPressed: guess, child: Text(tr('Guess', 'অনুমান'))),
             ]),
           ),
         ),
-        'Tries $tries',
+        tr('Tries $tries', 'চেষ্টা $tries'),
       );
 }

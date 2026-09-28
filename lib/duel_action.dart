@@ -11,36 +11,36 @@ final _r = Random();
 const _cat = '2P Action';
 
 final duelActionGames = <Game>[
-  Game('Pong Classic', _cat, () => const Pong('Pong Classic'), glyph: '🏓'),
-  Game('Pong Fast', _cat, () => const Pong('Pong Fast', speed: 1.5), glyph: '🏓💨'),
-  Game('Pong Two Balls', _cat, () => const Pong('Pong Two Balls', balls: 2), glyph: '⚪⚪'),
-  Game('Pong Tiny Paddles', _cat, () => const Pong('Pong Tiny Paddles', paddle: .12), glyph: '▁▁'),
-  Game('Pong Center Wall', _cat, () => const Pong('Pong Center Wall', wall: true), glyph: '▬ ▬'),
-  Game('Pong Speed-Up Rally', _cat, () => const Pong('Pong Speed-Up Rally', speedUp: true), glyph: '⏩'),
-  Game('Air Hockey Classic', _cat, () => const AirHockey('Air Hockey Classic'), glyph: '🏒'),
-  Game('Air Hockey Big Goals', _cat, () => const AirHockey('Air Hockey Big Goals', goal: .6), glyph: '🥅'),
-  Game('Air Hockey Ice', _cat, () => const AirHockey('Air Hockey Ice', friction: .97), glyph: '🧊'),
-  Game('Air Hockey Heavy Puck', _cat, () => const AirHockey('Air Hockey Heavy Puck', puckR: .055, mass: 1.5, friction: .35), glyph: '🪨'),
-  Game('Air Hockey Two Pucks', _cat, () => const AirHockey('Air Hockey Two Pucks', pucks: 2), glyph: '⚫⚫'),
-  Game('Tron Classic', _cat, () => const GridDuel('Tron Classic'), glyph: '🏍️'),
-  Game('Tron Fast', _cat, () => const GridDuel('Tron Fast', tickMs: 50), glyph: '🏍️💨'),
-  Game('Tron Small Arena', _cat, () => const GridDuel('Tron Small Arena', cols: 18, rows: 26, tickMs: 100), glyph: '▫️'),
-  Game('Tron Wrap-Around', _cat, () => const GridDuel('Tron Wrap-Around', wrap: true), glyph: '🔁'),
-  Game('Tron Boost', _cat, () => const GridDuel('Tron Boost', boost: true), glyph: '🚀'),
-  Game('Tron Obstacles', _cat, () => const GridDuel('Tron Obstacles', obstacles: true), glyph: '⛔'),
-  Game('Snake Duel Classic', _cat, () => const GridDuel('Snake Duel Classic', tron: false, cols: 20, rows: 30, tickMs: 130, len: 3), glyph: '🐍'),
-  Game('Snake Duel Fast', _cat, () => const GridDuel('Snake Duel Fast', tron: false, cols: 20, rows: 30, tickMs: 85, len: 3), glyph: '🐍💨'),
-  Game('Snake Duel Wrap', _cat, () => const GridDuel('Snake Duel Wrap', tron: false, cols: 20, rows: 30, tickMs: 130, len: 3, wrap: true), glyph: '🐍🔁'),
-  Game('Snake Duel Poison', _cat, () => const GridDuel('Snake Duel Poison', tron: false, cols: 20, rows: 30, tickMs: 130, len: 3, poison: true), glyph: '☠️'),
-  Game('Snake Duel Long', _cat, () => const GridDuel('Snake Duel Long', tron: false, cols: 20, rows: 30, tickMs: 130, len: 10), glyph: '〰️'),
-  Game('Tug of War', _cat, () => const TapBattle('Tug of War', 'tug'), glyph: '🪢'),
-  Game('Tap Race 100', _cat, () => const TapBattle('Tap Race 100', 'race'), glyph: '👆'),
-  Game('Hold & Release', _cat, () => const TapBattle('Hold & Release', 'hold'), glyph: '⏱️'),
-  Game('Rhythm Duel', _cat, () => const TapBattle('Rhythm Duel', 'rhythm'), glyph: '🥁'),
-  Game('Reflex Duel Classic', _cat, () => const ReflexDuel('Reflex Duel Classic', 'classic'), glyph: '🚦'),
-  Game('Reflex Duel Stroop', _cat, () => const ReflexDuel('Reflex Duel Stroop', 'stroop'), glyph: '🌈'),
-  Game('Reflex Duel Even', _cat, () => const ReflexDuel('Reflex Duel Even', 'even'), glyph: '2 4 6'),
-  Game('Reflex Duel Shapes', _cat, () => const ReflexDuel('Reflex Duel Shapes', 'shape'), glyph: '▲▲'),
+  Game('Pong Classic', _cat, () => const Pong('Pong Classic'), glyph: '🏓', bn: 'পং ক্লাসিক'),
+  Game('Pong Fast', _cat, () => const Pong('Pong Fast', speed: 1.5), glyph: '🏓💨', bn: 'পং দ্রুত'),
+  Game('Pong Two Balls', _cat, () => const Pong('Pong Two Balls', balls: 2), glyph: '⚪⚪', bn: 'পং দুই বল'),
+  Game('Pong Tiny Paddles', _cat, () => const Pong('Pong Tiny Paddles', paddle: .12), glyph: '▁▁', bn: 'পং ছোট প্যাডেল'),
+  Game('Pong Center Wall', _cat, () => const Pong('Pong Center Wall', wall: true), glyph: '▬ ▬', bn: 'পং মাঝের দেয়াল'),
+  Game('Pong Speed-Up Rally', _cat, () => const Pong('Pong Speed-Up Rally', speedUp: true), glyph: '⏩', bn: 'পং স্পিড-আপ র‍্যালি'),
+  Game('Air Hockey Classic', _cat, () => const AirHockey('Air Hockey Classic'), glyph: '🏒', bn: 'এয়ার হকি ক্লাসিক'),
+  Game('Air Hockey Big Goals', _cat, () => const AirHockey('Air Hockey Big Goals', goal: .6), glyph: '🥅', bn: 'এয়ার হকি বড় গোল'),
+  Game('Air Hockey Ice', _cat, () => const AirHockey('Air Hockey Ice', friction: .97), glyph: '🧊', bn: 'এয়ার হকি বরফ'),
+  Game('Air Hockey Heavy Puck', _cat, () => const AirHockey('Air Hockey Heavy Puck', puckR: .055, mass: 1.5, friction: .35), glyph: '🪨', bn: 'এয়ার হকি ভারী পাক'),
+  Game('Air Hockey Two Pucks', _cat, () => const AirHockey('Air Hockey Two Pucks', pucks: 2), glyph: '⚫⚫', bn: 'এয়ার হকি দুই পাক'),
+  Game('Tron Classic', _cat, () => const GridDuel('Tron Classic'), glyph: '🏍️', bn: 'ট্রন ক্লাসিক'),
+  Game('Tron Fast', _cat, () => const GridDuel('Tron Fast', tickMs: 50), glyph: '🏍️💨', bn: 'ট্রন দ্রুত'),
+  Game('Tron Small Arena', _cat, () => const GridDuel('Tron Small Arena', cols: 18, rows: 26, tickMs: 100), glyph: '▫️', bn: 'ট্রন ছোট মাঠ'),
+  Game('Tron Wrap-Around', _cat, () => const GridDuel('Tron Wrap-Around', wrap: true), glyph: '🔁', bn: 'ট্রন ঘুরে আসা'),
+  Game('Tron Boost', _cat, () => const GridDuel('Tron Boost', boost: true), glyph: '🚀', bn: 'ট্রন বুস্ট'),
+  Game('Tron Obstacles', _cat, () => const GridDuel('Tron Obstacles', obstacles: true), glyph: '⛔', bn: 'ট্রন বাধা'),
+  Game('Snake Duel Classic', _cat, () => const GridDuel('Snake Duel Classic', tron: false, cols: 20, rows: 30, tickMs: 130, len: 3), glyph: '🐍', bn: 'সাপের লড়াই ক্লাসিক'),
+  Game('Snake Duel Fast', _cat, () => const GridDuel('Snake Duel Fast', tron: false, cols: 20, rows: 30, tickMs: 85, len: 3), glyph: '🐍💨', bn: 'সাপের লড়াই দ্রুত'),
+  Game('Snake Duel Wrap', _cat, () => const GridDuel('Snake Duel Wrap', tron: false, cols: 20, rows: 30, tickMs: 130, len: 3, wrap: true), glyph: '🐍🔁', bn: 'সাপের লড়াই ঘুরে আসা'),
+  Game('Snake Duel Poison', _cat, () => const GridDuel('Snake Duel Poison', tron: false, cols: 20, rows: 30, tickMs: 130, len: 3, poison: true), glyph: '☠️', bn: 'সাপের লড়াই বিষ'),
+  Game('Snake Duel Long', _cat, () => const GridDuel('Snake Duel Long', tron: false, cols: 20, rows: 30, tickMs: 130, len: 10), glyph: '〰️', bn: 'সাপের লড়াই লম্বা'),
+  Game('Tug of War', _cat, () => const TapBattle('Tug of War', 'tug'), glyph: '🪢', bn: 'দড়ি টানাটানি'),
+  Game('Tap Race 100', _cat, () => const TapBattle('Tap Race 100', 'race'), glyph: '👆', bn: 'ট্যাপ রেস 100'),
+  Game('Hold & Release', _cat, () => const TapBattle('Hold & Release', 'hold'), glyph: '⏱️', bn: 'ধরো আর ছাড়ো'),
+  Game('Rhythm Duel', _cat, () => const TapBattle('Rhythm Duel', 'rhythm'), glyph: '🥁', bn: 'তালের লড়াই'),
+  Game('Reflex Duel Classic', _cat, () => const ReflexDuel('Reflex Duel Classic', 'classic'), glyph: '🚦', bn: 'রিফ্লেক্স লড়াই ক্লাসিক'),
+  Game('Reflex Duel Stroop', _cat, () => const ReflexDuel('Reflex Duel Stroop', 'stroop'), glyph: '🌈', bn: 'রিফ্লেক্স লড়াই স্ট্রুপ'),
+  Game('Reflex Duel Even', _cat, () => const ReflexDuel('Reflex Duel Even', 'even'), glyph: '2 4 6', bn: 'রিফ্লেক্স লড়াই জোড়'),
+  Game('Reflex Duel Shapes', _cat, () => const ReflexDuel('Reflex Duel Shapes', 'shape'), glyph: '▲▲', bn: 'রিফ্লেক্স লড়াই আকার'),
 ];
 
 // ---------- shared ----------
@@ -260,7 +260,7 @@ class _PongState extends State<Pong> with SingleTickerProviderStateMixin {
           onTouch: (pl, pos) => pads[pl] = pos.dx.clamp(widget.paddle / 2, 1 - widget.paddle / 2),
           child: Stack(children: [_canvas(draw), ..._scores(score)]),
         ),
-        'First to $target',
+        tr('First to $target', 'প্রথমে $target'),
       );
 }
 
@@ -445,7 +445,7 @@ class _AirHockeyState extends State<AirHockey> with SingleTickerProviderStateMix
   Widget build(BuildContext context) => page(
         widget.title,
         _TouchSplit(onTouch: touch, child: Stack(children: [_canvas(draw), ..._scores(score)])),
-        'First to $target',
+        tr('First to $target', 'প্রথমে $target'),
       );
 }
 
@@ -501,7 +501,7 @@ class _GridDuelState extends State<GridDuel> {
   void resume() {
     paused = false;
     if (msg != null) return; // a round-end timer is already pending
-    setState(() => msg = 'Get ready!');
+    setState(() => msg = tr('Get ready!', 'তৈরি হও!'));
     roundTimer?.cancel();
     roundTimer = Timer(const Duration(milliseconds: 1200), () {
       if (mounted) setState(() => msg = null);
@@ -538,7 +538,7 @@ class _GridDuelState extends State<GridDuel> {
     if (!widget.tron) food = freeCell();
     if (widget.poison) poison = freeCell();
     phase = 0;
-    msg = 'Get ready!';
+    msg = tr('Get ready!', 'তৈরি হও!');
     roundTimer?.cancel();
     roundTimer = Timer(const Duration(milliseconds: 1200), () {
       if (mounted) setState(() => msg = null);
@@ -613,7 +613,7 @@ class _GridDuelState extends State<GridDuel> {
     final winner = crashed.length == 2 ? null : 1 - crashed.first;
     setState(() {
       if (winner != null) score[winner]++;
-      msg = winner == null ? 'Both crashed!' : '${duelNames[winner]} takes the round';
+      msg = winner == null ? tr('Both crashed!', 'দুজনেই ধাক্কা খেয়েছে!') : tr('${duelNames[winner]} takes the round', 'রাউন্ড জিতল ${duelNames[winner]}');
     });
     if (winner != null && score[winner] == target) {
       showWinner(context, winner, () => setState(() {
@@ -683,7 +683,7 @@ class _GridDuelState extends State<GridDuel> {
           ),
           controls(0),
         ]),
-        '🔵 ${score[0]} – ${score[1]} 🔴 · to $target',
+        tr('🔵 ${score[0]} – ${score[1]} 🔴 · to $target', '🔵 ${score[0]} – ${score[1]} 🔴 · $target পর্যন্ত'),
       );
 }
 
@@ -802,18 +802,18 @@ class _TapBattleState extends State<TapBattle> with SingleTickerProviderStateMix
   String text(int p) {
     switch (widget.mode) {
       case 'tug':
-        return 'TAP FAST\nto pull the knot to your side!';
+        return tr('TAP FAST\nto pull the knot to your side!', 'দ্রুত ট্যাপ করো\nগিঁট নিজের দিকে টানতে!');
       case 'race':
         return '${taps[p]} / 100';
       case 'hold':
         final h = held[p], both = held[0] != null && held[1] != null;
         final line = h == null
-            ? (pressAt[p] == null ? 'Hold for ${goal.toStringAsFixed(1)} s\nthen let go' : 'Holding…')
-            : (both ? '${h.toStringAsFixed(2)} s  (target ${goal.toStringAsFixed(1)} s)' : 'Released!');
-        return '$line\n\nRounds: ${score[p]} / $holdRounds';
+            ? (pressAt[p] == null ? tr('Hold for ${goal.toStringAsFixed(1)} s\nthen let go', '${goal.toStringAsFixed(1)} সে. ধরে রাখো\nতারপর ছাড়ো') : tr('Holding…', 'ধরে আছ…'))
+            : (both ? tr('${h.toStringAsFixed(2)} s  (target ${goal.toStringAsFixed(1)} s)', '${h.toStringAsFixed(2)} সে.  (লক্ষ্য ${goal.toStringAsFixed(1)} সে.)') : tr('Released!', 'ছেড়ে দিয়েছ!'));
+        return tr('$line\n\nRounds: ${score[p]} / $holdRounds', '$line\n\nরাউন্ড: ${score[p]} / $holdRounds');
       default:
         final k = ((sw.elapsedMilliseconds - lead * beat) / beat).floor() + 1;
-        return '${k <= 0 ? 'Get ready… ${1 - k}' : 'Beat ${min(k, beats)} / $beats'}\nTap on the beat!\n${points[p]} pts';
+        return '${k <= 0 ? tr('Get ready… ${1 - k}', 'তৈরি হও… ${1 - k}') : tr('Beat ${min(k, beats)} / $beats', 'তাল ${min(k, beats)} / $beats')}\n${tr('Tap on the beat!', 'তালে তালে ট্যাপ করো!')}\n${tr('${points[p]} pts', '${points[p]} পয়েন্ট')}';
     }
   }
 
@@ -863,7 +863,7 @@ class _TapBattleState extends State<TapBattle> with SingleTickerProviderStateMix
 
 typedef Stimulus = (String text, Color color, bool target);
 
-const reflexWords = ['RED', 'BLUE', 'GREEN', 'YELLOW'];
+List<String> get reflexWords => [tr('RED', 'লাল'), tr('BLUE', 'নীল'), tr('GREEN', 'সবুজ'), tr('YELLOW', 'হলুদ')];
 const reflexInks = [Colors.red, Colors.blue, Colors.green, Colors.yellow];
 const reflexShapes = ['●', '■', '▲', '★'];
 
@@ -889,7 +889,7 @@ class ReflexDuel extends StatefulWidget {
 
 class _ReflexDuelState extends State<ReflexDuel> {
   static const target = 5;
-  static const ready = ('GET READY', Colors.white70, false);
+  static Stimulus get ready => (tr('GET READY', 'তৈরি হও'), Colors.white70, false); // records compare by value, so stim == ready still works
   final score = [0, 0];
   Stimulus stim = ready;
   String? msg;
@@ -910,8 +910,8 @@ class _ReflexDuelState extends State<ReflexDuel> {
   void show() {
     if (!mounted) return;
     if (widget.mode == 'classic') {
-      final go = stim.$1 == 'WAIT';
-      setState(() => stim = go ? ('TAP!', Colors.greenAccent, true) : ('WAIT', Colors.redAccent, false));
+      final go = stim.$2 == Colors.redAccent; // showing WAIT
+      setState(() => stim = go ? (tr('TAP!', 'ট্যাপ!'), Colors.greenAccent, true) : (tr('WAIT', 'অপেক্ষা'), Colors.redAccent, false));
       t = Timer(go ? const Duration(seconds: 2) : Duration(milliseconds: 1500 + _r.nextInt(3000)), show);
     } else {
       setState(() => stim = reflexStimulus(widget.mode, _r));
@@ -931,7 +931,7 @@ class _ReflexDuelState extends State<ReflexDuel> {
     final hit = stim.$3, scorer = hit ? pl : 1 - pl;
     score[scorer]++;
     sfx(hit ? 'right' : 'wrong');
-    setState(() => msg = hit ? '${duelNames[pl]} was fastest!' : '${duelNames[pl]} fell for it!');
+    setState(() => msg = hit ? tr('${duelNames[pl]} was fastest!', '${duelNames[pl]} সবচেয়ে দ্রুত!') : tr('${duelNames[pl]} fell for it!', '${duelNames[pl]} ফাঁদে পড়েছে!'));
     if (score[scorer] == target) {
       showWinner(context, scorer, () => setState(() {
             score.fillRange(0, 2, 0);
@@ -945,10 +945,10 @@ class _ReflexDuelState extends State<ReflexDuel> {
   }
 
   String get rule => switch (widget.mode) {
-        'classic' => 'Tap when it turns GREEN',
-        'stroop' => 'Tap when the INK matches the word',
-        'even' => 'Tap on EVEN numbers',
-        _ => 'Tap when both shapes MATCH',
+        'classic' => tr('Tap when it turns GREEN', 'সবুজ হলে ট্যাপ করো'),
+        'stroop' => tr('Tap when the INK matches the word', 'কালির রং শব্দের সাথে মিললে ট্যাপ করো'),
+        'even' => tr('Tap on EVEN numbers', 'জোড় সংখ্যায় ট্যাপ করো'),
+        _ => tr('Tap when both shapes MATCH', 'দুটো আকার মিললে ট্যাপ করো'),
       };
 
   @override

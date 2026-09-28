@@ -7,12 +7,12 @@ import 'games.dart';
 final _r = Random();
 
 final tabletopGames = <Game>[
-  Game('Ludo 2 Players', 'Board', () => const Ludo([0, 2])),
-  Game('Ludo 4 Players', 'Board', () => const Ludo([0, 1, 2, 3])),
-  Game('Snakes & Ladders', 'Board', () => const SnakesLadders()),
-  Game('Blackjack', 'Cards', () => const Blackjack()),
-  Game('Crazy Eights', 'Cards', () => const CrazyEights()),
-  Game('Higher or Lower', 'Cards', () => const HigherLower()),
+  Game('Ludo 2 Players', 'Board', () => const Ludo([0, 2]), bn: 'লুডু 2 জন'),
+  Game('Ludo 4 Players', 'Board', () => const Ludo([0, 1, 2, 3]), bn: 'লুডু 4 জন'),
+  Game('Snakes & Ladders', 'Board', () => const SnakesLadders(), bn: 'সাপ লুডু'),
+  Game('Blackjack', 'Cards', () => const Blackjack(), bn: 'ব্ল্যাকজ্যাক'),
+  Game('Crazy Eights', 'Cards', () => const CrazyEights(), bn: 'ক্রেজি এইটস'),
+  Game('Higher or Lower', 'Cards', () => const HigherLower(), bn: 'বড় না ছোট'),
 ];
 
 // ---------- shared: dice & cards ----------
@@ -79,7 +79,7 @@ Widget playingCard(int? c, {VoidCallback? onTap, bool dim = false, double w = 58
 // ---------- Ludo ----------
 
 const ludoColors = [Colors.red, Colors.green, Colors.amber, Colors.blue];
-const ludoNames = ['You', 'Green', 'Yellow', 'Blue'];
+List<String> get ludoNames => [tr('You', 'আপনি'), tr('Green', 'সবুজ'), tr('Yellow', 'হলুদ'), tr('Blue', 'নীল')];
 
 /// Main loop on a 15×15 board, starting at red's start square.
 const ludoTrack = [
@@ -211,7 +211,7 @@ class _LudoState extends State<Ludo> {
     });
     if (pos[p].every((x) => x == 56)) {
       over = true;
-      showResult(context, won: p == 0, p == 0 ? 'You win! 🎉' : '${ludoNames[p]} wins', () => setState(start));
+      showResult(context, won: p == 0, p == 0 ? tr('You win! 🎉', 'আপনি জিতেছেন! 🎉') : tr('${ludoNames[p]} wins', '${ludoNames[p]} জিতেছে'), () => setState(start));
       return;
     }
     nextTurn(extra);
@@ -252,7 +252,7 @@ class _LudoState extends State<Ludo> {
     }
 
     return page(
-      widget.players.length == 2 ? 'Ludo · 2 Players' : 'Ludo · 4 Players',
+      widget.players.length == 2 ? tr('Ludo · 2 Players', 'লুডু · 2 জন') : tr('Ludo · 4 Players', 'লুডু · 4 জন'),
       Column(children: [
         Expanded(
           child: board(15, 225, gap: 1, (i) {
@@ -293,13 +293,13 @@ class _LudoState extends State<Ludo> {
               child: FilledButton.icon(
                 onPressed: cur == 0 && !rolling && waiting.isEmpty && !over ? roll : null,
                 icon: const Icon(Icons.casino),
-                label: Text(waiting.isNotEmpty ? 'Pick a token' : 'Roll', overflow: TextOverflow.ellipsis),
+                label: Text(waiting.isNotEmpty ? tr('Pick a token', 'গুটি বাছুন') : tr('Roll', 'চাল দিন'), overflow: TextOverflow.ellipsis),
               ),
             ),
           ]),
         ),
       ]),
-      cur == 0 ? 'Your turn' : "${ludoNames[cur]}'s turn",
+      cur == 0 ? tr('Your turn', 'আপনার পালা') : tr("${ludoNames[cur]}'s turn", '${ludoNames[cur]}-এর পালা'),
     );
   }
 }
@@ -342,7 +342,7 @@ class _SnakesLaddersState extends State<SnakesLadders> {
       setState(() => pos[p] = jump);
     }
     if (pos[p] == 100) {
-      showResult(context, won: p == 0, p == 0 ? 'You win! 🎉' : 'AI wins', () => setState(() {
+      showResult(context, won: p == 0, p == 0 ? tr('You win! 🎉', 'আপনি জিতেছেন! 🎉') : tr('AI wins', 'কম্পিউটার জিতেছে'), () => setState(() {
             pos.fillRange(0, 2, 0);
             turn = 0;
             busy = false;
@@ -360,7 +360,7 @@ class _SnakesLaddersState extends State<SnakesLadders> {
 
   @override
   Widget build(BuildContext context) => page(
-        'Snakes & Ladders',
+        tr('Snakes & Ladders', 'সাপ লুডু'),
         Column(children: [
           Expanded(
             child: board(10, 100, gap: 2, (i) {
@@ -387,7 +387,7 @@ class _SnakesLaddersState extends State<SnakesLadders> {
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               dice(die),
               const SizedBox(width: 20),
-              FilledButton.icon(onPressed: turn == 0 && !busy ? play : null, icon: const Icon(Icons.casino), label: const Text('Roll')),
+              FilledButton.icon(onPressed: turn == 0 && !busy ? play : null, icon: const Icon(Icons.casino), label: Text(tr('Roll', 'চাল দিন'))),
             ]),
           ),
         ]),
@@ -424,7 +424,7 @@ class _BlackjackState extends State<Blackjack> {
   List<int> deck = newDeck(), player = [], dealer = [];
   int chips = 100, bet = 10;
   bool playing = false;
-  String msg = 'Place your bet';
+  String msg = tr('Place your bet', 'বাজি ধরুন');
 
   int draw() {
     if (deck.isEmpty) deck = newDeck();
@@ -444,7 +444,7 @@ class _BlackjackState extends State<Blackjack> {
 
   void hit() {
     setState(() => player.add(draw()));
-    if (handValue(player) > 21) settle(-bet, 'Bust!');
+    if (handValue(player) > 21) settle(-bet, tr('Bust!', 'বাস্ট!'));
   }
 
   void stand() {
@@ -454,15 +454,15 @@ class _BlackjackState extends State<Blackjack> {
     final p = handValue(player), d = handValue(dealer);
     final pNat = p == 21 && player.length == 2, dNat = d == 21 && dealer.length == 2;
     if (pNat && !dNat) {
-      settle(bet * 3 ~/ 2, 'Blackjack! +${bet * 3 ~/ 2}');
+      settle(bet * 3 ~/ 2, tr('Blackjack! +${bet * 3 ~/ 2}', 'ব্ল্যাকজ্যাক! +${bet * 3 ~/ 2}'));
     } else if (dNat && !pNat) {
-      settle(-bet, 'Dealer blackjack');
+      settle(-bet, tr('Dealer blackjack', 'ডিলারের ব্ল্যাকজ্যাক'));
     } else if (d > 21 || p > d) {
-      settle(bet, 'You win +$bet');
+      settle(bet, tr('You win +$bet', 'আপনি জিতলেন +$bet'));
     } else if (p == d) {
-      settle(0, 'Push');
+      settle(0, tr('Push', 'সমান'));
     } else {
-      settle(-bet, 'Dealer wins');
+      settle(-bet, tr('Dealer wins', 'ডিলার জিতেছে'));
     }
   }
 
@@ -476,11 +476,11 @@ class _BlackjackState extends State<Blackjack> {
     });
     record(context, chips, unit: ' chips');
     if (chips < 10) {
-      showResult(context, won: false, 'Out of chips!', () => setState(() {
+      showResult(context, won: false, tr('Out of chips!', 'চিপ শেষ!'), () => setState(() {
             chips = 100;
             player = [];
             dealer = [];
-            msg = 'Place your bet';
+            msg = tr('Place your bet', 'বাজি ধরুন');
           }));
     }
   }
@@ -493,20 +493,20 @@ class _BlackjackState extends State<Blackjack> {
 
   @override
   Widget build(BuildContext context) => page(
-        'Blackjack',
+        tr('Blackjack', 'ব্ল্যাকজ্যাক'),
         Container(
           color: Colors.green.shade900,
           padding: const EdgeInsets.all(16),
           child: Column(children: [
-            hand('Dealer', dealer, hideSecond: playing),
+            hand(tr('Dealer', 'ডিলার'), dealer, hideSecond: playing),
             Expanded(child: Center(child: Text(msg, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold)))),
-            hand('You', player),
+            hand(tr('You', 'আপনি'), player),
             const SizedBox(height: 20),
             if (playing)
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                FilledButton(onPressed: hit, child: const Text('Hit')),
+                FilledButton(onPressed: hit, child: Text(tr('Hit', 'হিট'))),
                 const SizedBox(width: 16),
-                FilledButton.tonal(onPressed: () => setState(stand), child: const Text('Stand')),
+                FilledButton.tonal(onPressed: () => setState(stand), child: Text(tr('Stand', 'স্ট্যান্ড'))),
               ])
             else
               Column(children: [
@@ -516,7 +516,7 @@ class _BlackjackState extends State<Blackjack> {
                   onSelectionChanged: (s) => setState(() => bet = s.first),
                 ),
                 const SizedBox(height: 12),
-                FilledButton.icon(onPressed: chips >= bet ? deal : null, icon: const Icon(Icons.style), label: Text('Deal · bet $bet')),
+                FilledButton.icon(onPressed: chips >= bet ? deal : null, icon: const Icon(Icons.style), label: Text(tr('Deal · bet $bet', 'বাঁটুন · বাজি $bet'))),
               ]),
           ]),
         ),
@@ -557,7 +557,7 @@ class _CrazyEightsState extends State<CrazyEights> {
     suit = suitOf(first);
     yourTurn = true;
     over = false;
-    msg = 'Match suit or rank. 8s are wild!';
+    msg = tr('Match suit or rank. 8s are wild!', 'রং বা মান মেলান। 8 যেকোনো জায়গায় চলে!');
   }
 
   bool playable(int c) => rankOf(c) == 8 || suitOf(c) == suit || rankOf(c) == rankOf(pile.last);
@@ -573,7 +573,7 @@ class _CrazyEightsState extends State<CrazyEights> {
   bool checkWin(List<int> hand, bool isYou) {
     if (hand.isNotEmpty) return false;
     over = true;
-    showResult(context, won: isYou, isYou ? 'You win! 🎉' : 'AI wins', () => setState(start));
+    showResult(context, won: isYou, isYou ? tr('You win! 🎉', 'আপনি জিতেছেন! 🎉') : tr('AI wins', 'কম্পিউটার জিতেছে'), () => setState(start));
     return true;
   }
 
@@ -583,7 +583,7 @@ class _CrazyEightsState extends State<CrazyEights> {
     if (rankOf(c) == 8) {
       final picked = await showDialog<int>(
         context: context,
-        builder: (d) => SimpleDialog(title: const Text('Choose a suit'), children: [
+        builder: (d) => SimpleDialog(title: Text(tr('Choose a suit', 'রং বাছুন')), children: [
           for (var k = 0; k < 4; k++) SimpleDialogOption(onPressed: () => Navigator.pop(d, k), child: Text(suits[k], style: TextStyle(fontSize: 32, color: k == 1 || k == 2 ? Colors.red : null))),
         ]),
       );
@@ -612,7 +612,7 @@ class _CrazyEightsState extends State<CrazyEights> {
   Future<void> aiTurn() async {
     setState(() {
       yourTurn = false;
-      msg = 'AI is thinking…';
+      msg = tr('AI is thinking…', 'কম্পিউটার ভাবছে…');
     });
     await Future.delayed(const Duration(milliseconds: 800));
     if (!mounted) return;
@@ -624,7 +624,7 @@ class _CrazyEightsState extends State<CrazyEights> {
     }
     setState(() {
       if (options.isEmpty) {
-        msg = 'AI drew a card. Your turn!';
+        msg = tr('AI drew a card. Your turn!', 'কম্পিউটার একটা তাস তুলেছে। আপনার পালা!');
       } else {
         final c = options.first;
         ai.remove(c);
@@ -636,9 +636,9 @@ class _CrazyEightsState extends State<CrazyEights> {
             counts[suitOf(h)]++;
           }
           suit = counts.indexOf(counts.reduce(max));
-          msg = 'AI played an 8 → ${suits[suit]}. Your turn!';
+          msg = tr('AI played an 8 → ${suits[suit]}. Your turn!', 'কম্পিউটার 8 দিয়েছে → ${suits[suit]}। আপনার পালা!');
         } else {
-          msg = 'Your turn!';
+          msg = tr('Your turn!', 'আপনার পালা!');
         }
       }
       yourTurn = true;
@@ -650,25 +650,25 @@ class _CrazyEightsState extends State<CrazyEights> {
   Widget build(BuildContext context) {
     final canPlay = you.any(playable);
     return page(
-      'Crazy Eights',
+      tr('Crazy Eights', 'ক্রেজি এইটস'),
       Container(
         color: Colors.green.shade900,
         padding: const EdgeInsets.all(12),
         child: Column(children: [
-          Text('AI · ${ai.length} cards', style: const TextStyle(color: Colors.white70)),
+          Text(tr('AI · ${ai.length} cards', 'কম্পিউটার · ${ai.length}টি তাস'), style: const TextStyle(color: Colors.white70)),
           SizedBox(height: 70, child: Stack(alignment: Alignment.center, children: [for (var i = 0; i < ai.length; i++) Positioned(left: 20.0 + i * 14, child: playingCard(null, w: 40))])),
           Expanded(
             child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                GestureDetector(onTap: yourTurn && !over && !canPlay ? youDraw : null, child: Column(children: [playingCard(null), Text(canPlay ? 'Deck' : 'Tap to draw', style: const TextStyle(color: Colors.white70))])),
+                GestureDetector(onTap: yourTurn && !over && !canPlay ? youDraw : null, child: Column(children: [playingCard(null), Text(canPlay ? tr('Deck', 'ডেক') : tr('Tap to draw', 'তুলতে চাপুন'), style: const TextStyle(color: Colors.white70))])),
                 const SizedBox(width: 24),
-                Column(children: [playingCard(pile.last), Text('Suit: ${suits[suit]}', style: const TextStyle(color: Colors.white70))]),
+                Column(children: [playingCard(pile.last), Text(tr('Suit: ${suits[suit]}', 'রং: ${suits[suit]}'), style: const TextStyle(color: Colors.white70))]),
               ]),
               const SizedBox(height: 16),
               Text(msg, textAlign: TextAlign.center, style: const TextStyle(fontSize: 18)),
             ]),
           ),
-          Text('Your hand', style: const TextStyle(color: Colors.white70)),
+          Text(tr('Your hand', 'আপনার তাস'), style: const TextStyle(color: Colors.white70)),
           Flexible(
             child: SingleChildScrollView(
               child: Wrap(alignment: WrapAlignment.center, children: [
@@ -678,7 +678,7 @@ class _CrazyEightsState extends State<CrazyEights> {
           ),
         ]),
       ),
-      yourTurn ? 'Your turn' : 'AI turn',
+      yourTurn ? tr('Your turn', 'আপনার পালা') : tr('AI turn', 'কম্পিউটারের পালা'),
     );
   }
 }
@@ -695,7 +695,7 @@ class _HigherLowerState extends State<HigherLower> {
   List<int> deck = newDeck();
   late int card = deck.removeLast();
   int streak = 0;
-  String msg = 'Will the next card be higher or lower?';
+  String msg = tr('Will the next card be higher or lower?', 'পরের তাস বড় হবে না ছোট?');
 
   void guess(bool higher) {
     if (deck.isEmpty) deck = newDeck();
@@ -703,27 +703,27 @@ class _HigherLowerState extends State<HigherLower> {
     setState(() => card = next);
     if (a == b) {
       sfx('tap');
-      setState(() => msg = 'Same rank — free pass!');
+      setState(() => msg = tr('Same rank — free pass!', 'একই মান — ফ্রি পাস!'));
     } else if ((b > a) == higher) {
       sfx('right');
       setState(() {
         streak++;
-        msg = 'Correct!';
+        msg = tr('Correct!', 'ঠিক!');
       });
     } else {
       final s = streak;
-      showResult(context, won: false, score: s, unit: ' streak', 'Streak: $s', () => setState(() {
+      showResult(context, won: false, score: s, unit: ' streak', tr('Streak: $s', 'টানা: $s'), () => setState(() {
             streak = 0;
             deck = newDeck();
             card = deck.removeLast();
-            msg = 'Will the next card be higher or lower?';
+            msg = tr('Will the next card be higher or lower?', 'পরের তাস বড় হবে না ছোট?');
           }));
     }
   }
 
   @override
   Widget build(BuildContext context) => page(
-        'Higher or Lower',
+        tr('Higher or Lower', 'বড় না ছোট'),
         Container(
           color: Colors.green.shade900,
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -731,15 +731,15 @@ class _HigherLowerState extends State<HigherLower> {
             const SizedBox(height: 24),
             AnimatedSwitcher(duration: const Duration(milliseconds: 250), child: KeyedSubtree(key: ValueKey(card), child: playingCard(card, w: 120))),
             const SizedBox(height: 8),
-            const Text('Aces are low', style: TextStyle(color: Colors.white54)),
+            Text(tr('Aces are low', 'টেক্কা সবচেয়ে ছোট'), style: const TextStyle(color: Colors.white54)),
             const SizedBox(height: 32),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              FilledButton.icon(onPressed: () => guess(true), icon: const Icon(Icons.arrow_upward), label: const Text('Higher')),
+              FilledButton.icon(onPressed: () => guess(true), icon: const Icon(Icons.arrow_upward), label: Text(tr('Higher', 'বড়'))),
               const SizedBox(width: 16),
-              FilledButton.icon(onPressed: () => guess(false), icon: const Icon(Icons.arrow_downward), label: const Text('Lower')),
+              FilledButton.icon(onPressed: () => guess(false), icon: const Icon(Icons.arrow_downward), label: Text(tr('Lower', 'ছোট'))),
             ]),
           ]),
         ),
-        'Streak $streak',
+        tr('Streak $streak', 'টানা $streak'),
       );
 }

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'complex.dart';
@@ -20,10 +21,20 @@ Future<void> main() async {
   // Every game is laid out for a phone held upright; rotation would also reset real-time games mid-rally.
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   prefs = await SharedPreferences.getInstance();
+  // Follow the phone until the user picks a language on the home screen.
+  bangla.value = prefs!.getBool('bangla') ?? WidgetsBinding.instance.platformDispatcher.locale.languageCode == 'bn';
+  for (final g in allGames) {
+    if (g.bn != null) bnNames[g.name] = g.bn!;
+  }
   runApp(const App());
 }
 
 final allGames = [...quizGames, ...otherGames, ...complexGames, ...tabletopGames, ...duelActionGames, ...duelBoardGames, ...duelClassicGames, ...quizGames2, ...puzzleGames2, ...solitaireGames];
+
+const catsBn = {
+  'Math': 'গণিত', 'Logic': 'যুক্তি', 'Word': 'শব্দ', 'Knowledge': 'জ্ঞান', 'Memory': 'স্মৃতি', 'Focus': 'মনোযোগ',
+  'Puzzle': 'পাজল', 'Board': 'বোর্ড', 'Cards': 'তাস', '2P Action': '2 জনের অ্যাকশন', '2P Board': '2 জনের বোর্ড',
+};
 
 const cats = {
   'Math': (Icons.calculate, Colors.blue),
@@ -81,11 +92,17 @@ class App extends StatelessWidget {
   const App({super.key});
 
   @override
-  Widget build(BuildContext context) => MaterialApp(
-        title: 'Brain Games',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(colorSchemeSeed: Colors.deepPurple, brightness: Brightness.dark),
-        home: const Home(),
+  Widget build(BuildContext context) => ValueListenableBuilder(
+        valueListenable: bangla,
+        builder: (_, bn, __) => MaterialApp(
+          title: 'Brain Games',
+          debugShowCheckedModeBanner: false,
+          locale: Locale(bn ? 'bn' : 'en'),
+          supportedLocales: const [Locale('en'), Locale('bn')],
+          localizationsDelegates: GlobalMaterialLocalizations.delegates,
+          theme: ThemeData(colorSchemeSeed: Colors.deepPurple, brightness: Brightness.dark),
+          home: const Home(),
+        ),
       );
 }
 
@@ -115,13 +132,21 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final muted = prefs?.getBool('mute') ?? false;
-    final list = allGames.where((g) => (cat == null || g.cat == cat) && g.name.toLowerCase().contains(query.toLowerCase())).toList();
+    final q = query.toLowerCase();
+    final list = allGames.where((g) => (cat == null || g.cat == cat) && (g.name.toLowerCase().contains(q) || (g.bn?.contains(q) ?? false))).toList();
     final byName = {for (final g in allGames) g.name: g};
     final played = cat == null && query.isEmpty ? [for (final n in recent) if (byName[n] case final g?) g] : <Game>[]; // renamed games drop out
     return Scaffold(
-      appBar: AppBar(title: Text('Brain Games · ${allGames.length}'), actions: [
+      appBar: AppBar(title: Text(tr('Brain Games · ${allGames.length}', 'ব্রেইন গেমস · ${allGames.length}')), actions: [
+        TextButton(
+          onPressed: () {
+            bangla.value = !bangla.value;
+            prefs?.setBool('bangla', bangla.value);
+          },
+          child: Text(tr('বাংলা', 'English')),
+        ),
         IconButton(
-          tooltip: 'Sound',
+          tooltip: tr('Sound', 'শব্দ'),
           icon: Icon(muted ? Icons.volume_off : Icons.volume_up),
           onPressed: () => setState(() => prefs?.setBool('mute', !muted)),
         ),
@@ -129,12 +154,12 @@ class _HomeState extends State<Home> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: list.isEmpty ? null : () => open(list[Random().nextInt(list.length)]),
         icon: const Icon(Icons.casino),
-        label: const Text('Surprise me'),
+        label: Text(tr('Surprise me', 'যেকোনো একটা')),
       ),
       body: Column(children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-          child: SearchBar(hintText: 'Search games', leading: const Icon(Icons.search), onChanged: (v) => setState(() => query = v)),
+          child: SearchBar(hintText: tr('Search games', 'গেম খুঁজুন'), leading: const Icon(Icons.search), onChanged: (v) => setState(() => query = v)),
         ),
         SizedBox(
           height: 56,
@@ -147,7 +172,7 @@ class _HomeState extends State<Home> {
                   padding: const EdgeInsets.all(4),
                   child: ChoiceChip(
                     avatar: c == null ? null : Icon(cats[c]!.$1, size: 18),
-                    label: Text(c ?? 'All'),
+                    label: Text(c == null ? tr('All', 'সব') : tr(c, catsBn[c]!)),
                     selected: cat == c,
                     onSelected: (_) => setState(() => cat = c),
                   ),
@@ -156,7 +181,7 @@ class _HomeState extends State<Home> {
           ),
         ),
         if (played.isNotEmpty) ...[
-          const Padding(padding: EdgeInsets.fromLTRB(16, 4, 16, 6), child: Align(alignment: Alignment.centerLeft, child: Text('Recently played'))),
+          Padding(padding: const EdgeInsets.fromLTRB(16, 4, 16, 6), child: Align(alignment: Alignment.centerLeft, child: Text(tr('Recently played', 'সম্প্রতি খেলা')))),
           SizedBox(
             height: 120,
             child: ListView.separated(
@@ -229,8 +254,8 @@ class _GameCardState extends State<GameCard> {
                     ),
                   ),
                 ),
-                Text(g.name, textAlign: TextAlign.center, maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w700, color: Colors.white)),
-                Text(best == null ? 'New' : '🏆 $best', style: const TextStyle(fontSize: 12, color: Colors.white70)),
+                Text(g.title, textAlign: TextAlign.center, maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w700, color: Colors.white)),
+                Text(best == null ? tr('New', 'নতুন') : '🏆 $best', style: const TextStyle(fontSize: 12, color: Colors.white70)),
               ]),
             ),
           ),

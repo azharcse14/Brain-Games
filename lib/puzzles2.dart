@@ -9,16 +9,16 @@ import 'games.dart';
 final _r = Random();
 
 final puzzleGames2 = <Game>[
-  for (final n in [5, 7, 10]) Game('Nonogram $n×$n', 'Logic', () => Nonogram(n), glyph: '🖼️$n'),
-  for (final (n, k) in [(8, 6), (10, 8), (12, 10)]) Game('Word Search $n×$n', 'Word', () => WordSearch(n, k), glyph: '🔎$n'),
-  for (final (n, c) in [(10, 6), (14, 6), (18, 7)]) Game('Flood It $n×$n', 'Puzzle', () => FloodIt(n, c), glyph: '🌊$n'),
-  for (final (label, w, h) in [('Small', 8, 12), ('Medium', 12, 18), ('Large', 16, 24)]) Game('Maze $label', 'Puzzle', () => Maze(w, h), glyph: '🌀${label[0]}'),
-  Game('Peg Solitaire', 'Puzzle', () => const PegSolitaire(false), glyph: '⚫✚'),
-  Game('Peg Triangle', 'Puzzle', () => const PegSolitaire(true), glyph: '⚫△'),
-  for (final c in [4, 6, 8]) Game('Water Sort $c Colors', 'Puzzle', () => WaterSort(c), glyph: '🧪$c'),
-  for (final n in [5, 6]) Game("Knight's Tour $n×$n", 'Puzzle', () => KnightsTour(n), glyph: '♘$n'),
-  for (final n in [3, 5, 6]) Game('2048 $n×$n', 'Puzzle', () => Game2048N(n), glyph: '2048·$n'),
-  Game('Skyscrapers 4×4', 'Logic', () => const Skyscrapers(4), glyph: '🏙️'),
+  for (final n in [5, 7, 10]) Game('Nonogram $n×$n', 'Logic', () => Nonogram(n), glyph: '🖼️$n', bn: 'ননোগ্রাম $n×$n'),
+  for (final (n, k) in [(8, 6), (10, 8), (12, 10)]) Game('Word Search $n×$n', 'Word', () => WordSearch(n, k), glyph: '🔎$n', bn: 'শব্দ খোঁজা $n×$n'),
+  for (final (n, c) in [(10, 6), (14, 6), (18, 7)]) Game('Flood It $n×$n', 'Puzzle', () => FloodIt(n, c), glyph: '🌊$n', bn: 'রঙের বন্যা $n×$n'),
+  for (final (label, bn, w, h) in [('Small', 'ছোট', 8, 12), ('Medium', 'মাঝারি', 12, 18), ('Large', 'বড়', 16, 24)]) Game('Maze $label', 'Puzzle', () => Maze(w, h), glyph: '🌀${label[0]}', bn: 'গোলকধাঁধা $bn'),
+  Game('Peg Solitaire', 'Puzzle', () => const PegSolitaire(false), glyph: '⚫✚', bn: 'পেগ সলিটেয়ার'),
+  Game('Peg Triangle', 'Puzzle', () => const PegSolitaire(true), glyph: '⚫△', bn: 'পেগ ত্রিভুজ'),
+  for (final c in [4, 6, 8]) Game('Water Sort $c Colors', 'Puzzle', () => WaterSort(c), glyph: '🧪$c', bn: 'পানি সাজানো $c রঙ'),
+  for (final n in [5, 6]) Game("Knight's Tour $n×$n", 'Puzzle', () => KnightsTour(n), glyph: '♘$n', bn: 'ঘোড়ার ভ্রমণ $n×$n'),
+  for (final n in [3, 5, 6]) Game('2048 $n×$n', 'Puzzle', () => Game2048N(n), glyph: '2048·$n', bn: '2048 $n×$n'),
+  Game('Skyscrapers 4×4', 'Logic', () => const Skyscrapers(4), glyph: '🏙️', bn: 'আকাশচুম্বী 4×4'),
 ];
 
 const puzzlePalette = [Colors.red, Colors.blue, Colors.green, Colors.yellow, Colors.purple, Colors.orange, Colors.pink, Colors.cyan];
@@ -26,7 +26,7 @@ const puzzlePalette = [Colors.red, Colors.blue, Colors.green, Colors.yellow, Col
 void _won(BuildContext context, Stopwatch sw, VoidCallback again) {
   sw.stop();
   final s = sw.elapsed.inSeconds;
-  showResult(context, score: s, lower: true, unit: ' s', 'Solved in ${s ~/ 60}m ${s % 60}s', again);
+  showResult(context, score: s, lower: true, unit: ' s', tr('Solved in ${s ~/ 60}m ${s % 60}s', '${s ~/ 60} মি. ${s % 60} সে.-এ সমাধান'), again);
 }
 
 // ---------- Nonogram ----------
@@ -106,7 +106,7 @@ class _NonogramState extends State<Nonogram> {
     final cw = n >= 10 ? 70.0 : 56.0, ch = 14.0 * ((n + 1) ~/ 2) + 6;
     const fs = TextStyle(fontSize: 12, color: Colors.white70);
     return page(
-      'Nonogram',
+      tr('Nonogram', 'ননোগ্রাম'),
       Column(children: [
         Expanded(
           child: LayoutBuilder(builder: (_, box) {
@@ -157,7 +157,7 @@ class _NonogramState extends State<Nonogram> {
         ),
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: FilterChip(label: const Text('✕ Mark mode (or long-press)'), selected: xMode, onSelected: (v) => setState(() => xMode = v)),
+          child: FilterChip(label: Text(tr('✕ Mark mode (or long-press)', '✕ চিহ্ন মোড (বা লম্বা চাপ)')), selected: xMode, onSelected: (v) => setState(() => xMode = v)),
         ),
       ]),
       '$n×$n',
@@ -256,7 +256,7 @@ class _WordSearchState extends State<WordSearch> {
 
   @override
   Widget build(BuildContext context) => page(
-        'Word Search',
+        tr('Word Search', 'শব্দ খোঁজা'),
         Column(children: [
           Expanded(
             child: board(n, n * n, gap: 2, (i) {
@@ -355,17 +355,17 @@ class _FloodItState extends State<FloodIt> {
       moves++;
     });
     if (floodRegion(g, n).length == n * n) {
-      showResult(context, score: moves, lower: true, unit: ' moves', 'Flooded in $moves moves!', () => setState(start));
+      showResult(context, score: moves, lower: true, unit: ' moves', tr('Flooded in $moves moves!', '$moves চালে পুরো বোর্ড ভরেছে!'), () => setState(start));
     } else if (moves >= limit) {
-      showResult(context, won: false, 'Out of moves!', () => setState(start));
+      showResult(context, won: false, tr('Out of moves!', 'চাল শেষ!'), () => setState(start));
     }
   }
 
   @override
   Widget build(BuildContext context) => page(
-        'Flood It',
+        tr('Flood It', 'রঙের বন্যা'),
         Column(children: [
-          const Padding(padding: EdgeInsets.all(8), child: Text('Fill the board with one colour, starting top-left.', style: TextStyle(color: Colors.white70))),
+          Padding(padding: const EdgeInsets.all(8), child: Text(tr('Fill the board with one colour, starting top-left.', 'উপরের বাম কোণ থেকে শুরু করে পুরো বোর্ড এক রঙে ভরুন।'), style: const TextStyle(color: Colors.white70))),
           Expanded(child: board(n, n * n, gap: 0, (i) => Container(color: puzzlePalette[g[i]]))),
           Padding(
             padding: const EdgeInsets.only(bottom: 20),
@@ -378,7 +378,7 @@ class _FloodItState extends State<FloodIt> {
             ]),
           ),
         ]),
-        'Moves $moves/$limit',
+        tr('Moves $moves/$limit', 'চাল $moves/$limit'),
       );
 }
 
@@ -452,7 +452,7 @@ class _MazeState extends State<Maze> {
 
   @override
   Widget build(BuildContext context) => page(
-        'Maze',
+        tr('Maze', 'গোলকধাঁধা'),
         Focus(
           autofocus: true,
           onKeyEvent: (_, e) {
@@ -487,7 +487,7 @@ class _MazeState extends State<Maze> {
             ),
           ]),
         ),
-        'Reach 🟩',
+        tr('Reach 🟩', '🟩-তে পৌঁছান'),
       );
 }
 
@@ -572,7 +572,7 @@ class _PegSolitaireState extends State<PegSolitaire> {
       });
       if (!pegAnyJump(holes, pegs, dirs)) {
         final left = pegs.length;
-        showResult(context, won: left == 1, score: left, lower: true, unit: ' pegs', left == 1 ? 'Perfect! One peg left 🎉' : 'No moves left.\n$left pegs remain', () => setState(start));
+        showResult(context, won: left == 1, score: left, lower: true, unit: ' pegs', left == 1 ? tr('Perfect! One peg left 🎉', 'দারুণ! মাত্র একটা পেগ বাকি 🎉') : tr('No moves left.\n$left pegs remain', 'আর চাল নেই।\n$left টি পেগ বাকি'), () => setState(start));
       }
       return;
     }
@@ -595,9 +595,9 @@ class _PegSolitaireState extends State<PegSolitaire> {
 
   @override
   Widget build(BuildContext context) => page(
-        widget.triangle ? 'Peg Triangle' : 'Peg Solitaire',
+        widget.triangle ? tr('Peg Triangle', 'পেগ ত্রিভুজ') : tr('Peg Solitaire', 'পেগ সলিটেয়ার'),
         Column(children: [
-          const Padding(padding: EdgeInsets.all(12), child: Text('Jump a peg over another into an empty hole.\nLeave just one peg.', textAlign: TextAlign.center, style: TextStyle(color: Colors.white70))),
+          Padding(padding: const EdgeInsets.all(12), child: Text(tr('Jump a peg over another into an empty hole.\nLeave just one peg.', 'একটা পেগ দিয়ে আরেকটা ডিঙিয়ে খালি গর্তে যান।\nশেষে একটাই পেগ রাখুন।'), textAlign: TextAlign.center, style: const TextStyle(color: Colors.white70))),
           Expanded(
             child: widget.triangle
                 ? Center(
@@ -608,7 +608,7 @@ class _PegSolitaireState extends State<PegSolitaire> {
                 : board(7, 49, gap: 2, (i) => holes.contains((i ~/ 7, i % 7)) ? Center(child: FractionallySizedBox(widthFactor: .9, heightFactor: .9, child: hole((i ~/ 7, i % 7), double.infinity))) : const SizedBox()),
           ),
         ]),
-        'Pegs ${pegs.length}',
+        tr('Pegs ${pegs.length}', 'পেগ ${pegs.length}'),
       );
 }
 
@@ -708,7 +708,7 @@ class _WaterSortState extends State<WaterSort> {
       return;
     }
     sfx('tap');
-    if (waterSorted(t)) showResult(context, score: moves, lower: true, unit: ' moves', 'Sorted in $moves moves!', () => setState(start));
+    if (waterSorted(t)) showResult(context, score: moves, lower: true, unit: ' moves', tr('Sorted in $moves moves!', '$moves চালে সাজানো হয়েছে!'), () => setState(start));
   }
 
   void undo() {
@@ -725,9 +725,9 @@ class _WaterSortState extends State<WaterSort> {
 
   @override
   Widget build(BuildContext context) => page(
-        'Water Sort',
+        tr('Water Sort', 'পানি সাজানো'),
         Column(children: [
-          const Padding(padding: EdgeInsets.all(12), child: Text('Tap a tube, then another, to pour.\nSort every colour into its own tube.', textAlign: TextAlign.center, style: TextStyle(color: Colors.white70))),
+          Padding(padding: const EdgeInsets.all(12), child: Text(tr('Tap a tube, then another, to pour.\nSort every colour into its own tube.', 'ঢালতে একটা টিউবে, তারপর আরেকটায় চাপুন।\nপ্রতিটা রঙ আলাদা টিউবে সাজান।'), textAlign: TextAlign.center, style: const TextStyle(color: Colors.white70))),
           Expanded(
             child: Center(
               child: SingleChildScrollView(
@@ -758,13 +758,13 @@ class _WaterSortState extends State<WaterSort> {
           Padding(
             padding: const EdgeInsets.only(bottom: 16),
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              OutlinedButton.icon(onPressed: history.isEmpty ? null : undo, icon: const Icon(Icons.undo), label: const Text('Undo')),
+              OutlinedButton.icon(onPressed: history.isEmpty ? null : undo, icon: const Icon(Icons.undo), label: Text(tr('Undo', 'আগের চাল'))),
               const SizedBox(width: 12),
-              OutlinedButton.icon(onPressed: () => setState(start), icon: const Icon(Icons.refresh), label: const Text('New')),
+              OutlinedButton.icon(onPressed: () => setState(start), icon: const Icon(Icons.refresh), label: Text(tr('New', 'নতুন'))),
             ]),
           ),
         ]),
-        'Moves $moves',
+        tr('Moves $moves', 'চাল $moves'),
       );
 }
 
@@ -807,12 +807,12 @@ class _KnightsTourState extends State<KnightsTour> {
   Widget build(BuildContext context) {
     final next = legal;
     return page(
-      "Knight's Tour",
+      tr("Knight's Tour", 'ঘোড়ার ভ্রমণ'),
       Column(children: [
         Padding(
           padding: const EdgeInsets.all(12),
           child: Text(
-            path.isEmpty ? 'Tap a highlighted square to place the knight.' : (next.isEmpty ? 'Stuck! Undo and try another path.' : 'Visit every square exactly once.'),
+            path.isEmpty ? tr('Tap a highlighted square to place the knight.', 'ঘোড়া বসাতে একটা ঘরে চাপুন।') : (next.isEmpty ? tr('Stuck! Undo and try another path.', 'আটকে গেছেন! পিছিয়ে অন্য পথ চেষ্টা করুন।') : tr('Visit every square exactly once.', 'প্রতিটা ঘরে ঠিক একবার যান।')),
             style: const TextStyle(color: Colors.white70),
           ),
         ),
@@ -827,10 +827,9 @@ class _KnightsTourState extends State<KnightsTour> {
         ),
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            OutlinedButton.icon(onPressed: path.isEmpty ? null : () => setState(path.removeLast), icon: const Icon(Icons.undo), label: const Text('Undo')),
-            const SizedBox(width: 12),
-            OutlinedButton.icon(onPressed: () => setState(path.clear), icon: const Icon(Icons.refresh), label: const Text('Restart')),
+          child: Wrap(alignment: WrapAlignment.center, spacing: 12, runSpacing: 8, children: [
+            OutlinedButton.icon(onPressed: path.isEmpty ? null : () => setState(path.removeLast), icon: const Icon(Icons.undo), label: Text(tr('Undo', 'আগের চাল'))),
+            OutlinedButton.icon(onPressed: () => setState(path.clear), icon: const Icon(Icons.refresh), label: Text(tr('Restart', 'আবার শুরু'))),
           ]),
         ),
       ]),
@@ -894,7 +893,7 @@ class _Game2048NState extends State<Game2048N> {
       score += gained;
       spawn();
     });
-    if (!canMove()) showResult(context, won: false, score: score, 'No moves left!\nScore: $score', () => setState(start));
+    if (!canMove()) showResult(context, won: false, score: score, tr('No moves left!\nScore: $score', 'আর চাল নেই!\nস্কোর: $score'), () => setState(start));
   }
 
   @override
@@ -921,7 +920,7 @@ class _Game2048NState extends State<Game2048N> {
             }),
           ),
         ),
-        'Score $score',
+        tr('Score $score', 'স্কোর $score'),
       );
 }
 
@@ -1007,11 +1006,15 @@ class _SkyscrapersState extends State<Skyscrapers> {
   Widget build(BuildContext context) {
     final m = n + 2;
     return page(
-      'Skyscrapers',
+      tr('Skyscrapers', 'আকাশচুম্বী'),
       Column(children: [
-        const Padding(
-          padding: EdgeInsets.all(12),
-          child: Text('Fill 1–4 so each row and column has every height once.\nEdge numbers say how many buildings you can see from there.', textAlign: TextAlign.center, style: TextStyle(color: Colors.white70)),
+        Padding(
+          padding: const EdgeInsets.all(12),
+          child: Text(
+              tr('Fill 1–4 so each row and column has every height once.\nEdge numbers say how many buildings you can see from there.',
+                  'প্রতিটা সারি ও কলামে 1–4 একবার করে বসান।\nকিনারার সংখ্যা বলে ওখান থেকে কয়টা ভবন দেখা যায়।'),
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Colors.white70)),
         ),
         Expanded(
           child: board(m, m * m, gap: 4, (i) {
@@ -1043,7 +1046,7 @@ class _SkyscrapersState extends State<Skyscrapers> {
           ]),
         ),
       ]),
-      '${g.where((v) => v == 0).length} left',
+      tr('${g.where((v) => v == 0).length} left', '${g.where((v) => v == 0).length} বাকি'),
     );
   }
 }

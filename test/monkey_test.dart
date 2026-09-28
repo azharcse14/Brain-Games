@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 /// Opens every game on a small phone and taps it randomly, looking for crashes and layout overflows.
 void main() {
-  testWidgets('every game survives random taps on a 360×640 phone', (tester) async {
+  testWidgets('every game survives random taps on a 360×640 phone, in English and Bangla', (tester) async {
     SharedPreferences.setMockInitialValues({'mute': true});
     prefs = await SharedPreferences.getInstance();
     tester.view.physicalSize = const Size(360, 640);
@@ -16,7 +16,9 @@ void main() {
     addTearDown(tester.view.reset);
     final r = Random(1);
     final failures = <String>[];
-    for (final g in allGames) {
+    addTearDown(() => bangla.value = false);
+    for (final (bn, g) in [for (final bn in [false, true]) for (final g in allGames) (bn, g)]) {
+      bangla.value = bn;
       await tester.pumpWidget(MaterialApp(key: UniqueKey(), home: const SizedBox()));
       tester.state<NavigatorState>(find.byType(Navigator)).push(MaterialPageRoute(settings: RouteSettings(name: g.name), builder: (_) => g.build()));
       await tester.pump();
@@ -26,7 +28,7 @@ void main() {
         await tester.pump(const Duration(milliseconds: 350));
         final e = tester.takeException();
         if (e != null) {
-          failures.add('${g.name} (tap $k): ${e.toString().split('\n').first}');
+          failures.add('${g.name}${bn ? ' [bn]' : ''} (tap $k): ${e.toString().split('\n').first}');
           break;
         }
       }

@@ -9,31 +9,31 @@ import 'tabletop.dart';
 // Board cells: 0 = empty, 1 = Blue (player 0), 2 = Red (player 1).
 
 final duelBoardGames = <Game>[
-  Game('2P Tic Tac Toe 3×3', '2P Board', () => const InARow('Tic Tac Toe', 3, 3, 3), glyph: '✕○'),
-  Game('2P Tic Tac Toe 4×4', '2P Board', () => const InARow('Tic Tac Toe 4×4', 4, 4, 4), glyph: '4×4'),
-  Game('2P Tic Tac Toe 5×5', '2P Board', () => const InARow('Tic Tac Toe 5×5', 5, 5, 4), glyph: '5×5'),
-  for (final n in [9, 11, 15]) Game('Gomoku $n×$n', '2P Board', () => InARow('Gomoku $n×$n', n, n, 5), glyph: '⚫⚪'),
-  Game('2P Connect Four 7×6', '2P Board', () => const InARow('Connect Four', 6, 7, 4, gravity: true), glyph: '🔵🔴'),
-  Game('Connect Four 8×7', '2P Board', () => const InARow('Connect Four 8×7', 7, 8, 4, gravity: true), glyph: '8×7'),
-  Game('Connect Five 9×7', '2P Board', () => const InARow('Connect Five', 7, 9, 5, gravity: true), glyph: 'C5'),
-  Game('Connect Three 5×4', '2P Board', () => const InARow('Connect Three', 4, 5, 3, gravity: true), glyph: 'C3'),
-  Game('Gravity Gomoku 10×10', '2P Board', () => const InARow('Gravity Gomoku', 10, 10, 5, gravity: true), glyph: '⬇⚪'),
-  Game('Misère Tic Tac Toe', '2P Board', () => const InARow('Misère Tic Tac Toe', 3, 3, 3, misere: true), glyph: '🙃'),
-  Game('Ultimate Tic Tac Toe', '2P Board', () => const UltimateTtt(), glyph: '⊞'),
-  for (final n in [6, 8, 10]) Game('Reversi $n×$n', '2P Board', () => Reversi(n), glyph: '◐'),
-  for (final n in [3, 4, 5, 6]) Game('Dots and Boxes $n×$n', '2P Board', () => DotsBoxes(n), glyph: '⊡'),
-  for (final s in [3, 4, 6]) Game('Mancala $s Seeds', '2P Board', () => Mancala(s), glyph: '🥣'),
-  for (final n in [5, 7, 9]) Game('Hex $n×$n', '2P Board', () => Hex(n), glyph: '⬡'),
-  for (final n in [5, 6, 8]) Game('Domineering $n×$n', '2P Board', () => Domineering(n), glyph: '▯▭'),
-  Game('Nim 3-4-5', '2P Board', () => const Nim('Nim 3-4-5', [3, 4, 5]), glyph: '|||'),
-  Game('Nim 1-3-5-7', '2P Board', () => const Nim('Nim 1-3-5-7', [1, 3, 5, 7]), glyph: '|‖|'),
-  Game('Misère Nim', '2P Board', () => const Nim('Misère Nim', [1, 3, 5, 7], misere: true), glyph: '🙃|'),
-  Game('21 Sticks', '2P Board', () => const Nim('21 Sticks', [21], misere: true, maxTake: 3), glyph: '21'),
-  for (final (r, c) in [(4, 6), (6, 8)]) Game('Chomp $r×$c', '2P Board', () => Chomp(r, c), glyph: '🍫'),
-  for (final t in [50, 100]) Game('Pig to $t', '2P Board', () => Pig(t), glyph: '🐷'),
-  Game('Pentago', '2P Board', () => const Pentago(), glyph: '↻'),
-  Game('Isolation 7×7', '2P Board', () => const Isolation(7, knight: false), glyph: '♛'),
-  Game('Knight Isolation 8×8', '2P Board', () => const Isolation(8, knight: true), glyph: '♞'),
+  Game('2P Tic Tac Toe 3×3', '2P Board', () => const InARow('Tic Tac Toe', 3, 3, 3, bn: 'টিক ট্যাক টো'), glyph: '✕○', bn: 'দুজনের টিক ট্যাক টো 3×3'),
+  Game('2P Tic Tac Toe 4×4', '2P Board', () => const InARow('Tic Tac Toe 4×4', 4, 4, 4, bn: 'টিক ট্যাক টো 4×4'), glyph: '4×4', bn: 'দুজনের টিক ট্যাক টো 4×4'),
+  Game('2P Tic Tac Toe 5×5', '2P Board', () => const InARow('Tic Tac Toe 5×5', 5, 5, 4, bn: 'টিক ট্যাক টো 5×5'), glyph: '5×5', bn: 'দুজনের টিক ট্যাক টো 5×5'),
+  for (final n in [9, 11, 15]) Game('Gomoku $n×$n', '2P Board', () => InARow('Gomoku $n×$n', n, n, 5), glyph: '⚫⚪', bn: 'গোমোকু $n×$n'),
+  Game('2P Connect Four 7×6', '2P Board', () => const InARow('Connect Four', 6, 7, 4, gravity: true, bn: 'কানেক্ট ফোর'), glyph: '🔵🔴', bn: 'দুজনের কানেক্ট ফোর 7×6'),
+  Game('Connect Four 8×7', '2P Board', () => const InARow('Connect Four 8×7', 7, 8, 4, gravity: true), glyph: '8×7', bn: 'কানেক্ট ফোর 8×7'),
+  Game('Connect Five 9×7', '2P Board', () => const InARow('Connect Five', 7, 9, 5, gravity: true, bn: 'কানেক্ট ফাইভ'), glyph: 'C5', bn: 'কানেক্ট ফাইভ 9×7'),
+  Game('Connect Three 5×4', '2P Board', () => const InARow('Connect Three', 4, 5, 3, gravity: true, bn: 'কানেক্ট থ্রি'), glyph: 'C3', bn: 'কানেক্ট থ্রি 5×4'),
+  Game('Gravity Gomoku 10×10', '2P Board', () => const InARow('Gravity Gomoku', 10, 10, 5, gravity: true, bn: 'গ্র্যাভিটি গোমোকু'), glyph: '⬇⚪', bn: 'গ্র্যাভিটি গোমোকু 10×10'),
+  Game('Misère Tic Tac Toe', '2P Board', () => const InARow('Misère Tic Tac Toe', 3, 3, 3, misere: true), glyph: '🙃', bn: 'উল্টো টিক ট্যাক টো'),
+  Game('Ultimate Tic Tac Toe', '2P Board', () => const UltimateTtt(), glyph: '⊞', bn: 'আলটিমেট টিক ট্যাক টো'),
+  for (final n in [6, 8, 10]) Game('Reversi $n×$n', '2P Board', () => Reversi(n), glyph: '◐', bn: 'রিভার্সি $n×$n'),
+  for (final n in [3, 4, 5, 6]) Game('Dots and Boxes $n×$n', '2P Board', () => DotsBoxes(n), glyph: '⊡', bn: 'ডটস অ্যান্ড বক্সেস $n×$n'),
+  for (final s in [3, 4, 6]) Game('Mancala $s Seeds', '2P Board', () => Mancala(s), glyph: '🥣', bn: 'মানকালা $s বীজ'),
+  for (final n in [5, 7, 9]) Game('Hex $n×$n', '2P Board', () => Hex(n), glyph: '⬡', bn: 'হেক্স $n×$n'),
+  for (final n in [5, 6, 8]) Game('Domineering $n×$n', '2P Board', () => Domineering(n), glyph: '▯▭', bn: 'ডমিনিয়ারিং $n×$n'),
+  Game('Nim 3-4-5', '2P Board', () => const Nim('Nim 3-4-5', [3, 4, 5]), glyph: '|||', bn: 'নিম 3-4-5'),
+  Game('Nim 1-3-5-7', '2P Board', () => const Nim('Nim 1-3-5-7', [1, 3, 5, 7]), glyph: '|‖|', bn: 'নিম 1-3-5-7'),
+  Game('Misère Nim', '2P Board', () => const Nim('Misère Nim', [1, 3, 5, 7], misere: true), glyph: '🙃|', bn: 'উল্টো নিম'),
+  Game('21 Sticks', '2P Board', () => const Nim('21 Sticks', [21], misere: true, maxTake: 3), glyph: '21', bn: '21 কাঠি'),
+  for (final (r, c) in [(4, 6), (6, 8)]) Game('Chomp $r×$c', '2P Board', () => Chomp(r, c), glyph: '🍫', bn: 'চম্প $r×$c'),
+  for (final t in [50, 100]) Game('Pig to $t', '2P Board', () => Pig(t), glyph: '🐷', bn: 'পিগ ($t পর্যন্ত)'),
+  Game('Pentago', '2P Board', () => const Pentago(), glyph: '↻', bn: 'পেন্টাগো'),
+  Game('Isolation 7×7', '2P Board', () => const Isolation(7, knight: false), glyph: '♛', bn: 'আইসোলেশন 7×7'),
+  Game('Knight Isolation 8×8', '2P Board', () => const Isolation(8, knight: true), glyph: '♞', bn: 'ঘোড়া আইসোলেশন 8×8'),
 ];
 
 // ---------- shared logic ----------
@@ -75,8 +75,9 @@ Widget duelPage(String title, int turn, Widget body, {String? banner, String? st
 // ---------- N in a row ----------
 
 class InARow extends StatefulWidget {
-  const InARow(this.title, this.rows, this.cols, this.k, {this.gravity = false, this.misere = false, super.key});
+  const InARow(this.title, this.rows, this.cols, this.k, {this.gravity = false, this.misere = false, this.bn, super.key});
   final String title;
+  final String? bn; // Bangla title when [title] isn't a game name
   final int rows, cols, k;
   final bool gravity, misere;
   @override
@@ -131,10 +132,11 @@ class _InARowState extends State<InARow> {
 
   @override
   Widget build(BuildContext context) => duelPage(
-        widget.title,
+        tr(widget.title, widget.bn ?? widget.title),
         turn,
         board(widget.cols, cells.length, gap: widget.cols > 9 ? 1 : 3, (i) => cellBox(Colors.blueGrey.shade800, disc(cells[i]), () => tap(i))),
-        banner: "${duelNames[turn]}'s turn · ${widget.misere ? '${widget.k} in a row LOSES' : '${widget.k} in a row wins'}",
+        banner: tr("${duelNames[turn]}'s turn · ${widget.misere ? '${widget.k} in a row LOSES' : '${widget.k} in a row wins'}",
+            '${duelNames[turn]}-এর পালা · ${widget.misere ? 'পরপর ${widget.k}টি হলে হার' : 'পরপর ${widget.k}টি হলে জয়'}'),
       );
 }
 
@@ -209,7 +211,8 @@ class _UltimateTttState extends State<UltimateTtt> {
   Widget build(BuildContext context) => duelPage(
         'Ultimate Tic Tac Toe',
         turn,
-        banner: "${duelNames[turn]}'s turn · ${forced == null ? 'play any open board' : 'play in the lit board'}",
+        banner: tr("${duelNames[turn]}'s turn · ${forced == null ? 'play any open board' : 'play in the lit board'}",
+            '${duelNames[turn]}-এর পালা · ${forced == null ? 'যেকোনো খোলা বোর্ডে খেলুন' : 'আলো জ্বলা বোর্ডে খেলুন'}'),
         board(9, 81, gap: 2, (g) {
           final r = g ~/ 9, c = g % 9, b = r ~/ 3 * 3 + c ~/ 3;
           final color = small[b] == 1 || small[b] == 2
@@ -286,7 +289,7 @@ class _ReversiState extends State<Reversi> {
       if (reversiCanMove(cells, n, 2 - turn)) {
         turn = 1 - turn;
       } else if (reversiCanMove(cells, n, turn + 1)) {
-        note = '${duelNames[1 - turn]} has no move and passes';
+        note = tr('${duelNames[1 - turn]} has no move and passes', '${duelNames[1 - turn]}-এর চাল নেই, পাস');
       } else {
         over = true;
       }
@@ -376,9 +379,9 @@ class _DotsBoxesState extends State<DotsBoxes> {
 
   @override
   Widget build(BuildContext context) => duelPage(
-        'Dots and Boxes',
+        tr('Dots and Boxes', 'ডটস অ্যান্ড বক্সেস'),
         turn,
-        banner: "${duelNames[turn]}'s turn · close a box to go again",
+        banner: tr("${duelNames[turn]}'s turn · close a box to go again", '${duelNames[turn]}-এর পালা · বাক্স বন্ধ করলে আবার চাল'),
         status: '🔵${owner.values.where((p) => p == 0).length} 🔴${owner.values.where((p) => p == 1).length}',
         board(s, s * s, gap: 0, (g) {
           final r = g ~/ s, c = g % s;
@@ -495,9 +498,9 @@ class _MancalaState extends State<Mancala> {
 
   @override
   Widget build(BuildContext context) => duelPage(
-        'Mancala · ${widget.seeds} Seeds',
+        tr('Mancala · ${widget.seeds} Seeds', 'মানকালা · ${widget.seeds} বীজ'),
         turn,
-        banner: "${duelNames[turn]}'s turn · ${turn == 0 ? 'bottom' : 'top'} row",
+        banner: tr("${duelNames[turn]}'s turn · ${turn == 0 ? 'bottom' : 'top'} row", '${duelNames[turn]}-এর পালা · ${turn == 0 ? 'নিচের' : 'উপরের'} সারি'),
         Center(
           child: FittedBox(
             fit: BoxFit.scaleDown, // the board is 372 px wide; shrink it on 360 px phones
@@ -579,7 +582,7 @@ class _HexState extends State<Hex> {
   Widget build(BuildContext context) => duelPage(
         'Hex $n×$n',
         turn,
-        banner: "${duelNames[turn]}'s turn · Blue: top↕bottom · Red: left↔right",
+        banner: tr("${duelNames[turn]}'s turn · Blue: top↕bottom · Red: left↔right", '${duelNames[turn]}-এর পালা · নীল: উপর↕নিচ · লাল: বাম↔ডান'),
         LayoutBuilder(builder: (_, box) {
           final s = min(box.maxWidth - 24, 460) / (n + (n - 1) / 2);
           return Center(
@@ -657,7 +660,8 @@ class _DomineeringState extends State<Domineering> {
   Widget build(BuildContext context) => duelPage(
         'Domineering $n×$n',
         turn,
-        banner: "${duelNames[turn]} places ${turn == 0 ? 'vertical ▯ (tap top cell)' : 'horizontal ▭ (tap left cell)'} · no room = you lose",
+        banner: tr("${duelNames[turn]} places ${turn == 0 ? 'vertical ▯ (tap top cell)' : 'horizontal ▭ (tap left cell)'} · no room = you lose",
+            '${duelNames[turn]} বসাবে ${turn == 0 ? 'খাড়া ▯ (উপরের ঘর চাপুন)' : 'আড়া ▭ (বাম ঘর চাপুন)'} · জায়গা না থাকলে হার'),
         board(n, n * n, gap: 2, (i) => cellBox(owner[i] == 0 ? Colors.blueGrey.shade700 : duelColors[owner[i] - 1], const SizedBox.expand(), () => tap(i))),
       );
 }
@@ -709,9 +713,12 @@ class _NimState extends State<Nim> {
   Widget build(BuildContext context) => duelPage(
         widget.title,
         turn,
-        banner: "${duelNames[turn]}'s turn · ${widget.misere ? 'taking the last stick LOSES' : 'take the last stick to win'}",
+        banner: tr("${duelNames[turn]}'s turn · ${widget.misere ? 'taking the last stick LOSES' : 'take the last stick to win'}",
+            '${duelNames[turn]}-এর পালা · ${widget.misere ? 'শেষ কাঠি নিলে হার' : 'শেষ কাঠি নিলে জয়'}'),
         ListView(padding: const EdgeInsets.all(16), children: [
-          Text('Tap a stick to take it and every stick to its right${widget.maxTake == null ? ' (one heap per turn)' : ' (1–${widget.maxTake} per turn)'}.',
+          Text(
+              tr('Tap a stick to take it and every stick to its right${widget.maxTake == null ? ' (one heap per turn)' : ' (1–${widget.maxTake} per turn)'}.',
+                  'কাঠি চাপলে সেটা আর তার ডানের সব কাঠি নেওয়া হবে${widget.maxTake == null ? ' (প্রতি চালে একটা স্তূপ)' : ' (প্রতি চালে 1–${widget.maxTake}টি)'}।'),
               textAlign: TextAlign.center, style: const TextStyle(color: Colors.white70)),
           for (var i = 0; i < h.length; i++)
             Padding(
@@ -775,7 +782,7 @@ class _ChompState extends State<Chomp> {
   Widget build(BuildContext context) => duelPage(
         'Chomp ${widget.rows}×${widget.cols}',
         turn,
-        banner: "${duelNames[turn]}'s turn · whoever eats ☠️ loses",
+        banner: tr("${duelNames[turn]}'s turn · whoever eats ☠️ loses", '${duelNames[turn]}-এর পালা · যে ☠️ খাবে সে হারবে'),
         board(
             widget.cols,
             eaten.length,
@@ -841,7 +848,7 @@ class _PigState extends State<Pig> {
   Widget build(BuildContext context) => duelPage(
         'Pig to ${widget.target}',
         turn,
-        banner: "${duelNames[turn]}'s turn · a 1 loses this turn's points",
+        banner: tr("${duelNames[turn]}'s turn · a 1 loses this turn's points", '${duelNames[turn]}-এর পালা · 1 উঠলে এই চালের পয়েন্ট বাদ'),
         Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             for (var p = 0; p < 2; p++)
@@ -853,12 +860,12 @@ class _PigState extends State<Pig> {
           const SizedBox(height: 24),
           dice(die, size: 80),
           const SizedBox(height: 16),
-          Text('This turn: $pot', style: const TextStyle(fontSize: 24)),
+          Text(tr('This turn: $pot', 'এই চালে: $pot'), style: const TextStyle(fontSize: 24)),
           const SizedBox(height: 24),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            FilledButton.icon(onPressed: rolling ? null : roll, icon: const Icon(Icons.casino), label: const Text('Roll')),
+            FilledButton.icon(onPressed: rolling ? null : roll, icon: const Icon(Icons.casino), label: Text(tr('Roll', 'ছক্কা ফেলুন'))),
             const SizedBox(width: 16),
-            FilledButton.tonal(onPressed: rolling || pot == 0 ? null : hold, child: const Text('Hold')),
+            FilledButton.tonal(onPressed: rolling || pot == 0 ? null : hold, child: Text(tr('Hold', 'রাখুন'))),
           ]),
         ]),
       );
@@ -935,7 +942,8 @@ class _PentagoState extends State<Pentago> {
   Widget build(BuildContext context) => duelPage(
         'Pentago',
         turn,
-        banner: "${duelNames[turn]}: ${rotating ? 'now rotate a quadrant' : 'place a marble'} · 5 in a row wins",
+        banner: tr("${duelNames[turn]}: ${rotating ? 'now rotate a quadrant' : 'place a marble'} · 5 in a row wins",
+            '${duelNames[turn]}: ${rotating ? 'এবার একটা ভাগ ঘোরান' : 'একটা গুটি বসান'} · পরপর 5টি হলে জয়'),
         Column(children: [
           Expanded(
               child: board(
@@ -1025,9 +1033,10 @@ class _IsolationState extends State<Isolation> {
   Widget build(BuildContext context) {
     final legal = moves(turn).toSet(), piece = widget.knight ? '♞' : '♛';
     return duelPage(
-      widget.knight ? 'Knight Isolation' : 'Isolation',
+      widget.knight ? tr('Knight Isolation', 'ঘোড়া আইসোলেশন') : tr('Isolation', 'আইসোলেশন'),
       turn,
-      banner: "${duelNames[turn]}'s turn · move like a ${widget.knight ? 'knight' : 'queen'} · stuck = you lose",
+      banner: tr("${duelNames[turn]}'s turn · move like a ${widget.knight ? 'knight' : 'queen'} · stuck = you lose",
+          '${duelNames[turn]}-এর পালা · ${widget.knight ? 'ঘোড়ার' : 'রানির'} মতো চলুন · আটকে গেলে হার'),
       board(n, n * n, gap: 2, (i) {
         final who = pos.indexOf(i);
         return cellBox(
