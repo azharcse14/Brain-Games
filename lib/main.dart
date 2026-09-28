@@ -224,7 +224,8 @@ class _GameCardState extends State<GameCard> {
                 Expanded(
                   child: Center(
                     child: FittedBox(
-                      child: Text(glyphFor(g) ?? '?', style: const TextStyle(fontSize: 40, fontWeight: FontWeight.w800, color: Colors.white)),
+                      // Emoji glyphs read as noise ("paw prints") to screen readers; the name below says it all.
+                      child: ExcludeSemantics(child: Text(glyphFor(g) ?? '?', style: const TextStyle(fontSize: 40, fontWeight: FontWeight.w800, color: Colors.white))),
                     ),
                   ),
                 ),

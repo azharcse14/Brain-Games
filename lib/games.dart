@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Game {
@@ -111,9 +112,10 @@ bool record(BuildContext context, num v, {bool lower = false, String unit = ''})
 
 final _players = <String, AudioPlayer>{};
 
-/// Plays assets/sfx/[name].wav unless muted.
+/// Plays assets/sfx/[name].wav with a matching buzz, unless muted.
 void sfx(String name) {
   if (prefs?.getBool('mute') ?? false) return;
+  name == 'tap' ? HapticFeedback.selectionClick() : HapticFeedback.mediumImpact();
   final p = _players.putIfAbsent(name, AudioPlayer.new);
   p.stop().then((_) => p.play(AssetSource('sfx/$name.wav'))).ignore();
 }
