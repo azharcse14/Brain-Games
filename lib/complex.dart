@@ -118,7 +118,7 @@ class _Game2048State extends State<Game2048> {
             child: board(4, 16, (i) {
               final v = cells[i];
               final hue = v == 0 ? 0.0 : (log(v) / ln2 * 32) % 360;
-              return tile(v == 0 ? Colors.grey.shade800 : HSLColor.fromAHSL(1, hue, .6, .45).toColor(), text: v == 0 ? '' : '$v');
+              return tile(v == 0 ? (dark ? Colors.grey.shade800 : Colors.grey.shade300) : HSLColor.fromAHSL(1, hue, .6, .45).toColor(), text: v == 0 ? '' : '$v');
             }),
           ),
         ),
@@ -416,14 +416,14 @@ class _MastermindState extends State<Mastermind> {
         width: size,
         height: size,
         margin: const EdgeInsets.all(4),
-        decoration: BoxDecoration(shape: BoxShape.circle, color: c == null ? Colors.white10 : colors[c], border: Border.all(color: Colors.white24)),
+        decoration: BoxDecoration(shape: BoxShape.circle, color: c == null ? (dark ? Colors.white10 : Colors.black12) : colors[c], border: Border.all(color: dark ? Colors.white24 : Colors.black26)),
       );
 
   @override
   Widget build(BuildContext context) => page(
         tr('Mastermind', 'মাস্টারমাইন্ড'),
         Column(children: [
-          Padding(padding: const EdgeInsets.all(12), child: Text(tr('● right color & place   ○ right color, wrong place', '● রং ও জায়গা ঠিক   ○ রং ঠিক, জায়গা ভুল'), style: const TextStyle(color: Colors.white70))),
+          Padding(padding: const EdgeInsets.all(12), child: Text(tr('● right color & place   ○ right color, wrong place', '● রং ও জায়গা ঠিক   ○ রং ঠিক, জায়গা ভুল'), style: TextStyle(color: dim))),
           Expanded(
             child: ListView(padding: const EdgeInsets.symmetric(horizontal: 24), children: [
               for (final (g, (b, w)) in guesses)
@@ -514,7 +514,7 @@ class _HanoiState extends State<Hanoi> {
   Widget build(BuildContext context) => page(
         tr('Tower of Hanoi', 'হ্যানয় টাওয়ার'),
         Column(children: [
-          Padding(padding: const EdgeInsets.all(16), child: Text(tr('Move every disk to the right peg.\nNever put a bigger disk on a smaller one.', 'সব চাকতি ডান দিকের খুঁটিতে নিন।\nছোট চাকতির ওপর কখনো বড়টা রাখবেন না।'), textAlign: TextAlign.center, style: const TextStyle(color: Colors.white70))),
+          Padding(padding: const EdgeInsets.all(16), child: Text(tr('Move every disk to the right peg.\nNever put a bigger disk on a smaller one.', 'সব চাকতি ডান দিকের খুঁটিতে নিন।\nছোট চাকতির ওপর কখনো বড়টা রাখবেন না।'), textAlign: TextAlign.center, style: TextStyle(color: dim))),
           Expanded(
             child: Row(children: [
               for (var p = 0; p < 3; p++)
@@ -524,7 +524,7 @@ class _HanoiState extends State<Hanoi> {
                     onTap: () => tap(p),
                     child: Container(
                       margin: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(color: sel == p ? Colors.white12 : null, borderRadius: BorderRadius.circular(12)),
+                      decoration: BoxDecoration(color: sel == p ? (dark ? Colors.white12 : Colors.black12) : null, borderRadius: BorderRadius.circular(12)),
                       child: Stack(alignment: Alignment.bottomCenter, children: [
                         Container(width: 8, margin: const EdgeInsets.only(top: 60), color: Colors.brown.shade300),
                         Column(mainAxisAlignment: MainAxisAlignment.end, children: [

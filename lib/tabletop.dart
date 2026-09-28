@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import 'games.dart';
+import 'solitaire.dart';
 
 final _r = Random();
 
@@ -24,7 +25,7 @@ Widget dice(int? v, {double size = 56}) {
     width: size,
     height: size,
     padding: EdgeInsets.all(size / 8),
-    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(size / 6)),
+    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(size / 6), border: Border.all(color: Colors.black26)), // edge shows on a light page
     child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       for (var r = 0; r < 3; r++)
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -371,7 +372,7 @@ class _SnakesLaddersState extends State<SnakesLadders> {
                 child: Stack(children: [
                   Text('$n', style: const TextStyle(fontSize: 9, color: Colors.white60)),
                   if (jump != null)
-                    Align(alignment: Alignment.bottomRight, child: FittedBox(child: Text(jump > n ? '🪜$jump' : '🐍$jump', style: const TextStyle(fontSize: 9)))),
+                    Align(alignment: Alignment.bottomRight, child: FittedBox(child: Text(jump > n ? '🪜$jump' : '🐍$jump', style: const TextStyle(fontSize: 9, color: Colors.white)))),
                   Center(
                     child: Row(mainAxisSize: MainAxisSize.min, children: [
                       for (var p = 0; p < 2; p++)
@@ -494,8 +495,7 @@ class _BlackjackState extends State<Blackjack> {
   @override
   Widget build(BuildContext context) => page(
         tr('Blackjack', 'ব্ল্যাকজ্যাক'),
-        Container(
-          color: Colors.green.shade900,
+        felt(Container(
           padding: const EdgeInsets.all(16),
           child: Column(children: [
             hand(tr('Dealer', 'ডিলার'), dealer, hideSecond: playing),
@@ -519,7 +519,7 @@ class _BlackjackState extends State<Blackjack> {
                 FilledButton.icon(onPressed: chips >= bet ? deal : null, icon: const Icon(Icons.style), label: Text(tr('Deal · bet $bet', 'বাঁটুন · বাজি $bet'))),
               ]),
           ]),
-        ),
+        )),
         '🪙 $chips',
       );
 }
@@ -651,8 +651,7 @@ class _CrazyEightsState extends State<CrazyEights> {
     final canPlay = you.any(playable);
     return page(
       tr('Crazy Eights', 'ক্রেজি এইটস'),
-      Container(
-        color: Colors.green.shade900,
+      felt(Container(
         padding: const EdgeInsets.all(12),
         child: Column(children: [
           Text(tr('AI · ${ai.length} cards', 'কম্পিউটার · ${ai.length}টি তাস'), style: const TextStyle(color: Colors.white70)),
@@ -677,7 +676,7 @@ class _CrazyEightsState extends State<CrazyEights> {
             ),
           ),
         ]),
-      ),
+      )),
       yourTurn ? tr('Your turn', 'আপনার পালা') : tr('AI turn', 'কম্পিউটারের পালা'),
     );
   }
@@ -724,9 +723,7 @@ class _HigherLowerState extends State<HigherLower> {
   @override
   Widget build(BuildContext context) => page(
         tr('Higher or Lower', 'বড় না ছোট'),
-        Container(
-          color: Colors.green.shade900,
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        felt(Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             Text(msg, style: const TextStyle(fontSize: 20)),
             const SizedBox(height: 24),
             AnimatedSwitcher(duration: const Duration(milliseconds: 250), child: KeyedSubtree(key: ValueKey(card), child: playingCard(card, w: 120))),
@@ -738,8 +735,7 @@ class _HigherLowerState extends State<HigherLower> {
               const SizedBox(width: 16),
               FilledButton.icon(onPressed: () => guess(false), icon: const Icon(Icons.arrow_downward), label: Text(tr('Lower', 'ছোট'))),
             ]),
-          ]),
-        ),
+          ])),
         tr('Streak $streak', 'টানা $streak'),
       );
 }

@@ -76,7 +76,7 @@ Widget _halves(Widget Function(int p) content) => Column(children: [
 Widget _banner(String t) => Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(color: Colors.black54, borderRadius: BorderRadius.circular(12)),
-      child: Text(t, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+      child: Text(t, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white)), // on the black54 pill in both themes
     );
 
 /// Routes every finger to the player whose half it started in (0 = bottom, 1 = top); positions are 0..1.
@@ -826,10 +826,10 @@ class _TapBattleState extends State<TapBattle> with SingleTickerProviderStateMix
           ..strokeWidth = 8);
         for (final y in [.075, .925]) {
           c.drawLine(Offset(mid.dx - 60, s.height * y), Offset(mid.dx + 60, s.height * y), Paint()
-            ..color = Colors.white54
+            ..color = dim
             ..strokeWidth = 3);
         }
-        c.drawCircle(Offset(mid.dx, mid.dy + rope * s.height * .425), 18, Paint()..color = Colors.white);
+        c.drawCircle(Offset(mid.dx, mid.dy + rope * s.height * .425), 18, Paint()..color = ink);
       case 'race':
         for (var p = 0; p < 2; p++) {
           final f = taps[p] / 100 * s.height / 2;
@@ -837,7 +837,7 @@ class _TapBattleState extends State<TapBattle> with SingleTickerProviderStateMix
         }
       case 'rhythm':
         final t = sw.elapsedMilliseconds % beat / beat;
-        c.drawCircle(mid, 30 + 30 * (1 - t), Paint()..color = Colors.white.withValues(alpha: .3 + .5 * (1 - t)));
+        c.drawCircle(mid, 30 + 30 * (1 - t), Paint()..color = ink.withValues(alpha: .3 + .5 * (1 - t)));
     }
   }
 
@@ -874,9 +874,9 @@ Stimulus reflexStimulus(String mode, Random r) {
     case 'stroop':
       return (reflexWords[a], reflexInks[b], target);
     case 'even':
-      return ('${2 * (1 + r.nextInt(49)) - (target ? 0 : 1)}', Colors.white, target);
+      return ('${2 * (1 + r.nextInt(49)) - (target ? 0 : 1)}', ink, target);
     default:
-      return ('${reflexShapes[a]}  ${reflexShapes[b]}', Colors.white, target);
+      return ('${reflexShapes[a]}  ${reflexShapes[b]}', ink, target);
   }
 }
 
@@ -889,7 +889,7 @@ class ReflexDuel extends StatefulWidget {
 
 class _ReflexDuelState extends State<ReflexDuel> {
   static const target = 5;
-  static Stimulus get ready => (tr('GET READY', 'তৈরি হও'), Colors.white70, false); // records compare by value, so stim == ready still works
+  static Stimulus get ready => (tr('GET READY', 'তৈরি হও'), dim, false); // records compare by value, so stim == ready still works
   final score = [0, 0];
   Stimulus stim = ready;
   String? msg;
@@ -957,7 +957,7 @@ class _ReflexDuelState extends State<ReflexDuel> {
         _TouchSplit(
           onDown: (pl, _) => tap(pl),
           child: _halves((p) => Column(mainAxisSize: MainAxisSize.min, children: [
-                Text(rule, style: const TextStyle(fontSize: 16, color: Colors.white70)),
+                Text(rule, style: TextStyle(fontSize: 16, color: dim)),
                 const SizedBox(height: 16),
                 msg == null
                     ? Text(stim.$1, style: TextStyle(fontSize: 56, fontWeight: FontWeight.w900, color: stim.$2))

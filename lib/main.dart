@@ -100,7 +100,8 @@ class App extends StatelessWidget {
           locale: Locale(bn ? 'bn' : 'en'),
           supportedLocales: const [Locale('en'), Locale('bn')],
           localizationsDelegates: GlobalMaterialLocalizations.delegates,
-          theme: ThemeData(colorSchemeSeed: Colors.deepPurple, brightness: Brightness.dark),
+          theme: ThemeData(colorSchemeSeed: Colors.deepPurple),
+          darkTheme: ThemeData(colorSchemeSeed: Colors.deepPurple, brightness: Brightness.dark),
           home: const Home(),
         ),
       );

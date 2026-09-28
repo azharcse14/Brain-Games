@@ -64,7 +64,12 @@ bool isSuitRun(List<int> t, int i) {
 /// FreeCell supermove: (free cells + 1) × 2^(empty columns).
 int freeCellMax(int freeCells, int emptyCols) => (freeCells + 1) << emptyCols;
 
-Widget felt(Widget child) => Container(color: Colors.green.shade900, child: child);
+/// Green card table. Always dark-themed, so text and buttons on it look the same whatever the phone's light/dark setting.
+Widget felt(Widget child) => Theme(
+      data: _feltTheme,
+      child: DefaultTextStyle.merge(style: TextStyle(color: _feltTheme.colorScheme.onSurface), child: Container(color: Colors.green.shade900, child: child)),
+    );
+final _feltTheme = ThemeData(colorSchemeSeed: Colors.deepPurple, brightness: Brightness.dark);
 
 /// A compact card with its label at the top, so overlapping stacks stay readable. null = empty slot.
 Widget sCard(int? c, double w, {bool sel = false}) {

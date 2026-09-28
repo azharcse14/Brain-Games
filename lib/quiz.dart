@@ -109,9 +109,14 @@ class _QuizScreenState extends State<QuizScreen> {
                             child: FadeTransition(opacity: a, child: child),
                           ),
                           child: Column(key: ObjectKey(q), children: [
-                            if (q.ask != null) Text(q.ask!, style: const TextStyle(fontSize: 18, color: Colors.white70), textAlign: TextAlign.center),
+                            if (q.ask != null) Text(q.ask!, style: TextStyle(fontSize: 18, color: dim), textAlign: TextAlign.center),
                             const SizedBox(height: 12),
-                            Text(q.prompt, textAlign: TextAlign.center, style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold, color: q.color)),
+                            // Stroop inks (yellow especially) vanish on a light page, so they get a dark card there.
+                            Container(
+                              padding: q.color == null || dark ? null : const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                              decoration: q.color == null || dark ? null : BoxDecoration(color: Colors.grey.shade900, borderRadius: BorderRadius.circular(16)),
+                              child: Text(q.prompt, textAlign: TextAlign.center, style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold, color: q.color)),
+                            ),
                           ]),
                         ),
                       ),

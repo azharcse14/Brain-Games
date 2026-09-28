@@ -387,7 +387,7 @@ class _DotsBoxesState extends State<DotsBoxes> {
           final r = g ~/ s, c = g % s;
           if (r.isEven && c.isEven) {
             return Center(
-              child: FractionallySizedBox(widthFactor: .4, heightFactor: .4, child: Container(decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.white))),
+              child: FractionallySizedBox(widthFactor: .4, heightFactor: .4, child: Container(decoration: BoxDecoration(shape: BoxShape.circle, color: ink))),
             );
           }
           if (r.isOdd && c.isOdd) {
@@ -401,7 +401,7 @@ class _DotsBoxesState extends State<DotsBoxes> {
               child: FractionallySizedBox(
                 widthFactor: r.isEven ? 1 : .2,
                 heightFactor: r.isEven ? .2 : 1,
-                child: Container(color: drawn ? Colors.white : Colors.white12),
+                child: Container(color: drawn ? ink : ink.withValues(alpha: .12)),
               ),
             ),
           );
@@ -491,7 +491,7 @@ class _MancalaState extends State<Mancala> {
           borderRadius: BorderRadius.circular(22),
           border: Border.all(color: !store && owner == turn && pits[i] > 0 ? duelColors[turn] : Colors.brown.shade900, width: 3),
         ),
-        child: Text('${pits[i]}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        child: Text('${pits[i]}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
       ),
     );
   }
@@ -719,7 +719,7 @@ class _NimState extends State<Nim> {
           Text(
               tr('Tap a stick to take it and every stick to its right${widget.maxTake == null ? ' (one heap per turn)' : ' (1–${widget.maxTake} per turn)'}.',
                   'কাঠি চাপলে সেটা আর তার ডানের সব কাঠি নেওয়া হবে${widget.maxTake == null ? ' (প্রতি চালে একটা স্তূপ)' : ' (প্রতি চালে 1–${widget.maxTake}টি)'}।'),
-              textAlign: TextAlign.center, style: const TextStyle(color: Colors.white70)),
+              textAlign: TextAlign.center, style: TextStyle(color: dim)),
           for (var i = 0; i < h.length; i++)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 12),
@@ -729,7 +729,7 @@ class _NimState extends State<Nim> {
                     onTap: () => take(i, k),
                     child: Container(width: 14, height: 64, decoration: BoxDecoration(color: Colors.amber.shade600, borderRadius: BorderRadius.circular(7))),
                   ),
-                if (h[i] == 0) const Text('—', style: TextStyle(fontSize: 32, color: Colors.white24)),
+                if (h[i] == 0) Text('—', style: TextStyle(fontSize: 32, color: ink.withValues(alpha: .24))),
               ]),
             ),
         ]),

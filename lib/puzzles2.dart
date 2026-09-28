@@ -104,7 +104,7 @@ class _NonogramState extends State<Nonogram> {
   Widget build(BuildContext context) {
     final rc = nonoClues(target, n, rows: true), cc = nonoClues(target, n, rows: false);
     final cw = n >= 10 ? 70.0 : 56.0, ch = 14.0 * ((n + 1) ~/ 2) + 6;
-    const fs = TextStyle(fontSize: 12, color: Colors.white70);
+    final fs = TextStyle(fontSize: 12, color: dim);
     return page(
       tr('Nonogram', 'ননোগ্রাম'),
       Column(children: [
@@ -272,7 +272,7 @@ class _WordSearchState extends State<WordSearch> {
                   w,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: found.contains(w) ? Colors.greenAccent : Colors.white,
+                    color: found.contains(w) ? (dark ? Colors.greenAccent : Colors.green.shade700) : ink,
                     decoration: found.contains(w) ? TextDecoration.lineThrough : null,
                   ),
                 ),
@@ -365,7 +365,7 @@ class _FloodItState extends State<FloodIt> {
   Widget build(BuildContext context) => page(
         tr('Flood It', 'রঙের বন্যা'),
         Column(children: [
-          Padding(padding: const EdgeInsets.all(8), child: Text(tr('Fill the board with one colour, starting top-left.', 'উপরের বাম কোণ থেকে শুরু করে পুরো বোর্ড এক রঙে ভরুন।'), style: const TextStyle(color: Colors.white70))),
+          Padding(padding: const EdgeInsets.all(8), child: Text(tr('Fill the board with one colour, starting top-left.', 'উপরের বাম কোণ থেকে শুরু করে পুরো বোর্ড এক রঙে ভরুন।'), style: TextStyle(color: dim))),
           Expanded(child: board(n, n * n, gap: 0, (i) => Container(color: puzzlePalette[g[i]]))),
           Padding(
             padding: const EdgeInsets.only(bottom: 20),
@@ -500,10 +500,10 @@ class _MazePainter extends CustomPainter {
   void paint(Canvas c, Size s) {
     final cw = s.width / w, chh = s.height / h;
     final wall = Paint()
-      ..color = Colors.white70
+      ..color = dim
       ..strokeWidth = 2
       ..strokeCap = StrokeCap.round;
-    c.drawRect(Rect.fromLTWH((w - 1) * cw + cw * .15, (h - 1) * chh + chh * .15, cw * .7, chh * .7), Paint()..color = Colors.greenAccent);
+    c.drawRect(Rect.fromLTWH((w - 1) * cw + cw * .15, (h - 1) * chh + chh * .15, cw * .7, chh * .7), Paint()..color = dark ? Colors.greenAccent : Colors.green.shade600);
     for (var i = 0; i < w * h; i++) {
       final x = i % w, y = i ~/ w, x0 = x * cw, y0 = y * chh;
       if ((open[i] & 1) == 0) c.drawLine(Offset(x0, y0), Offset(x0 + cw, y0), wall);
@@ -597,7 +597,7 @@ class _PegSolitaireState extends State<PegSolitaire> {
   Widget build(BuildContext context) => page(
         widget.triangle ? tr('Peg Triangle', 'পেগ ত্রিভুজ') : tr('Peg Solitaire', 'পেগ সলিটেয়ার'),
         Column(children: [
-          Padding(padding: const EdgeInsets.all(12), child: Text(tr('Jump a peg over another into an empty hole.\nLeave just one peg.', 'একটা পেগ দিয়ে আরেকটা ডিঙিয়ে খালি গর্তে যান।\nশেষে একটাই পেগ রাখুন।'), textAlign: TextAlign.center, style: const TextStyle(color: Colors.white70))),
+          Padding(padding: const EdgeInsets.all(12), child: Text(tr('Jump a peg over another into an empty hole.\nLeave just one peg.', 'একটা পেগ দিয়ে আরেকটা ডিঙিয়ে খালি গর্তে যান।\nশেষে একটাই পেগ রাখুন।'), textAlign: TextAlign.center, style: TextStyle(color: dim))),
           Expanded(
             child: widget.triangle
                 ? Center(
@@ -727,7 +727,7 @@ class _WaterSortState extends State<WaterSort> {
   Widget build(BuildContext context) => page(
         tr('Water Sort', 'পানি সাজানো'),
         Column(children: [
-          Padding(padding: const EdgeInsets.all(12), child: Text(tr('Tap a tube, then another, to pour.\nSort every colour into its own tube.', 'ঢালতে একটা টিউবে, তারপর আরেকটায় চাপুন।\nপ্রতিটা রঙ আলাদা টিউবে সাজান।'), textAlign: TextAlign.center, style: const TextStyle(color: Colors.white70))),
+          Padding(padding: const EdgeInsets.all(12), child: Text(tr('Tap a tube, then another, to pour.\nSort every colour into its own tube.', 'ঢালতে একটা টিউবে, তারপর আরেকটায় চাপুন।\nপ্রতিটা রঙ আলাদা টিউবে সাজান।'), textAlign: TextAlign.center, style: TextStyle(color: dim))),
           Expanded(
             child: Center(
               child: SingleChildScrollView(
@@ -742,7 +742,7 @@ class _WaterSortState extends State<WaterSort> {
                         height: tubeCap * 34 + 12,
                         padding: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
-                          border: Border.all(color: sel == i ? Colors.amber : Colors.white54, width: 2),
+                          border: Border.all(color: sel == i ? Colors.amber : (dark ? Colors.white54 : Colors.black38), width: 2),
                           borderRadius: const BorderRadius.vertical(bottom: Radius.circular(22)),
                         ),
                         child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
@@ -813,7 +813,7 @@ class _KnightsTourState extends State<KnightsTour> {
           padding: const EdgeInsets.all(12),
           child: Text(
             path.isEmpty ? tr('Tap a highlighted square to place the knight.', 'ঘোড়া বসাতে একটা ঘরে চাপুন।') : (next.isEmpty ? tr('Stuck! Undo and try another path.', 'আটকে গেছেন! পিছিয়ে অন্য পথ চেষ্টা করুন।') : tr('Visit every square exactly once.', 'প্রতিটা ঘরে ঠিক একবার যান।')),
-            style: const TextStyle(color: Colors.white70),
+            style: TextStyle(color: dim),
           ),
         ),
         Expanded(
@@ -916,7 +916,7 @@ class _Game2048NState extends State<Game2048N> {
             child: board(n, n * n, gap: n > 5 ? 5 : 8, (i) {
               final v = cells[i];
               final hue = v == 0 ? 0.0 : (log(v) / ln2 * 32) % 360;
-              return tile(v == 0 ? Colors.grey.shade800 : HSLColor.fromAHSL(1, hue, .6, .45).toColor(), text: v == 0 ? '' : '$v');
+              return tile(v == 0 ? (dark ? Colors.grey.shade800 : Colors.grey.shade300) : HSLColor.fromAHSL(1, hue, .6, .45).toColor(), text: v == 0 ? '' : '$v');
             }),
           ),
         ),
@@ -1014,7 +1014,7 @@ class _SkyscrapersState extends State<Skyscrapers> {
               tr('Fill 1–4 so each row and column has every height once.\nEdge numbers say how many buildings you can see from there.',
                   'প্রতিটা সারি ও কলামে 1–4 একবার করে বসান।\nকিনারার সংখ্যা বলে ওখান থেকে কয়টা ভবন দেখা যায়।'),
               textAlign: TextAlign.center,
-              style: const TextStyle(color: Colors.white70)),
+              style: TextStyle(color: dim)),
         ),
         Expanded(
           child: board(m, m * m, gap: 4, (i) {
@@ -1023,7 +1023,7 @@ class _SkyscrapersState extends State<Skyscrapers> {
               final clue = (rr == 0 || rr == n + 1) && cc > 0 && cc <= n
                   ? clues[rr == 0 ? 0 : 1][cc - 1]
                   : ((cc == 0 || cc == n + 1) && rr > 0 && rr <= n ? clues[cc == 0 ? 2 : 3][rr - 1] : null);
-              return Center(child: Text(clue == null ? '' : '$clue', style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.amberAccent)));
+              return Center(child: Text(clue == null ? '' : '$clue', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: dark ? Colors.amberAccent : Colors.amber.shade900)));
             }
             final j = (rr - 1) * n + cc - 1;
             return Material(

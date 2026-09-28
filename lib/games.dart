@@ -23,6 +23,15 @@ final bangla = ValueNotifier(false);
 /// English or Bangla text for the current language.
 String tr(String en, String bn) => bangla.value ? bn : en;
 
+// ---------- theme ----------
+
+/// The app follows the phone's light/dark setting (MaterialApp theme + darkTheme).
+bool get dark => WidgetsBinding.instance.platformDispatcher.platformBrightness == Brightness.dark;
+
+/// Text/icon colours for things drawn straight on the page background; tiles and felt keep their own white text.
+Color get ink => dark ? Colors.white : Colors.black87;
+Color get dim => dark ? Colors.white70 : Colors.black54;
+
 /// Bangla game names by English name, so [page] can title a game from the English name it's given. Filled in main.dart.
 final bnNames = <String, String>{};
 
@@ -365,7 +374,7 @@ class _PatternMemoryState extends State<PatternMemory> {
         tr('Pattern Memory', 'নকশা মনে রাখা'),
         board(n, n * n, (i) {
           final on = (showing && target.contains(i)) || hit.contains(i);
-          return tile(on ? Colors.teal : Colors.grey.shade800, onTap: () => tap(i));
+          return tile(on ? Colors.teal : (dark ? Colors.grey.shade800 : Colors.grey.shade300), onTap: () => tap(i));
         }),
         tr('Level $level', 'লেভেল $level'),
       );
@@ -692,7 +701,7 @@ class _LightsOutState extends State<LightsOut> {
   @override
   Widget build(BuildContext context) => page(
         tr('Lights Out', 'বাতি নেভাও'),
-        board(n, n * n, (i) => tile(on[i] ? Colors.amber : Colors.grey.shade800, onTap: () => tap(i))),
+        board(n, n * n, (i) => tile(on[i] ? Colors.amber : (dark ? Colors.grey.shade800 : Colors.grey.shade300), onTap: () => tap(i))),
         tr('Moves $moves', 'চাল $moves'),
       );
 }
@@ -765,7 +774,7 @@ class _TicTacToeState extends State<TicTacToe> {
   Widget build(BuildContext context) => page(
         tr('Tic Tac Toe', 'টিক ট্যাক টো'),
         board(3, 9,
-            (i) => tile(b[i] == 'X' ? Colors.blue.shade700 : (b[i] == 'O' ? Colors.red.shade700 : Colors.grey.shade800), text: b[i], onTap: () => tap(i))),
+            (i) => tile(b[i] == 'X' ? Colors.blue.shade700 : (b[i] == 'O' ? Colors.red.shade700 : (dark ? Colors.grey.shade800 : Colors.grey.shade300)), text: b[i], onTap: () => tap(i))),
         tr('You are X', 'আপনি X'),
       );
 }

@@ -176,7 +176,7 @@ class _ClassicBoardState extends State<ClassicBoard> {
         g.title,
         Column(children: [
           turnBanner(g.turn, g.status),
-          if (g.info case final info?) Padding(padding: const EdgeInsets.all(6), child: Text(info, textAlign: TextAlign.center, style: const TextStyle(color: Colors.white70))),
+          if (g.info case final info?) Padding(padding: const EdgeInsets.all(6), child: Text(info, textAlign: TextAlign.center, style: TextStyle(color: dim))),
           Expanded(
             child: board(g.n, g.n * g.n, gap: 0, (i) {
               if (!g.valid(i)) return const SizedBox();
@@ -1322,7 +1322,7 @@ class _BattleshipState extends State<Battleship> {
                 turnBanner(turn, tr('${duelNames[turn]}: fire at the enemy fleet', '${duelNames[turn]}: শত্রুর জাহাজে গোলা ছুড়ুন')),
                 Expanded(flex: 3, child: grid(1 - turn, reveal: false, onTap: fire)),
                 Text(msg.isEmpty ? ' ' : msg, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-                Text(tr('Your fleet', 'আপনার জাহাজ'), style: const TextStyle(color: Colors.white70)),
+                Text(tr('Your fleet', 'আপনার জাহাজ'), style: TextStyle(color: dim)),
                 Expanded(flex: 2, child: grid(turn, reveal: true)),
               ]),
       );
@@ -1579,7 +1579,7 @@ class _MastermindDuelState extends State<MastermindDuel> {
         width: size,
         height: size,
         margin: const EdgeInsets.all(4),
-        decoration: BoxDecoration(shape: BoxShape.circle, color: c == null ? Colors.white10 : colors[c], border: Border.all(color: Colors.white24)),
+        decoration: BoxDecoration(shape: BoxShape.circle, color: c == null ? ink.withValues(alpha: .1) : colors[c], border: Border.all(color: ink.withValues(alpha: .24))),
       );
 
   Widget picker(VoidCallback onDone, String doneLabel) => Column(children: [
