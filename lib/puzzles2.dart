@@ -65,7 +65,7 @@ class Nonogram extends StatefulWidget {
 }
 
 class _NonogramState extends State<Nonogram> {
-  final sw = Stopwatch();
+  final sw = gameClock();
   late List<bool> target, filled, marked;
   bool xMode = false;
   int get n => widget.n;
@@ -207,7 +207,7 @@ class WordSearch extends StatefulWidget {
 }
 
 class _WordSearchState extends State<WordSearch> {
-  final sw = Stopwatch();
+  final sw = gameClock();
   late List<String> g;
   late Map<String, List<int>> words;
   final found = <String>{}, foundCells = <int>{};
@@ -418,7 +418,7 @@ class Maze extends StatefulWidget {
 }
 
 class _MazeState extends State<Maze> {
-  final sw = Stopwatch();
+  final sw = gameClock();
   late List<int> open;
   int pos = 0;
   bool done = false;
@@ -783,7 +783,7 @@ class KnightsTour extends StatefulWidget {
 }
 
 class _KnightsTourState extends State<KnightsTour> {
-  final sw = Stopwatch();
+  final sw = gameClock();
   final path = <int>[];
   int get n => widget.n;
 
@@ -969,7 +969,7 @@ class Skyscrapers extends StatefulWidget {
 }
 
 class _SkyscrapersState extends State<Skyscrapers> {
-  final sw = Stopwatch();
+  final sw = gameClock();
   late List<List<int>> clues;
   late List<int> g;
   int? sel;

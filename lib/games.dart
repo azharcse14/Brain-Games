@@ -137,6 +137,31 @@ bool record(BuildContext context, num v, {bool lower = false, String unit = ''})
   return true;
 }
 
+final _clocks = <WeakReference<Stopwatch>>[], _pausedClocks = <Stopwatch>[];
+AppLifecycleListener? _clockPauser;
+
+/// A Stopwatch that stops while the app is in the background, so time away from the phone doesn't count toward a record.
+Stopwatch gameClock() {
+  _clockPauser ??= AppLifecycleListener(
+    onInactive: () {
+      for (final s in _clocks.map((r) => r.target).whereType<Stopwatch>().where((s) => s.isRunning)) {
+        s.stop();
+        _pausedClocks.add(s);
+      }
+    },
+    onResume: () {
+      for (final s in _pausedClocks) {
+        s.start();
+      }
+      _pausedClocks.clear();
+    },
+  );
+  _clocks.removeWhere((r) => r.target == null);
+  final s = Stopwatch();
+  _clocks.add(WeakReference(s));
+  return s;
+}
+
 final _players = <String, AudioPlayer>{};
 
 /// Plays assets/sfx/[name].wav with a matching buzz, unless muted.
@@ -447,7 +472,7 @@ class Reaction extends StatefulWidget {
 
 class _ReactionState extends State<Reaction> {
   String state = 'wait'; // wait | go | result | early
-  final sw = Stopwatch();
+  final sw = gameClock();
   final times = <int>[];
   Timer? t;
 
@@ -520,7 +545,7 @@ class Schulte extends StatefulWidget {
 }
 
 class _SchulteState extends State<Schulte> {
-  final sw = Stopwatch();
+  final sw = gameClock();
   late List<int> nums;
   int next = 1;
   int get n => widget.n;
@@ -565,7 +590,7 @@ class Aim extends StatefulWidget {
 
 class _AimState extends State<Aim> {
   static const goal = 20, size = 60.0;
-  final sw = Stopwatch()..start();
+  final sw = gameClock()..start();
   int hits = 0;
   Offset pos = const Offset(.5, .5);
 

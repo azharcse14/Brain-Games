@@ -698,7 +698,7 @@ class TapBattle extends StatefulWidget {
 
 class _TapBattleState extends State<TapBattle> with SingleTickerProviderStateMixin {
   static const beat = 600, beats = 16, lead = 3, holdRounds = 3;
-  final sw = Stopwatch();
+  final sw = gameClock();
   final taps = [0, 0], score = [0, 0], points = [0, 0];
   final hitBeats = [<int>{}, <int>{}];
   final held = <double?>[null, null];

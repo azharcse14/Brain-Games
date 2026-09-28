@@ -170,7 +170,7 @@ class Sudoku extends StatefulWidget {
 }
 
 class _SudokuState extends State<Sudoku> {
-  final sw = Stopwatch();
+  final sw = gameClock();
   late List<int> g;
   late List<bool> fixed;
   int? sel;
@@ -251,7 +251,7 @@ class Minesweeper extends StatefulWidget {
 }
 
 class _MinesweeperState extends State<Minesweeper> {
-  final sw = Stopwatch();
+  final sw = gameClock();
   late List<bool> mine, open, flag;
   bool started = false, over = false, flagMode = false;
   int get n => widget.n;

@@ -27,6 +27,18 @@ void main() {
     expect(prefs!.getString('bestText:/'), '7/10');
   });
 
+  testWidgets('game clocks stop while the app is in the background', (tester) async {
+    final sw = gameClock()..start();
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+    expect(sw.isRunning, isFalse);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    expect(sw.isRunning, isTrue);
+    final stopped = gameClock(); // never started, must stay stopped
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    expect(stopped.isRunning, isFalse);
+  });
+
   test('has 300 games with unique names (best scores are keyed by name)', () {
     expect(allGames.length, 300);
     expect(allGames.map((g) => g.name).toSet().length, allGames.length);

@@ -9,7 +9,11 @@ A Flutter app with **300 games**: brain-training quizzes, general knowledge, mem
 - **Adaptive quizzes**: 10 questions that get harder as you go, a 15-second timer per question and a 🔥 streak counter
 - **100 same-device 2-player games**: action games where both players control their own half of the screen at the same time, and pass-and-play board games (Chess, Go, Checkers and more)
 - **Computer opponents** in Ludo, Connect Four, Tic Tac Toe (can't be beaten), Crazy Eights and Snakes & Ladders
-- **Sound effects** with a mute toggle
+- **English and বাংলা**: every game, instruction and result in both languages, following the phone's language until you pick one on the home screen (English word games keep their English words)
+- **Light and dark theme**, following the phone's setting
+- **Recently played** row on the home screen
+- **Sound effects and haptics** with a mute toggle
+- **Plays fair in the background**: real-time games and solve timers pause when you leave the app, and back asks before quitting a game in progress
 - **Endless variety**: every question, puzzle, deck and board is generated at random
 
 ## Games
@@ -62,7 +66,10 @@ The tests check that:
 - the 2-player rules work: chess (castling, en passant, checkmate, stalemate), Go (capture, ko, suicide), checkers forced jumps, Quoridor wall blocking, Reversi flips, Mancala captures, Hex connections and more; action games play complete matches
 - solitaire and casino rules: poker hand evaluation (incl. Deuces Wild), Baccarat third-card rules, Yahtzee and Farkle scoring, Klondike/FreeCell/Spider moves
 - puzzles are always solvable: generated Water Sort, Maze, Nonogram, Word Search and Flood It boards are checked
-- a monkey test opens all 300 games on a small 360×640 phone and taps each one randomly, catching crashes and layout overflows
+- a monkey test opens all 300 games on a small 360×640 phone and taps each one randomly, in English and Bangla, catching crashes and layout overflows
+- every game has a Bangla name, and quizzes are valid in both languages
+
+CI runs `flutter analyze` and `flutter test` on every push and pull request.
 
 ## Project structure
 
@@ -73,7 +80,7 @@ lib/
 ├── quiz2.dart     # 30 more quizzes incl. the Knowledge category
 ├── puzzles2.dart  # Nonogram, Word Search, Flood It, Maze, Peg Solitaire, Water Sort, Knight's Tour, 2048 sizes
 ├── solitaire.dart # Klondike, FreeCell, Spider, Pyramid, TriPeaks, Video Poker, Baccarat, Yahtzee, Farkle, …
-├── games.dart     # Shared UI helpers, best scores, sound, memory/focus/puzzle games
+├── games.dart     # Shared UI helpers, language (tr) and theme (ink/dim) helpers, best scores, sound, memory/focus/puzzle games
 ├── complex.dart   # 2048, Sudoku, Minesweeper, Mastermind, Tower of Hanoi, Connect Four
 ├── tabletop.dart  # Ludo, Snakes & Ladders, Blackjack, Crazy Eights, Higher or Lower
 ├── duel.dart          # Shared 2-player helpers (colours, turn banner, winner dialog)
@@ -99,13 +106,13 @@ test/
 Most games are just a question generator. To add one, add an entry to `quizGames` in `lib/quiz.dart`:
 
 ```dart
-quiz('Triple It', 'Math', (r, d) {
+quiz('Triple It', 'Math', bn: 'তিনগুণ', (r, d) {
   final x = rn(r, 2, 10 * d);          // d = difficulty, 1–4
   return n('3 × $x', 3 * x, r);        // n() builds a question with nearby wrong answers
 }),
 ```
 
-Then give it a card icon in the `glyphs` map in `lib/main.dart`. The tests check that every game has one.
+Then give it a card icon in the `glyphs` map in `lib/main.dart`. The tests check that every game has one, and a Bangla name (`bn:`). Wrap any other text a player sees in `tr('English', 'বাংলা')`.
 
 ## Built with
 

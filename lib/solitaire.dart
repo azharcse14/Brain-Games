@@ -147,7 +147,7 @@ Widget tools(VoidCallback undo, VoidCallback restart, [List<Widget> extra = cons
 mixin Piles<T extends StatefulWidget> on State<T> {
   List<List<int>> p = [];
   final hist = <List<List<int>>>[];
-  final sw = Stopwatch();
+  final sw = gameClock();
   (int, int)? sel;
   int moves = 0;
 
