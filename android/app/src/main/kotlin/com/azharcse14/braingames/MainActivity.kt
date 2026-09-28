@@ -1,4 +1,4 @@
-package com.example.brain_games
+package com.azharcse14.braingames
 
 import io.flutter.embedding.android.FlutterActivity
 
