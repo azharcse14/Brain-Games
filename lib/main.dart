@@ -101,9 +101,12 @@ class _HomeState extends State<Home> {
 
   bool opening = false;
 
+  List<String> get recent => prefs?.getStringList('recent') ?? [];
+
   Future<void> open(Game g) async {
     if (opening) return; // a quick double tap would push the game twice
     opening = true;
+    prefs?.setStringList('recent', [g.name, ...recent.where((n) => n != g.name)].take(8).toList());
     await Navigator.push(context, MaterialPageRoute(settings: RouteSettings(name: g.name), builder: (_) => g.build()));
     opening = false;
     if (mounted) setState(() {}); // refresh best scores
@@ -113,6 +116,8 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     final muted = prefs?.getBool('mute') ?? false;
     final list = allGames.where((g) => (cat == null || g.cat == cat) && g.name.toLowerCase().contains(query.toLowerCase())).toList();
+    final byName = {for (final g in allGames) g.name: g};
+    final played = cat == null && query.isEmpty ? [for (final n in recent) if (byName[n] case final g?) g] : <Game>[]; // renamed games drop out
     return Scaffold(
       appBar: AppBar(title: Text('Brain Games · ${allGames.length}'), actions: [
         IconButton(
@@ -150,6 +155,20 @@ class _HomeState extends State<Home> {
             ],
           ),
         ),
+        if (played.isNotEmpty) ...[
+          const Padding(padding: EdgeInsets.fromLTRB(16, 4, 16, 6), child: Align(alignment: Alignment.centerLeft, child: Text('Recently played'))),
+          SizedBox(
+            height: 120,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              itemCount: played.length,
+              separatorBuilder: (_, __) => const SizedBox(width: 10),
+              itemBuilder: (_, i) => SizedBox(width: 114, child: GameCard(played[i], onTap: () => open(played[i]))),
+            ),
+          ),
+          const SizedBox(height: 12),
+        ],
         Expanded(
           child: GridView.builder(
             gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 180, mainAxisSpacing: 12, crossAxisSpacing: 12, childAspectRatio: .95),

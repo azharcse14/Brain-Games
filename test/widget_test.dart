@@ -153,6 +153,30 @@ void main() {
     expect(slSquare(0), 100); // top-left
   });
 
+  testWidgets('back asks before leaving a game, and the game shows up under Recently played', (tester) async {
+    prefs!.setBool('mute', true);
+    await tester.pumpWidget(const App());
+    expect(find.text('Recently played'), findsNothing);
+    await tester.pump(const Duration(seconds: 1)); // let the cards fly in
+    await tester.tap(find.text('Addition'));
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 1));
+    await tester.pageBack();
+    await tester.pump(const Duration(milliseconds: 500));
+    await tester.tap(find.text('Stay'));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Leave game?'), findsNothing);
+    expect(find.byType(QuizScreen), findsOneWidget);
+    await tester.pageBack();
+    await tester.pump(const Duration(milliseconds: 500));
+    await tester.tap(find.text('Leave'));
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 1));
+    expect(find.byType(QuizScreen), findsNothing);
+    expect(find.text('Recently played'), findsOneWidget);
+    expect(prefs!.getStringList('recent'), ['Addition']);
+  });
+
   testWidgets('ludo and snakes & ladders survive many turns against the AI', (tester) async {
     prefs!.setBool('mute', true);
     tester.view.physicalSize = const Size(400, 800);

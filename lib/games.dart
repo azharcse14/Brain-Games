@@ -30,11 +30,33 @@ final otherGames = <Game>[
 
 // ---------- shared UI ----------
 
-Widget page(String title, Widget body, [String? status]) => Scaffold(
-      appBar: AppBar(title: Text(title), actions: [
-        if (status != null) Padding(padding: const EdgeInsets.all(16), child: Text(status, style: const TextStyle(fontSize: 16))),
-      ]),
-      body: SafeArea(child: body),
+/// Game screen. Back asks first so a stray tap doesn't throw away a game in progress; Navigator.pop (the result dialog's Exit) skips the question.
+Widget page(String title, Widget body, [String? status]) => Builder(
+      builder: (context) => PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, _) async {
+          if (didPop) return;
+          final nav = Navigator.of(context);
+          final leave = await showDialog<bool>(
+            context: context,
+            builder: (c) => AlertDialog(
+              title: const Text('Leave game?'),
+              content: const Text('Your progress will be lost.'),
+              actions: [
+                TextButton(onPressed: () => Navigator.pop(c, false), child: const Text('Stay')),
+                FilledButton(onPressed: () => Navigator.pop(c, true), child: const Text('Leave')),
+              ],
+            ),
+          );
+          if (leave ?? false) nav.pop();
+        },
+        child: Scaffold(
+          appBar: AppBar(title: Text(title), actions: [
+            if (status != null) Padding(padding: const EdgeInsets.all(16), child: Text(status, style: const TextStyle(fontSize: 16))),
+          ]),
+          body: SafeArea(child: body),
+        ),
+      ),
     );
 
 Widget board(int cols, int count, Widget Function(int) cell, {double gap = 8}) => Center(

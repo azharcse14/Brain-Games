@@ -482,6 +482,8 @@ class _GridDuelState extends State<GridDuel> {
   Set<Cell> blocks = {};
   Cell? food, poison;
   Timer? timer, roundTimer;
+  late final AppLifecycleListener life;
+  bool paused = false; // Timer.periodic keeps firing in the background, unlike tickers
   int phase = 0;
   String? msg;
   int get cols => widget.cols;
@@ -493,10 +495,22 @@ class _GridDuelState extends State<GridDuel> {
     startRound();
     // Half-rate ticks: normal movers step every other tick, boosted ones every tick.
     timer = Timer.periodic(Duration(milliseconds: widget.tickMs ~/ 2), (_) => step());
+    life = AppLifecycleListener(onInactive: () => paused = true, onResume: resume);
+  }
+
+  void resume() {
+    paused = false;
+    if (msg != null) return; // a round-end timer is already pending
+    setState(() => msg = 'Get ready!');
+    roundTimer?.cancel();
+    roundTimer = Timer(const Duration(milliseconds: 1200), () {
+      if (mounted) setState(() => msg = null);
+    });
   }
 
   @override
   void dispose() {
+    life.dispose();
     timer?.cancel();
     roundTimer?.cancel();
     super.dispose();
@@ -555,7 +569,7 @@ class _GridDuelState extends State<GridDuel> {
   }
 
   void step() {
-    if (msg != null) return;
+    if (msg != null || paused) return;
     phase++;
     final movers = [for (var p = 0; p < 2; p++) if (phase.isEven || boosting[p] > 0) p];
     if (movers.isEmpty) return;
