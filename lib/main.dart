@@ -8,8 +8,11 @@ import 'complex.dart';
 import 'duel_action.dart';
 import 'duel_board.dart';
 import 'duel_classic.dart';
+import 'puzzles2.dart';
 import 'games.dart';
 import 'quiz.dart';
+import 'quiz2.dart';
+import 'solitaire.dart';
 import 'tabletop.dart';
 
 Future<void> main() async {
@@ -20,12 +23,13 @@ Future<void> main() async {
   runApp(const App());
 }
 
-final allGames = [...quizGames, ...otherGames, ...complexGames, ...tabletopGames, ...duelActionGames, ...duelBoardGames, ...duelClassicGames];
+final allGames = [...quizGames, ...otherGames, ...complexGames, ...tabletopGames, ...duelActionGames, ...duelBoardGames, ...duelClassicGames, ...quizGames2, ...puzzleGames2, ...solitaireGames];
 
 const cats = {
   'Math': (Icons.calculate, Colors.blue),
   'Logic': (Icons.psychology, Colors.purple),
   'Word': (Icons.abc, Colors.teal),
+  'Knowledge': (Icons.public, Colors.lime),
   'Memory': (Icons.memory, Colors.orange),
   'Focus': (Icons.center_focus_strong, Colors.red),
   'Puzzle': (Icons.extension, Colors.green),

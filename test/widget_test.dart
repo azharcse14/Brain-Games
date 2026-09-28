@@ -27,8 +27,8 @@ void main() {
     expect(prefs!.getString('bestText:/'), '7/10');
   });
 
-  test('has 224 games with unique names (best scores are keyed by name)', () {
-    expect(allGames.length, 224);
+  test('has 300 games with unique names (best scores are keyed by name)', () {
+    expect(allGames.length, 300);
     expect(allGames.map((g) => g.name).toSet().length, allGames.length);
   });
 
